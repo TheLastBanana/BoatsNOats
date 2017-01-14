@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 // An object which can be split up by the portal.
@@ -12,37 +13,11 @@ public class Splittable : MonoBehaviour {
         Material mat = sr.material;
         sr.enabled = false;
 
-        // Create mesh, copying the bounds of the sprite
+        // Create mesh, copying the mesh data of the sprite
         Mesh mesh = new Mesh();
-
-        Vector3 min = transform.InverseTransformPoint(sr.bounds.min);
-        Vector3 max = transform.InverseTransformPoint(sr.bounds.max);
-
-        Vector3[] vertices =
-        {
-            min,
-            new Vector3(max.x, min.y, 0),
-            max,
-            new Vector3(min.x, max.y, 0)
-        };
-
-        Vector2[] uv =
-        {
-            new Vector2(0, 0),
-            new Vector2(1, 0),
-            new Vector2(1, 1),
-            new Vector2(0, 1)
-        };
-
-        int[] triangles =
-        {
-            3, 1, 0,
-            3, 2, 1 
-        };
-
-        mesh.vertices = vertices;
-        mesh.uv = uv;
-        mesh.triangles = triangles;
+        mesh.vertices = Array.ConvertAll(sr.sprite.vertices, item => (Vector3) item);
+        mesh.uv = sr.sprite.uv;
+        mesh.triangles = Array.ConvertAll(sr.sprite.triangles, item => (int)item);
 
         // Remove sprite renderer
         DestroyImmediate(sr);
