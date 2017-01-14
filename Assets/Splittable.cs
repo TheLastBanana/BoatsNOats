@@ -62,8 +62,9 @@ public class Splittable : MonoBehaviour {
         SplitOnPlane(new Vector3(0.5f, 0.0f, 0), new Vector2(0, 1));
     }
 
-    // Split the object along a plane defined by anchor and dir
-    public void SplitOnPlane(Vector2 anchor, Vector2 dir)
+    // Split the object along a plane defined by anchor and dir.
+    // Return the other half, or null if the plane did not intersect.
+    public GameObject SplitOnPlane(Vector2 anchor, Vector2 dir)
     {
         // Make a second object
         GameObject rightObj = Instantiate(gameObject);
@@ -72,11 +73,13 @@ public class Splittable : MonoBehaviour {
         if (!SplitCollider(gameObject, rightObj, anchor, dir))
         {
             DestroyImmediate(rightObj);
-            return;
+            return null;
         }
         SplitMesh(gameObject, rightObj, anchor, dir);
         Center(gameObject);
         Center(rightObj);
+
+        return rightObj;
     }
 
     // Split leftObj's mesh into two (leftObj and rightObj) along a plane defined by anchor and dir
