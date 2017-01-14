@@ -70,6 +70,8 @@ public class Splittable : MonoBehaviour {
 
         SplitMesh(gameObject, rightObj, anchor, dir);
         SplitCollider(gameObject, rightObj, anchor, dir);
+        Center(gameObject);
+        Center(rightObj);
     }
 
     // Split leftObj's mesh into two (leftObj and rightObj) along a plane defined by anchor and dir
@@ -243,5 +245,46 @@ public class Splittable : MonoBehaviour {
 
         leftColl.points = leftPoints.ToArray();
         rightColl.points = rightPoints.ToArray();
+    }
+
+    // Center an object's mesh and collider
+    static private void Center(GameObject obj)
+    {
+        Mesh mesh = obj.GetComponent<MeshFilter>().mesh;
+        PolygonCollider2D coll = obj.GetComponent<PolygonCollider2D>();
+
+        // Find the min and max collider points
+        Vector3 min = new Vector2(float.MaxValue, float.MaxValue);
+        Vector3 max = new Vector2(float.MinValue, float.MinValue);
+
+        foreach (Vector2 p in coll.points)
+        {
+            if (p.x < min.x) min.x = p.x;
+            if (p.x > max.x) max.x = p.x;
+            if (p.y < min.y) min.y = p.y;
+            if (p.y > max.y) max.y = p.y;
+        }
+        
+        // Determine center
+        Vector3 center = (min + max) * 0.5f;
+
+        // Offset vertices
+        Vector3[] newVertices = mesh.vertices;
+        for (int i = 0; i < newVertices.Length; ++i)
+        {
+            newVertices[i] -= center;
+        }
+        mesh.vertices = newVertices;
+
+        // Offset collider
+        Vector2[] newPoints = coll.points;
+        for (int i = 0; i < newPoints.Length; ++i)
+        {
+            newPoints[i] -= new Vector2(center.x, center.y);
+        }
+        coll.points = newPoints;
+
+        // Finally, move the transform to accommodate
+        obj.transform.position += center;
     }
 }
