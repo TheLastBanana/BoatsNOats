@@ -59,7 +59,7 @@ public class Splittable : MonoBehaviour {
 
 
         // DEBUG
-        SplitOnPlane(new Vector3(0.5f, 0.3f, 0), new Vector2(1, 1));
+        SplitOnPlane(new Vector3(0.5f, 0.0f, 0), new Vector2(0, 1));
     }
 
     // Split the object along a plane defined by anchor and dir
@@ -68,8 +68,13 @@ public class Splittable : MonoBehaviour {
         // Make a second object
         GameObject rightObj = Instantiate(gameObject);
 
+        // If false, plane doesn't intersect collider, so don't split
+        if (!SplitCollider(gameObject, rightObj, anchor, dir))
+        {
+            DestroyImmediate(rightObj);
+            return;
+        }
         SplitMesh(gameObject, rightObj, anchor, dir);
-        SplitCollider(gameObject, rightObj, anchor, dir);
         Center(gameObject);
         Center(rightObj);
     }
@@ -233,7 +238,7 @@ public class Splittable : MonoBehaviour {
     }
 
     // Split leftObj's PolygonCollider2d into two (leftObj and rightObj) along a plane defined by anchor and dir
-    static private void SplitCollider(GameObject leftObj, GameObject rightObj, Vector2 anchor, Vector2 dir)
+    static private bool SplitCollider(GameObject leftObj, GameObject rightObj, Vector2 anchor, Vector2 dir)
     {
         PolygonCollider2D leftColl = leftObj.GetComponent<PolygonCollider2D>();
         PolygonCollider2D rightColl = rightObj.GetComponent<PolygonCollider2D>();
@@ -259,6 +264,7 @@ public class Splittable : MonoBehaviour {
 
         // Whether the last point was on the left
         bool wasLeft = oldPoints[0].x < 0;
+        bool switched = false;
 
         for (int i = 0; i < oldPoints.Count + 1; ++i)
         {
@@ -275,6 +281,8 @@ public class Splittable : MonoBehaviour {
 
                 leftPoints.Add(inter);
                 rightPoints.Add(inter);
+
+                switched = true;
             }
             
             // Don't duplicate the last point if we're not interpolating it
@@ -286,6 +294,9 @@ public class Splittable : MonoBehaviour {
 
             wasLeft = isLeft;
         }
+
+        // Everything is on one side
+        if (!switched) return false;
 
         // Transform back
         for (int i = 0; i < leftPoints.Count; ++i)
@@ -301,6 +312,8 @@ public class Splittable : MonoBehaviour {
 
         leftColl.points = leftPoints.ToArray();
         rightColl.points = rightPoints.ToArray();
+
+        return true;
     }
 
     // Center an object's mesh and collider (by center of mass)
