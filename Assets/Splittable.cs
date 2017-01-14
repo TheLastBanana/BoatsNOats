@@ -41,6 +41,9 @@ public class Splittable : MonoBehaviour {
     // Return the other half, or null if the plane did not intersect.
     public GameObject SplitOnPlane(Vector2 anchor, Vector2 dir)
     {
+        anchor = transform.InverseTransformPoint(anchor);
+        dir = transform.InverseTransformDirection(dir);
+
         // Make a second object
         GameObject rightObj = Instantiate(gameObject);
 
@@ -70,7 +73,7 @@ public class Splittable : MonoBehaviour {
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         Matrix4x4 rotate = Matrix4x4.TRS(
             anchor,
-            Quaternion.AngleAxis(-angle - 90.0f, Vector3.forward), // Subtract 90 so we get "left" and "right" rather than "up" and "down"
+            Quaternion.AngleAxis(-angle + 90.0f, Vector3.forward), // Subtract 90 so we get "left" and "right" rather than "up" and "down"
             Vector3.one
         );
 
@@ -229,7 +232,7 @@ public class Splittable : MonoBehaviour {
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         Matrix4x4 rotate = Matrix4x4.TRS(
             anchor,
-            Quaternion.AngleAxis(-angle - 90.0f, Vector3.forward),
+            Quaternion.AngleAxis(-angle + 90.0f, Vector3.forward),
             Vector3.one
         );
 
@@ -322,6 +325,6 @@ public class Splittable : MonoBehaviour {
         coll.points = newPoints;
 
         // Finally, move the transform to accommodate
-        obj.transform.position += center;
+        obj.transform.position += obj.transform.TransformVector(center);
     }
 }
