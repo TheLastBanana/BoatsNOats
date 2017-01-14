@@ -86,7 +86,7 @@ public class Splittable : MonoBehaviour {
         // Transform vertices to be relative to the plane
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         Matrix4x4 rotate = Matrix4x4.TRS(
-            -anchor,
+            anchor,
             Quaternion.AngleAxis(-angle - 90.0f, Vector3.forward), // Subtract 90 so we get "left" and "right" rather than "up" and "down"
             Vector3.one
         );
@@ -245,7 +245,7 @@ public class Splittable : MonoBehaviour {
         // Transform vertices to be relative to the plane
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         Matrix4x4 rotate = Matrix4x4.TRS(
-            -anchor,
+            anchor,
             Quaternion.AngleAxis(-angle - 90.0f, Vector3.forward),
             Vector3.one
         );
