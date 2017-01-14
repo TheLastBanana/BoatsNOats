@@ -303,26 +303,16 @@ public class Splittable : MonoBehaviour {
         rightColl.points = rightPoints.ToArray();
     }
 
-    // Center an object's mesh and collider
+    // Center an object's mesh and collider (by center of mass)
     static private void Center(GameObject obj)
     {
         Mesh mesh = obj.GetComponent<MeshFilter>().mesh;
         PolygonCollider2D coll = obj.GetComponent<PolygonCollider2D>();
 
-        // Find the min and max collider points
-        Vector3 min = new Vector2(float.MaxValue, float.MaxValue);
-        Vector3 max = new Vector2(float.MinValue, float.MinValue);
-
-        foreach (Vector2 p in coll.points)
-        {
-            if (p.x < min.x) min.x = p.x;
-            if (p.x > max.x) max.x = p.x;
-            if (p.y < min.y) min.y = p.y;
-            if (p.y > max.y) max.y = p.y;
-        }
-        
-        // Determine center
-        Vector3 center = (min + max) * 0.5f;
+        // Find the average point
+        Vector2 sum = new Vector2();
+        foreach (Vector2 p in coll.points) sum += p;
+        Vector3 center = sum / coll.points.Length;
 
         // Offset vertices
         Vector3[] newVertices = mesh.vertices;
