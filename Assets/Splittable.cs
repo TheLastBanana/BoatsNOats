@@ -59,7 +59,7 @@ public class Splittable : MonoBehaviour {
 
 
         // DEBUG
-        SplitOnPlane(new Vector3(0.5f, 0, 0), new Vector2(1, 0));
+        SplitOnPlane(new Vector3(0.5f, 0.3f, 0), new Vector2(1, 1));
     }
 
     // Split the object along a plane defined by anchor and dir
@@ -80,8 +80,24 @@ public class Splittable : MonoBehaviour {
         Mesh rightMesh = rightObj.GetComponent<MeshFilter>().mesh;
         Mesh leftMesh = leftObj.GetComponent<MeshFilter>().mesh;
 
-        List<Vector3> leftVerts = new List<Vector3>(leftMesh.vertices);
-        List<Vector3> rightVerts = new List<Vector3>(leftMesh.vertices);
+        List<Vector3> leftVerts = new List<Vector3>();
+        List<Vector3> rightVerts = new List<Vector3>();
+
+        // Transform vertices to be relative to the plane
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        Matrix4x4 rotate = Matrix4x4.TRS(
+            -anchor,
+            Quaternion.AngleAxis(-angle - 90.0f, Vector3.forward), // Subtract 90 so we get "left" and "right" rather than "up" and "down"
+            Vector3.one
+        );
+
+        foreach (Vector3 vert in leftMesh.vertices)
+        {
+            Vector4 point = new Vector4(vert.x, vert.y, vert.z, 1);
+            Vector3 transformed = rotate * point;
+            leftVerts.Add(transformed);
+            rightVerts.Add(transformed);
+        }
 
         List<Vector2> leftUV = new List<Vector2>(leftMesh.uv);
         List<Vector2> rightUV = new List<Vector2>(rightMesh.uv);
@@ -99,7 +115,7 @@ public class Splittable : MonoBehaviour {
             for (int j = i; j < i + 3; ++j)
             {
                 int vi = leftMesh.triangles[j];
-                if (leftMesh.vertices[vi].x < anchor.x) left.Add(vi);
+                if (leftVerts[vi].x < 0) left.Add(vi);
                 else right.Add(vi);
             }
 
@@ -117,9 +133,9 @@ public class Splittable : MonoBehaviour {
                 // Either way, the logic is similar. Let point C be the point that is alone on its side
                 if (left.Count == 2)
                 {
-                    pointA = leftMesh.vertices[left[0]];
-                    pointB = leftMesh.vertices[left[1]];
-                    pointC = leftMesh.vertices[right[0]];
+                    pointA = leftVerts[left[0]];
+                    pointB = leftVerts[left[1]];
+                    pointC = leftVerts[right[0]];
 
                     uvA = leftMesh.uv[left[0]];
                     uvB = leftMesh.uv[left[1]];
@@ -127,9 +143,9 @@ public class Splittable : MonoBehaviour {
                 }
                 else
                 {
-                    pointA = leftMesh.vertices[right[0]];
-                    pointB = leftMesh.vertices[right[1]];
-                    pointC = leftMesh.vertices[left[0]];
+                    pointA = leftVerts[right[0]];
+                    pointB = leftVerts[right[1]];
+                    pointC = leftVerts[left[0]];
 
                     uvA = leftMesh.uv[right[0]];
                     uvB = leftMesh.uv[right[1]];
@@ -138,8 +154,8 @@ public class Splittable : MonoBehaviour {
 
                 // x and y increase based on slope of the edge, so we find where the intersection
                 // lies on the axis perpendicular to the plane
-                float ratioA = (anchor.x - pointA.x) / (pointC.x - pointA.x);
-                float ratioB = (anchor.x - pointB.x) / (pointC.x - pointB.x);
+                float ratioA = (-pointA.x) / (pointC.x - pointA.x);
+                float ratioB = (-pointB.x) / (pointC.x - pointB.x);
 
                 // Now use the ratio to calculate intersection points
                 Vector2 interA = Vector2.Lerp(pointA, pointC, ratioA);
@@ -195,6 +211,18 @@ public class Splittable : MonoBehaviour {
             }
         }
 
+        // Transform back
+        for (int i = 0; i < leftVerts.Count; ++i)
+        {
+            Vector4 point = new Vector4(leftVerts[i].x, leftVerts[i].y, leftVerts[i].z, 1);
+            leftVerts[i] = rotate.inverse * point;
+        }
+        for (int i = 0; i < rightVerts.Count; ++i)
+        {
+            Vector4 point = new Vector4(rightVerts[i].x, rightVerts[i].y, rightVerts[i].z, 1);
+            rightVerts[i] = rotate.inverse * point;
+        }
+
         leftMesh.vertices = leftVerts.ToArray();
         leftMesh.triangles = leftTris.ToArray();
         leftMesh.uv = leftUV.ToArray();
@@ -210,23 +238,39 @@ public class Splittable : MonoBehaviour {
         PolygonCollider2D leftColl = leftObj.GetComponent<PolygonCollider2D>();
         PolygonCollider2D rightColl = rightObj.GetComponent<PolygonCollider2D>();
 
+        List<Vector2> oldPoints = new List<Vector2>();
         List<Vector2> leftPoints = new List<Vector2>();
         List<Vector2> rightPoints = new List<Vector2>();
 
-        // Whether the last point was on the left
-        bool wasLeft = leftColl.points[0].x < anchor.x;
+        // Transform vertices to be relative to the plane
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        Matrix4x4 rotate = Matrix4x4.TRS(
+            -anchor,
+            Quaternion.AngleAxis(-angle - 90.0f, Vector3.forward),
+            Vector3.one
+        );
 
-        for (int i = 0; i < leftColl.points.Length + 1; ++i)
+        foreach (Vector3 point in leftColl.points)
         {
-            Vector2 point = leftColl.points[i % leftColl.points.Length];
-            bool isLeft = point.x < anchor.x;
+            Vector4 point4 = new Vector4(point.x, point.y, point.z, 1);
+            Vector3 transformed = rotate * point4;
+            oldPoints.Add(transformed);
+        }
+
+        // Whether the last point was on the left
+        bool wasLeft = oldPoints[0].x < 0;
+
+        for (int i = 0; i < oldPoints.Count + 1; ++i)
+        {
+            Vector2 point = oldPoints[i % oldPoints.Count];
+            bool isLeft = point.x < 0;
 
             // Check if this edge is split (i.e. we've gone from left to right)
             if (wasLeft != isLeft)
             {
                 // Add a new point between the two using the slope calculation (see comments in SplitMesh)
-                Vector2 lastPoint = leftColl.points[i - 1];
-                float ratio = (anchor.x - lastPoint.x) / (point.x - lastPoint.x);
+                Vector2 lastPoint = oldPoints[i - 1];
+                float ratio = (-lastPoint.x) / (point.x - lastPoint.x);
                 Vector2 inter = Vector2.Lerp(lastPoint, point, ratio);
 
                 leftPoints.Add(inter);
@@ -234,13 +278,25 @@ public class Splittable : MonoBehaviour {
             }
             
             // Don't duplicate the last point if we're not interpolating it
-            if (i < leftColl.points.Length)
+            if (i < oldPoints.Count)
             {
                 if (isLeft) leftPoints.Add(point);
                 else rightPoints.Add(point);
             }
 
             wasLeft = isLeft;
+        }
+
+        // Transform back
+        for (int i = 0; i < leftPoints.Count; ++i)
+        {
+            Vector4 point = new Vector4(leftPoints[i].x, leftPoints[i].y, 0, 1);
+            leftPoints[i] = rotate.inverse * point;
+        }
+        for (int i = 0; i < rightPoints.Count; ++i)
+        {
+            Vector4 point = new Vector4(rightPoints[i].x, rightPoints[i].y, 0, 1);
+            rightPoints[i] = rotate.inverse * point;
         }
 
         leftColl.points = leftPoints.ToArray();
