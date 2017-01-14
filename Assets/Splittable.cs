@@ -4,6 +4,18 @@ using UnityEngine;
 
 // An object which can be split up by the portal.
 public class Splittable : MonoBehaviour {
+    // Represents an edge between two vertices
+    private struct Edge
+    {
+        public Edge(int a, int b)
+        {
+            this.a = a;
+            this.b = b;
+        }
+
+        public int a, b;
+    }
+
     void Start () {
         // Get sprite info (if there is one)
         SpriteRenderer sr = gameObject.GetComponent<SpriteRenderer>();
@@ -92,6 +104,10 @@ public class Splittable : MonoBehaviour {
         List<int> leftTris = new List<int>();
         List<int> rightTris = new List<int>();
 
+        // Cache of newly-created vertices for intersecting edges
+        Dictionary<Edge, int> leftInters = new Dictionary<Edge, int>();
+        Dictionary<Edge, int> rightInters = new Dictionary<Edge, int>();
+
         // Sort triangles to sides
         for (int i = 0; i < leftMesh.triangles.Length; i += 3)
         {
@@ -112,6 +128,7 @@ public class Splittable : MonoBehaviour {
             // Triangle intersects the plane
             else
             {
+                int vertA, vertB, vertC;
                 Vector2 pointA, pointB, pointC;
                 Vector2 uvA, uvB, uvC;
 
@@ -119,80 +136,77 @@ public class Splittable : MonoBehaviour {
                 // Either way, the logic is similar. Let point C be the point that is alone on its side
                 if (left.Count == 2)
                 {
-                    pointA = leftVerts[left[0]];
-                    pointB = leftVerts[left[1]];
-                    pointC = leftVerts[right[0]];
-
-                    uvA = leftMesh.uv[left[0]];
-                    uvB = leftMesh.uv[left[1]];
-                    uvC = leftMesh.uv[right[0]];
+                    vertA = left[0];
+                    vertB = left[1];
+                    vertC = right[0];
                 }
                 else
                 {
-                    pointA = leftVerts[right[0]];
-                    pointB = leftVerts[right[1]];
-                    pointC = leftVerts[left[0]];
-
-                    uvA = leftMesh.uv[right[0]];
-                    uvB = leftMesh.uv[right[1]];
-                    uvC = leftMesh.uv[left[0]];
+                    vertA = right[0];
+                    vertB = right[1];
+                    vertC = left[0];
                 }
 
-                // x and y increase based on slope of the edge, so we find where the intersection
-                // lies on the axis perpendicular to the plane
-                float ratioA = (-pointA.x) / (pointC.x - pointA.x);
-                float ratioB = (-pointB.x) / (pointC.x - pointB.x);
+                pointA = leftVerts[vertA];
+                pointB = leftVerts[vertB];
+                pointC = leftVerts[vertC];
 
-                // Now use the ratio to calculate intersection points
-                Vector2 interA = Vector2.Lerp(pointA, pointC, ratioA);
-                Vector2 interB = Vector2.Lerp(pointB, pointC, ratioB);
+                uvA = leftMesh.uv[vertA];
+                uvB = leftMesh.uv[vertB];
+                uvC = leftMesh.uv[vertC];
 
-                // Add them to the vertex lists
-                leftVerts.Add(interA);
-                leftVerts.Add(interB);
-                rightVerts.Add(interA);
-                rightVerts.Add(interB);
+                int leftInterIdA, rightInterIdA, leftInterIdB, rightInterIdB;
 
-                // Add corresponding UV coords
-                Vector2 interUVA = Vector2.Lerp(uvA, uvC, ratioA);
-                Vector2 interUVB = Vector2.Lerp(uvB, uvC, ratioB);
+                // Determine edges we're looking at. Always put the smallest vert id first
+                // so the edge tuple is consistent.
+                Edge edgeA = new Edge(Math.Min(vertA, vertC), Math.Max(vertA, vertC));
+                Edge edgeB = new Edge(Math.Min(vertB, vertC), Math.Max(vertB, vertC));
 
-                leftUV.Add(interUVA);
-                leftUV.Add(interUVB);
-                rightUV.Add(interUVA);
-                rightUV.Add(interUVB);
+                // If the point isn't cached, pass it into this horrible cluster of arguments to calculate the intersection
+                if (!leftInters.ContainsKey(edgeA))
+                    IntersectEdge(edgeA, pointA, pointC, uvA, uvC, leftVerts, rightVerts, leftUV, rightUV, leftInters, rightInters);
+
+                leftInterIdA = leftInters[edgeA];
+                rightInterIdA = rightInters[edgeA];
+
+                // Do the same thing for edge B
+                if (!leftInters.ContainsKey(edgeB))
+                    IntersectEdge(edgeB, pointB, pointC, uvB, uvC, leftVerts, rightVerts, leftUV, rightUV, leftInters, rightInters);
+
+                leftInterIdB = leftInters[edgeB];
+                rightInterIdB = rightInters[edgeB];
 
                 if (left.Count == 2)
                 {
                     // Add right triangle
                     rightTris.Add(right[0]);
-                    rightTris.Add(rightVerts.Count - 2);
-                    rightTris.Add(rightVerts.Count - 1);
+                    rightTris.Add(rightInterIdB);
+                    rightTris.Add(rightInterIdA);
 
                     // Add left triangles
                     leftTris.Add(left[0]);
                     leftTris.Add(left[1]);
-                    leftTris.Add(leftVerts.Count - 2);
+                    leftTris.Add(leftInterIdA);
 
                     leftTris.Add(left[1]);
-                    leftTris.Add(leftVerts.Count - 1);
-                    leftTris.Add(leftVerts.Count - 2);
+                    leftTris.Add(leftInterIdB);
+                    leftTris.Add(leftInterIdA);
                 }
                 else
                 {
                     // Add left triangle
                     leftTris.Add(left[0]);
-                    leftTris.Add(leftVerts.Count - 2);
-                    leftTris.Add(leftVerts.Count - 1);
+                    leftTris.Add(leftInterIdB);
+                    leftTris.Add(leftInterIdA);
 
                     // Add right triangles
                     rightTris.Add(right[0]);
                     rightTris.Add(right[1]);
-                    rightTris.Add(rightVerts.Count - 2);
+                    rightTris.Add(rightInterIdA);
 
                     rightTris.Add(right[1]);
-                    rightTris.Add(rightVerts.Count - 1);
-                    rightTris.Add(rightVerts.Count - 2);
+                    rightTris.Add(rightInterIdB);
+                    rightTris.Add(rightInterIdA);
                 }
             }
         }
@@ -216,6 +230,32 @@ public class Splittable : MonoBehaviour {
         rightMesh.vertices = rightVerts.ToArray();
         rightMesh.triangles = rightTris.ToArray();
         rightMesh.uv = rightUV.ToArray();
+    }
+
+    // Used within SplitMesh to find the intersection point between the plane and a mesh edge
+    static private void IntersectEdge(Edge edge, Vector2 start, Vector2 end, Vector2 startUV, Vector2 endUV,
+        List<Vector3> leftVerts, List<Vector3> rightVerts, List<Vector2> leftUV, List<Vector2> rightUV,
+        Dictionary<Edge, int> leftInters, Dictionary<Edge, int> rightInters)
+    {
+        // x and y increase based on slope of the edge, so we find where the intersection
+        // lies on the axis perpendicular to the plane
+        float ratio = (-start.x) / (end.x - start.x);
+
+        // Now use the ratio to calculate intersection points
+        Vector2 inter = Vector2.Lerp(start, end, ratio);
+
+        // Add them to the vertex lists
+        leftVerts.Add(inter);
+        rightVerts.Add(inter);
+
+        // Add corresponding UV coords
+        Vector2 interUVA = Vector2.Lerp(startUV, endUV, ratio);
+        leftUV.Add(interUVA);
+        rightUV.Add(interUVA);
+
+        // Cache this index
+        leftInters[edge] = leftVerts.Count - 1;
+        rightInters[edge] = rightVerts.Count - 1;
     }
 
     // Split leftObj's PolygonCollider2d into two (leftObj and rightObj) along a plane defined by anchor and dir
