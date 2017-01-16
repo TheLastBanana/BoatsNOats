@@ -85,7 +85,7 @@ public class Splittable : MonoBehaviour {
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         Matrix4x4 rotate = Matrix4x4.TRS(
             anchor,
-            Quaternion.AngleAxis(-angle + 90.0f, Vector3.forward), // Subtract 90 so we get "left" and "right" rather than "up" and "down"
+            Quaternion.AngleAxis(angle + 90.0f, Vector3.forward), // Subtract 90 so we get "left" and "right" rather than "up" and "down"
             Vector3.one
         );
 
@@ -313,7 +313,7 @@ public class Splittable : MonoBehaviour {
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         Matrix4x4 rotate = Matrix4x4.TRS(
             anchor,
-            Quaternion.AngleAxis(-angle + 90.0f, Vector3.forward),
+            Quaternion.AngleAxis(angle + 90.0f, Vector3.forward),
             Vector3.one
         );
 
