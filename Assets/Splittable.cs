@@ -40,8 +40,6 @@ public class Splittable : MonoBehaviour {
             return null;
         }
         SplitMesh(gameObject, rightObj, anchor, dir);
-        Center(gameObject);
-        Center(rightObj);
 
         return rightObj;
     }
@@ -380,36 +378,5 @@ public class Splittable : MonoBehaviour {
         rightColl.points = rightPoints.ToArray();
 
         return true;
-    }
-
-    // Center an object's mesh and collider (by center of mass)
-    static private void Center(GameObject obj)
-    {
-        Mesh mesh = obj.GetComponent<MeshFilter>().mesh;
-        PolygonCollider2D coll = obj.GetComponent<PolygonCollider2D>();
-
-        // Find the average point
-        Vector2 sum = new Vector2();
-        foreach (Vector2 p in coll.points) sum += p;
-        Vector3 center = sum / coll.points.Length;
-
-        // Offset vertices
-        Vector3[] newVertices = mesh.vertices;
-        for (int i = 0; i < newVertices.Length; ++i)
-        {
-            newVertices[i] -= center;
-        }
-        mesh.vertices = newVertices;
-
-        // Offset collider
-        Vector2[] newPoints = coll.points;
-        for (int i = 0; i < newPoints.Length; ++i)
-        {
-            newPoints[i] -= new Vector2(center.x, center.y);
-        }
-        coll.points = newPoints;
-
-        // Finally, move the transform to accommodate
-        obj.transform.position += obj.transform.TransformVector(center);
     }
 }
