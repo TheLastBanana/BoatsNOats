@@ -4,6 +4,8 @@ using UnityEngine;
 
 // An object which can be split up by the portal.
 public class Splittable : MonoBehaviour {
+    private Vector3 startPoint;
+
     // Represents an edge between two vertices
     private struct Edge
     {
@@ -18,9 +20,20 @@ public class Splittable : MonoBehaviour {
 
     void Start () {
         ConvertToMesh();
+    }
 
-        // DEBUG
-        SplitOnPlane(new Vector3(0.5f, 0.5f, 0), new Vector2(0, 1));
+    void Update ()
+    {
+        // DEBUG: click and drag to draw a line and split across it
+        if (Input.GetMouseButtonDown(0))
+        {
+            startPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            Vector3 endPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            SplitOnPlane(startPoint, endPoint - startPoint);
+        }
     }
 
     // Split the object along a plane defined by anchor and dir.
@@ -30,16 +43,32 @@ public class Splittable : MonoBehaviour {
         anchor = transform.InverseTransformPoint(anchor);
         dir = transform.InverseTransformDirection(dir);
 
+        // Matrix to transform vertices so they're relative to the plane
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+        // We want to move points so the anchor is the origin, then rotate. Matrix operations are in reverse order,
+        // so build a rotation matrix, then multiply by a translation matrix.
+        Matrix4x4 matrix = Matrix4x4.TRS(
+            Vector3.zero,
+            Quaternion.AngleAxis(-angle + 90.0f, Vector3.forward), // Add 90 so we get "left" and "right" rather than "up" and "down"
+            Vector3.one
+        );
+        matrix *= Matrix4x4.TRS(
+            -anchor,
+            Quaternion.identity,
+            Vector3.one
+        );
+
         // Make a second object
         GameObject rightObj = Instantiate(gameObject);
 
         // If false, plane doesn't intersect collider, so don't split
-        if (!SplitCollider(gameObject, rightObj, anchor, dir))
+        if (!SplitCollider(gameObject, rightObj, matrix))
         {
             DestroyImmediate(rightObj);
             return null;
         }
-        SplitMesh(gameObject, rightObj, anchor, dir);
+        SplitMesh(gameObject, rightObj, matrix);
 
         return rightObj;
     }
@@ -75,7 +104,7 @@ public class Splittable : MonoBehaviour {
     }
 
     // Split leftObj's mesh into two (leftObj and rightObj) along a plane defined by anchor and dir
-    static private void SplitMesh(GameObject leftObj, GameObject rightObj, Vector2 anchor, Vector2 dir)
+    static private void SplitMesh(GameObject leftObj, GameObject rightObj, Matrix4x4 matrix)
     {
         Mesh rightMesh = rightObj.GetComponent<MeshFilter>().mesh;
         Mesh leftMesh = leftObj.GetComponent<MeshFilter>().mesh;
@@ -83,18 +112,10 @@ public class Splittable : MonoBehaviour {
         List<Vector3> leftVerts = new List<Vector3>();
         List<Vector3> rightVerts = new List<Vector3>();
 
-        // Transform vertices to be relative to the plane
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        Matrix4x4 rotate = Matrix4x4.TRS(
-            anchor,
-            Quaternion.AngleAxis(angle + 90.0f, Vector3.forward), // Subtract 90 so we get "left" and "right" rather than "up" and "down"
-            Vector3.one
-        );
-
+        // Transform points to be relative to cutting plane
         foreach (Vector3 vert in leftMesh.vertices)
         {
-            Vector4 point = new Vector4(vert.x, vert.y, vert.z, 1);
-            Vector3 transformed = rotate * point;
+            Vector3 transformed = matrix.MultiplyPoint3x4(vert);
             leftVerts.Add(transformed);
             rightVerts.Add(transformed);
         }
@@ -217,12 +238,12 @@ public class Splittable : MonoBehaviour {
         for (int i = 0; i < leftVerts.Count; ++i)
         {
             Vector4 point = new Vector4(leftVerts[i].x, leftVerts[i].y, leftVerts[i].z, 1);
-            leftVerts[i] = rotate.inverse * point;
+            leftVerts[i] = matrix.inverse * point;
         }
         for (int i = 0; i < rightVerts.Count; ++i)
         {
             Vector4 point = new Vector4(rightVerts[i].x, rightVerts[i].y, rightVerts[i].z, 1);
-            rightVerts[i] = rotate.inverse * point;
+            rightVerts[i] = matrix.inverse * point;
         }
 
         leftMesh.vertices = leftVerts.ToArray();
@@ -302,7 +323,7 @@ public class Splittable : MonoBehaviour {
     }
 
     // Split leftObj's PolygonCollider2d into two (leftObj and rightObj) along a plane defined by anchor and dir
-    static private bool SplitCollider(GameObject leftObj, GameObject rightObj, Vector2 anchor, Vector2 dir)
+    static private bool SplitCollider(GameObject leftObj, GameObject rightObj, Matrix4x4 matrix)
     {
         PolygonCollider2D leftColl = leftObj.GetComponent<PolygonCollider2D>();
         PolygonCollider2D rightColl = rightObj.GetComponent<PolygonCollider2D>();
@@ -311,18 +332,10 @@ public class Splittable : MonoBehaviour {
         List<Vector2> leftPoints = new List<Vector2>();
         List<Vector2> rightPoints = new List<Vector2>();
 
-        // Transform vertices to be relative to the plane
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        Matrix4x4 rotate = Matrix4x4.TRS(
-            anchor,
-            Quaternion.AngleAxis(angle + 90.0f, Vector3.forward),
-            Vector3.one
-        );
-
+        // Transform points to be relative to cutting plane
         foreach (Vector3 point in leftColl.points)
         {
-            Vector4 point4 = new Vector4(point.x, point.y, point.z, 1);
-            Vector3 transformed = rotate * point4;
+            Vector3 transformed = matrix.MultiplyPoint3x4(point);
             oldPoints.Add(transformed);
         }
 
@@ -366,12 +379,12 @@ public class Splittable : MonoBehaviour {
         for (int i = 0; i < leftPoints.Count; ++i)
         {
             Vector4 point = new Vector4(leftPoints[i].x, leftPoints[i].y, 0, 1);
-            leftPoints[i] = rotate.inverse * point;
+            leftPoints[i] = matrix.inverse * point;
         }
         for (int i = 0; i < rightPoints.Count; ++i)
         {
             Vector4 point = new Vector4(rightPoints[i].x, rightPoints[i].y, 0, 1);
-            rightPoints[i] = rotate.inverse * point;
+            rightPoints[i] = matrix.inverse * point;
         }
 
         leftColl.points = leftPoints.ToArray();
