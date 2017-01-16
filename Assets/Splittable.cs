@@ -101,6 +101,8 @@ public class Splittable : MonoBehaviour {
         MeshRenderer mr = gameObject.AddComponent<MeshRenderer>();
         mr.material = mat;
         mr.material.mainTexture = tex;
+
+        mesh.RecalculateBounds();
     }
 
     // Split leftObj's mesh into two (leftObj and rightObj) along a plane defined by anchor and dir
@@ -254,9 +256,13 @@ public class Splittable : MonoBehaviour {
         rightMesh.triangles = rightTris.ToArray();
         rightMesh.uv = rightUV.ToArray();
 
-        // Finally, clean up any leftover vertices
+        // Clean up any leftover vertices
         CleanUpVertices(leftMesh);
         CleanUpVertices(rightMesh);
+
+        // Recalculate bounds for renderer
+        leftMesh.RecalculateBounds();
+        rightMesh.RecalculateBounds();
     }
 
     // Used within SplitMesh to find the intersection point between the plane and a mesh edge
