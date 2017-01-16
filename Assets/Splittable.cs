@@ -17,36 +17,10 @@ public class Splittable : MonoBehaviour {
     }
 
     void Start () {
-        // Get sprite info (if there is one)
-        SpriteRenderer sr = gameObject.GetComponent<SpriteRenderer>();
-        if (sr == null) return;
-
-        Texture tex = sr.sprite.texture;
-        Material mat = sr.material;
-        sr.enabled = false;
-
-        // Create mesh, copying the mesh data of the sprite
-        Mesh mesh = new Mesh();
-        mesh.vertices = Array.ConvertAll(sr.sprite.vertices, item => (Vector3) item);
-        mesh.uv = sr.sprite.uv;
-        mesh.triangles = Array.ConvertAll(sr.sprite.triangles, item => (int)item);
-
-        // Remove sprite renderer
-        DestroyImmediate(sr);
-
-        // Create mesh filter
-        MeshFilter mf = gameObject.AddComponent<MeshFilter>();
-        mf.mesh = mesh;
-
-        // Create mesh renderer
-        MeshRenderer mr = gameObject.AddComponent<MeshRenderer>();
-        mr.material = mat;
-        mr.material.mainTexture = tex;
-
-
+        ConvertToMesh();
 
         // DEBUG
-        SplitOnPlane(new Vector3(0.5f, 0.0f, 0), new Vector2(0, 1));
+        SplitOnPlane(new Vector3(0.5f, 0.5f, 0), new Vector2(0, 1));
     }
 
     // Split the object along a plane defined by anchor and dir.
@@ -70,6 +44,36 @@ public class Splittable : MonoBehaviour {
         Center(rightObj);
 
         return rightObj;
+    }
+
+    // Convert the SpriteRenderer to a mesh
+    private void ConvertToMesh()
+    {
+        // Get sprite info (if there is one)
+        SpriteRenderer sr = gameObject.GetComponent<SpriteRenderer>();
+        if (sr == null) return;
+
+        Texture tex = sr.sprite.texture;
+        Material mat = sr.material;
+        sr.enabled = false;
+
+        // Create mesh, copying the mesh data of the sprite
+        Mesh mesh = new Mesh();
+        mesh.vertices = Array.ConvertAll(sr.sprite.vertices, item => (Vector3)item);
+        mesh.uv = sr.sprite.uv;
+        mesh.triangles = Array.ConvertAll(sr.sprite.triangles, item => (int)item);
+
+        // Remove sprite renderer
+        DestroyImmediate(sr);
+
+        // Create mesh filter
+        MeshFilter mf = gameObject.AddComponent<MeshFilter>();
+        mf.mesh = mesh;
+
+        // Create mesh renderer
+        MeshRenderer mr = gameObject.AddComponent<MeshRenderer>();
+        mr.material = mat;
+        mr.material.mainTexture = tex;
     }
 
     // Split leftObj's mesh into two (leftObj and rightObj) along a plane defined by anchor and dir
