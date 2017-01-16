@@ -230,6 +230,10 @@ public class Splittable : MonoBehaviour {
         rightMesh.vertices = rightVerts.ToArray();
         rightMesh.triangles = rightTris.ToArray();
         rightMesh.uv = rightUV.ToArray();
+
+        // Finally, clean up any leftover vertices
+        CleanUpVertices(leftMesh);
+        CleanUpVertices(rightMesh);
     }
 
     // Used within SplitMesh to find the intersection point between the plane and a mesh edge
@@ -256,6 +260,43 @@ public class Splittable : MonoBehaviour {
         // Cache this index
         leftInters[edge] = leftVerts.Count - 1;
         rightInters[edge] = rightVerts.Count - 1;
+    }
+
+    // Remove any unused vertices
+    static private void CleanUpVertices(Mesh mesh)
+    {
+        List<Vector3> tempVerts = new List<Vector3>();
+        List<Vector2> tempUV = new List<Vector2>();
+        List<int> removed = new List<int>();
+        
+        for (int i = 0; i < mesh.vertexCount; ++i)
+        {
+            // Check if any triangle uses this index
+            if (Array.Exists(mesh.triangles, x => x == i))
+            {
+                tempVerts.Add(mesh.vertices[i]);
+                tempUV.Add(mesh.uv[i]);
+
+                continue;
+            }
+
+            // Otherwise, mark it to be removed
+            removed.Add(i);
+        }
+
+        int[] tempTriangles = mesh.triangles;
+        foreach (int i in removed)
+        {
+            // Decrement any higher indices to reflect the vertex's removal
+            for (int j = 0; j < tempTriangles.Length; ++j)
+            {
+                if (tempTriangles[j] >= i) --tempTriangles[j];
+            }
+        }
+
+        mesh.triangles = tempTriangles;
+        mesh.vertices = tempVerts.ToArray();
+        mesh.uv = tempUV.ToArray();
     }
 
     // Split leftObj's PolygonCollider2d into two (leftObj and rightObj) along a plane defined by anchor and dir
