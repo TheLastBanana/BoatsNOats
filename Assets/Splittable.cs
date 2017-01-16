@@ -291,7 +291,7 @@ public class Splittable : MonoBehaviour {
         List<Vector3> tempVerts = new List<Vector3>();
         List<Vector2> tempUV = new List<Vector2>();
         List<int> removed = new List<int>();
-        
+
         for (int i = 0; i < mesh.vertexCount; ++i)
         {
             // Check if any triangle uses this index
@@ -307,13 +307,16 @@ public class Splittable : MonoBehaviour {
             removed.Add(i);
         }
 
-        int[] tempTriangles = mesh.triangles;
-        foreach (int i in removed)
+        // Reverse the list so we don't also have to decrement higher removed indices
+        removed.Reverse();
+
+        int[] tempTriangles = mesh.triangles.Clone() as int[];
+        foreach (int index in removed)
         {
             // Decrement any higher indices to reflect the vertex's removal
             for (int j = 0; j < tempTriangles.Length; ++j)
             {
-                if (tempTriangles[j] >= i) --tempTriangles[j];
+                if (tempTriangles[j] >= index) --tempTriangles[j];
             }
         }
 
