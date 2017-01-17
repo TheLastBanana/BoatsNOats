@@ -337,67 +337,72 @@ public class Splittable : MonoBehaviour {
         PolygonCollider2D leftColl = leftObj.GetComponent<PolygonCollider2D>();
         PolygonCollider2D rightColl = rightObj.GetComponent<PolygonCollider2D>();
 
-        List<Vector2> oldPoints = new List<Vector2>();
-        List<Vector2> leftPoints = new List<Vector2>();
-        List<Vector2> rightPoints = new List<Vector2>();
-
-        // Transform points to be relative to cutting plane
-        foreach (Vector3 point in leftColl.points)
+        for (int pathIndex = 0; pathIndex < leftColl.pathCount; ++pathIndex)
         {
-            Vector3 transformed = matrix.MultiplyPoint3x4(point);
-            oldPoints.Add(transformed);
-        }
+            Vector2[] path = leftColl.GetPath(pathIndex);
 
-        // Whether the last point was on the left
-        bool wasLeft = oldPoints[0].x < 0;
-        bool switched = false;
+            List<Vector2> oldPoints = new List<Vector2>();
+            List<Vector2> leftPoints = new List<Vector2>();
+            List<Vector2> rightPoints = new List<Vector2>();
 
-        for (int i = 0; i < oldPoints.Count + 1; ++i)
-        {
-            Vector2 point = oldPoints[i % oldPoints.Count];
-            bool isLeft = point.x < 0;
-
-            // Check if this edge is split (i.e. we've gone from left to right)
-            if (wasLeft != isLeft)
+            // Transform points to be relative to cutting plane
+            foreach (Vector3 point in path)
             {
-                // Add a new point between the two using the slope calculation (see comments in SplitMesh)
-                Vector2 lastPoint = oldPoints[i - 1];
-                float ratio = (-lastPoint.x) / (point.x - lastPoint.x);
-                Vector2 inter = Vector2.Lerp(lastPoint, point, ratio);
-
-                leftPoints.Add(inter);
-                rightPoints.Add(inter);
-
-                switched = true;
-            }
-            
-            // Don't duplicate the last point if we're not interpolating it
-            if (i < oldPoints.Count)
-            {
-                if (isLeft) leftPoints.Add(point);
-                else rightPoints.Add(point);
+                Vector3 transformed = matrix.MultiplyPoint3x4(point);
+                oldPoints.Add(transformed);
             }
 
-            wasLeft = isLeft;
-        }
+            // Whether the last point was on the left
+            bool wasLeft = oldPoints[0].x < 0;
+            bool switched = false;
 
-        // Everything is on one side
-        if (!switched) return false;
+            for (int i = 0; i < oldPoints.Count + 1; ++i)
+            {
+                Vector2 point = oldPoints[i % oldPoints.Count];
+                bool isLeft = point.x < 0;
 
-        // Transform back
-        for (int i = 0; i < leftPoints.Count; ++i)
-        {
-            Vector4 point = new Vector4(leftPoints[i].x, leftPoints[i].y, 0, 1);
-            leftPoints[i] = matrix.inverse * point;
-        }
-        for (int i = 0; i < rightPoints.Count; ++i)
-        {
-            Vector4 point = new Vector4(rightPoints[i].x, rightPoints[i].y, 0, 1);
-            rightPoints[i] = matrix.inverse * point;
-        }
+                // Check if this edge is split (i.e. we've gone from left to right)
+                if (wasLeft != isLeft)
+                {
+                    // Add a new point between the two using the slope calculation (see comments in SplitMesh)
+                    Vector2 lastPoint = oldPoints[i - 1];
+                    float ratio = (-lastPoint.x) / (point.x - lastPoint.x);
+                    Vector2 inter = Vector2.Lerp(lastPoint, point, ratio);
 
-        leftColl.points = leftPoints.ToArray();
-        rightColl.points = rightPoints.ToArray();
+                    leftPoints.Add(inter);
+                    rightPoints.Add(inter);
+
+                    switched = true;
+                }
+
+                // Don't duplicate the last point if we're not interpolating it
+                if (i < oldPoints.Count)
+                {
+                    if (isLeft) leftPoints.Add(point);
+                    else rightPoints.Add(point);
+                }
+
+                wasLeft = isLeft;
+            }
+
+            // Everything is on one side
+            if (!switched) return false;
+
+            // Transform back
+            for (int i = 0; i < leftPoints.Count; ++i)
+            {
+                Vector4 point = new Vector4(leftPoints[i].x, leftPoints[i].y, 0, 1);
+                leftPoints[i] = matrix.inverse * point;
+            }
+            for (int i = 0; i < rightPoints.Count; ++i)
+            {
+                Vector4 point = new Vector4(rightPoints[i].x, rightPoints[i].y, 0, 1);
+                rightPoints[i] = matrix.inverse * point;
+            }
+
+            leftColl.SetPath(pathIndex, leftPoints.ToArray());
+            rightColl.SetPath(pathIndex, rightPoints.ToArray());
+        }
 
         return true;
     }
