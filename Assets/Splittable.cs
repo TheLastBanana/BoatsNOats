@@ -27,11 +27,11 @@ public class Splittable : MonoBehaviour {
         // DEBUG: click and drag to draw a line and split across it
         if (Input.GetMouseButtonDown(0))
         {
-            startPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            startPoint = Camera.current.ScreenToWorldPoint(Input.mousePosition);
         }
         if (Input.GetMouseButtonUp(0))
         {
-            Vector3 endPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 endPoint = Camera.current.ScreenToWorldPoint(Input.mousePosition);
             SplitOnPlane(startPoint, endPoint - startPoint);
         }
     }
