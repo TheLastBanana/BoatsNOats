@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialog>
+  <text>
+    Hey this is some <speed v="10"><b>text!</b></speed> hello
+  </text>
+  <text>
+    This is some more text, what do?
+  </text>
+</dialog>
