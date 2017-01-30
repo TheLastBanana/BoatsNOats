@@ -800,7 +800,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b1e771e1c2550744b87cca2d8750a02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialog: {fileID: 4900000, guid: ace7c257cb9b6da46b8d76190b9da333, type: 3}
+  dialogFile: {fileID: 4900000, guid: ace7c257cb9b6da46b8d76190b9da333, type: 3}
 --- !u!1 &1300275163
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dialog>
   <text>
+    <b>this is some bold text <color=#00ffffff> that's also underlined</color>?</b> <i>Italics!</i>
+  </text>
+  <text>
     Hey this is some <speed v="10"><b>text!</b></speed> hello
   </text>
   <text>
