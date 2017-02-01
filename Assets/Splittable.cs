@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 // An object which can be split up by the portal.
 public class Splittable : MonoBehaviour {
     private Vector3 startPoint;
@@ -38,7 +39,7 @@ public class Splittable : MonoBehaviour {
 
     // Split the object along a plane defined by anchor and dir.
     // Return the other half, or null if the plane did not intersect.
-    public GameObject SplitOnPlane(Vector2 anchor, Vector2 dir)
+    public List<GameObject> SplitOnPlane(Vector2 anchor, Vector2 dir)
     {
         anchor = transform.InverseTransformPoint(anchor);
         dir = transform.InverseTransformDirection(dir);
@@ -69,8 +70,10 @@ public class Splittable : MonoBehaviour {
             return null;
         }
         SplitMesh(gameObject, rightObj, matrix);
-
-        return rightObj;
+        List<GameObject> gameObjectList = new List<GameObject>();
+        gameObjectList.Add(gameObject);
+        gameObjectList.Add(rightObj);
+        return gameObjectList;
     }
 
     // Convert the SpriteRenderer to a mesh
