@@ -3,6 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraSwitcher : MonoBehaviour {
+    public AudioSource portalDragSound;
+    public AudioSource portalReleaseSound;
+    public AudioSource altWorldAmbience;
+    public AudioLowPassFilter altWorldAmbienceLPF;
+    public float portalSoundMaxSize = 20.0f;
+    public float dragLpfLow = 200.0f;
+    public float dragLpfHigh = 3000.0f;
+    public float dragPitchLow = 1.0f;
+    public float dragPitchHigh = 2.0f;
 
     public Camera cMain;
     public Camera cAlt;
@@ -12,9 +21,11 @@ public class CameraSwitcher : MonoBehaviour {
     Vector3 mousePosition1;
     Rect rect;
 
+    AudioEffects afx;
+
     // Use this for initialization
     void Start () {
-		
+        afx = GetComponent<AudioEffects>();
 	}
 	
 	// Update is called once per frame
@@ -37,7 +48,11 @@ public class CameraSwitcher : MonoBehaviour {
         {
             isSelecting = true;
             mousePosition1 = Input.mousePosition;
-            
+
+            portalDragSound.Play();
+            altWorldAmbience.Play();
+            afx.cancelEffects(portalDragSound);
+            afx.cancelEffects(altWorldAmbience);
         }
         // If we let go of the right mouse button, end selection
         if (Input.GetMouseButtonUp(1))
@@ -62,9 +77,24 @@ public class CameraSwitcher : MonoBehaviour {
                 
             }
             isSelecting = false;
+
+            afx.smoothStop(portalDragSound);
+            afx.smoothStop(altWorldAmbience);
+            portalReleaseSound.Play();
         }
             
+        if (isSelecting)
+        {
+            // Get size of selection box
+            float selectionSize = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - Camera.main.ScreenToWorldPoint(mousePosition1)).magnitude;
+            float sizeFactor = selectionSize / portalSoundMaxSize;
 
+            // Update pitch of drag sound
+            portalDragSound.pitch = Mathf.Lerp(dragPitchLow, dragPitchHigh, sizeFactor);
+
+            // Update low-pass filter on alternate world ambience
+            altWorldAmbienceLPF.cutoffFrequency = Mathf.Lerp(dragLpfLow, dragLpfHigh, sizeFactor);
+        }
     }
 
     //Figure out the 4 corners of the bounds for both the selection box and the object and do AABB to figure out where they overlap
