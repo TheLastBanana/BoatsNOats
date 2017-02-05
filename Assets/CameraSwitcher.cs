@@ -53,6 +53,10 @@ public class CameraSwitcher : MonoBehaviour {
             altWorldAmbience.Play();
             afx.cancelEffects(portalDragSound);
             afx.cancelEffects(altWorldAmbience);
+
+            // Disable physics
+            foreach (var physicsObject in FindObjectsOfType<Rigidbody2D>())
+                physicsObject.simulated = false;
         }
         // If we let go of the right mouse button, end selection
         if (Input.GetMouseButtonUp(1))
@@ -77,6 +81,10 @@ public class CameraSwitcher : MonoBehaviour {
                 
             }
             isSelecting = false;
+
+            // Enable physics
+            foreach (var physicsObject in FindObjectsOfType<Rigidbody2D>())
+                physicsObject.simulated = true;
 
             afx.smoothStop(portalDragSound);
             afx.smoothStop(altWorldAmbience);
