@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraSwitcher : MonoBehaviour {
-    public AudioSource portalDragSound;
-    public AudioSource portalReleaseSound;
+public class CameraSwitcher : MonoBehaviour
+{
+    public AudioSource timeStopSound;
     public AudioSource altWorldAmbience;
+    public AudioSource portalDragSound;
+    public AudioSource timeStartSound;
+    public AudioSource objectCutSound;
     public AudioLowPassFilter altWorldAmbienceLPF;
     public float portalSoundMaxSize = 20.0f;
     public float dragLpfLow = 200.0f;
@@ -49,6 +52,7 @@ public class CameraSwitcher : MonoBehaviour {
             isSelecting = true;
             mousePosition1 = Input.mousePosition;
 
+            timeStopSound.Play();
             portalDragSound.Play();
             altWorldAmbience.Play();
             afx.cancelEffects(portalDragSound);
@@ -69,14 +73,16 @@ public class CameraSwitcher : MonoBehaviour {
             max.z = 0;
             var bounds = new Bounds();
             bounds.SetMinMax(min, max);
-            
+
             //Iterate through the splittable objects
+            bool anyCuts = false;
             foreach (var selectableObject in FindObjectsOfType<Splittable>())
             {
                 //If the object and the selection box bounds touch figure out where they do for cutting purposes
                 if (bounds.Intersects(selectableObject.GetComponent<PolygonCollider2D>().bounds))
                 {
                     cutObject(selectableObject, bounds);
+                    anyCuts = true;
                 }  
                 
             }
@@ -88,7 +94,8 @@ public class CameraSwitcher : MonoBehaviour {
 
             afx.smoothStop(portalDragSound);
             afx.smoothStop(altWorldAmbience);
-            portalReleaseSound.Play();
+            timeStartSound.Play();
+            if (anyCuts) objectCutSound.Play();
         }
             
         if (isSelecting)
