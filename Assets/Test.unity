@@ -170,6 +170,69 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &211395734
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 211395736}
+  - component: {fileID: 211395735}
+  - component: {fileID: 211395737}
+  m_Layer: 0
+  m_Name: PortalManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &211395735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 211395734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 248f22321f336ec48b90517db02252de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeStopSound: {fileID: 1580730581}
+  altWorldAmbience: {fileID: 656613278}
+  portalDragSound: {fileID: 847174314}
+  timeStartSound: {fileID: 926393927}
+  objectCutSound: {fileID: 867615535}
+  altWorldAmbienceLPF: {fileID: 656613279}
+  portalSoundMaxSize: 20
+  dragLpfLow: 200
+  dragLpfHigh: 3000
+  dragPitchLow: 1
+  dragPitchHigh: 2
+--- !u!4 &211395736
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 211395734}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 19
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &211395737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 211395734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e49cb9b3e5b6abf498048481a2b0a472, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &306911671
 GameObject:
   m_ObjectHideFlags: 0
@@ -1765,7 +1828,6 @@ GameObject:
   - component: {fileID: 1093931718}
   - component: {fileID: 1093931717}
   - component: {fileID: 1093931716}
-  - component: {fileID: 1093931721}
   m_Layer: 0
   m_Name: CameraManager
   m_TagString: Untagged
@@ -1804,17 +1866,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4b7915c729e722498f2120985d8d120, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeStopSound: {fileID: 1580730581}
-  altWorldAmbience: {fileID: 656613278}
-  portalDragSound: {fileID: 847174314}
-  timeStartSound: {fileID: 926393927}
-  objectCutSound: {fileID: 867615535}
-  altWorldAmbienceLPF: {fileID: 656613279}
-  portalSoundMaxSize: 20
-  dragLpfLow: 200
-  dragLpfHigh: 3000
-  dragPitchLow: 1
-  dragPitchHigh: 1.5
   cMain: {fileID: 1038241252}
   cAlt: {fileID: 603401305}
 --- !u!4 &1093931718
@@ -1830,17 +1881,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1093931721
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1093931715}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e49cb9b3e5b6abf498048481a2b0a472, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1300275163
 GameObject:
   m_ObjectHideFlags: 0
