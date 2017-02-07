@@ -164,6 +164,9 @@ public class PortalManager : MonoBehaviour
                     verticalPieces[i][1].transform.parent = myGameObject.transform;
                 }
             }
+
+            myGameObject.transform.position = selectableObject.transform.parent.position;
+            myGameObject.transform.rotation = selectableObject.transform.parent.rotation;
         }
     }
 
