@@ -7,7 +7,7 @@ public class CameraTracker : MonoBehaviour {
     public GameObject player;
     public Camera mainCam, altCam;
     public int xMin, xMax, yMin, yMax; // These could be floats
-    public int xOff, yOff; // Offset to alt cam
+    public WorldOffsets offs;
 
 	// Use this for initialization
 	void Start () {
@@ -49,8 +49,8 @@ public class CameraTracker : MonoBehaviour {
         mainCamTrans.position = pos;
 
         // Offset for the alt cam
-        pos.x += xOff;
-        pos.y += yOff;
+        pos.x += offs.x;
+        pos.y += offs.y;
         altCamTrans.position = pos;
 	}
 }
