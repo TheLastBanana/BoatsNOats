@@ -1926,7 +1926,7 @@ MonoBehaviour:
   xMax: 34
   yMin: -3
   yMax: 15
-  offs: {fileID: 0}
+  offs: {fileID: 1034332575}
 --- !u!114 &1093931717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3144,9 +3144,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f472aefd391fb94283509da64defa94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0, y: 0, z: 0}
 --- !u!4 &1919266867
 Transform:
   m_ObjectHideFlags: 0
