@@ -6,7 +6,6 @@ using System.Reflection;
 // An object which can be split up by the portal.
 public class Splittable : MonoBehaviour {
     private Vector3 startPoint;
-    public Bounds totalBounds = new Bounds();
 
     // Represents an edge between two vertices
     private struct Edge
@@ -20,13 +19,30 @@ public class Splittable : MonoBehaviour {
         public int a, b;
     }
 
+    // Encapsulated bounds of all children
+    public Bounds totalBounds
+    {
+        get
+        {
+            if (transform.childCount == 0) return new Bounds();
+
+            Bounds totalBounds = transform.GetChild(0).GetComponent<Renderer>().bounds;
+
+            for (int i = 1; i < transform.childCount; ++i)
+            {
+                Transform child = transform.GetChild(i).transform;
+                totalBounds.Encapsulate(child.GetComponent<Renderer>().bounds);
+            }
+
+            return totalBounds;
+        }
+    }
+
     void Start () {
         for (int i = 0; i < transform.childCount; ++i)
         {
             ConvertToMesh(transform.GetChild(i).gameObject);
         }
-
-        RecalculateBounds();
     }
 
     void Update()
@@ -101,26 +117,10 @@ public class Splittable : MonoBehaviour {
             return null;
         }
 
-        RecalculateBounds();
-        rightParent.GetComponent<Splittable>().RecalculateBounds();
-
         List<GameObject> gameObjectList = new List<GameObject>();
         gameObjectList.Add(gameObject);
         gameObjectList.Add(rightParent);
         return gameObjectList;
-    }
-
-    private void RecalculateBounds()
-    {
-        if (transform.childCount == 0) return;
-
-        totalBounds = transform.GetChild(0).GetComponent<Renderer>().bounds;
-
-        for (int i = 1; i < transform.childCount; ++i)
-        {
-            Transform child = transform.GetChild(i).transform;
-            totalBounds.Encapsulate(child.GetComponent<Renderer>().bounds);
-        }
     }
 
     // Convert the SpriteRenderer to a mesh
