@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System.Reflection;
 
 // An object which can be split up by the portal.
 public class Splittable : MonoBehaviour {
     private Vector3 startPoint;
+    public Bounds totalBounds = new Bounds();
 
     // Represents an edge between two vertices
     private struct Edge
@@ -20,7 +21,26 @@ public class Splittable : MonoBehaviour {
     }
 
     void Start () {
-        ConvertToMesh();
+        for (int i = 0; i < transform.childCount; ++i)
+        {
+            ConvertToMesh(transform.GetChild(i).gameObject);
+        }
+
+        RecalculateBounds();
+    }
+
+    void Update()
+    {
+        // DEBUG: click and drag to draw a line and split across it
+        if (Input.GetMouseButtonDown(0))
+        {
+            startPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            Vector3 endPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            SplitOnPlane(startPoint, endPoint - startPoint);
+        }
     }
 
     // Split the object along a plane defined by anchor and dir.
@@ -46,24 +66,65 @@ public class Splittable : MonoBehaviour {
             Vector3.one
         );
 
-        // Make a second object
-        GameObject rightObj = Instantiate(gameObject);
+        GameObject rightParent = Instantiate(gameObject);
 
-        // If false, plane doesn't intersect collider, so don't split
-        if (!SplitCollider(gameObject, rightObj, matrix))
+        // Copy over physics info
+        Rigidbody2D leftPhys = GetComponent<Rigidbody2D>();
+        Rigidbody2D rightPhys = rightParent.GetComponent<Rigidbody2D>();
+        rightPhys.velocity = leftPhys.velocity;
+        rightPhys.angularVelocity = leftPhys.angularVelocity;
+
+        bool anySplits = false;
+        for (int i = 0; i < transform.childCount; ++i)
         {
-            DestroyImmediate(rightObj);
+            GameObject leftChild = transform.GetChild(i).gameObject;
+
+            // Make a second object
+            GameObject rightChild = rightParent.transform.GetChild(i).gameObject;
+
+            // If false, plane doesn't intersect collider, so don't split
+            if (!SplitCollider(leftChild, rightChild, matrix))
+            {
+                Destroy(rightChild);
+                continue;
+            }
+            SplitMesh(leftChild, rightChild, matrix);
+
+            rightChild.transform.SetParent(rightParent.transform);
+
+            anySplits = true;
+        }
+
+        if (!anySplits)
+        {
+            Destroy(rightParent);
             return null;
         }
-        SplitMesh(gameObject, rightObj, matrix);
+
+        RecalculateBounds();
+        rightParent.GetComponent<Splittable>().RecalculateBounds();
+
         List<GameObject> gameObjectList = new List<GameObject>();
         gameObjectList.Add(gameObject);
-        gameObjectList.Add(rightObj);
+        gameObjectList.Add(rightParent);
         return gameObjectList;
     }
 
+    private void RecalculateBounds()
+    {
+        if (transform.childCount == 0) return;
+
+        totalBounds = transform.GetChild(0).GetComponent<Renderer>().bounds;
+
+        for (int i = 1; i < transform.childCount; ++i)
+        {
+            Transform child = transform.GetChild(i).transform;
+            totalBounds.Encapsulate(child.GetComponent<Renderer>().bounds);
+        }
+    }
+
     // Convert the SpriteRenderer to a mesh
-    private void ConvertToMesh()
+    static private void ConvertToMesh(GameObject gameObject)
     {
         // Get sprite info (if there is one)
         SpriteRenderer sr = gameObject.GetComponent<SpriteRenderer>();

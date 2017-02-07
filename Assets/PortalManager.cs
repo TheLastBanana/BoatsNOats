@@ -64,7 +64,7 @@ public class PortalManager : MonoBehaviour
             foreach (var selectableObject in FindObjectsOfType<Splittable>())
             {
                 //If the object and the selection box bounds touch figure out where they do for cutting purposes
-                if (bounds.Intersects(selectableObject.GetComponent<PolygonCollider2D>().bounds))
+                if (bounds.Intersects(selectableObject.totalBounds))
                 {
                     cutObject(selectableObject, bounds);
                     anyCuts = true;
@@ -97,6 +97,15 @@ public class PortalManager : MonoBehaviour
         }
     }
 
+    // Move a Transform's children to another Transform
+    static void transferChildren(Transform oldParent, Transform newParent)
+    {
+        for (int i = 0; i < oldParent.childCount; ++i)
+        {
+            oldParent.GetChild(i).SetParent(newParent);
+        }
+    }
+
     //Figure out the 4 corners of the bounds for both the selection box and the object and do AABB to figure out where they overlap
     void cutObject(Splittable selectableObject, Bounds selectbounds)
     {
@@ -107,7 +116,7 @@ public class PortalManager : MonoBehaviour
         Vector2 selectbotright = new Vector2(selectbounds.center.x + selectbounds.extents.x, selectbounds.center.y - selectbounds.extents.y);
         Vector2 selecttopright = new Vector2(selectbounds.center.x + selectbounds.extents.x, selectbounds.center.y + selectbounds.extents.y);
 
-        Bounds objbounds = selectableObject.GetComponent<PolygonCollider2D>().bounds;
+        Bounds objbounds = selectableObject.totalBounds;
         Vector2 objbotleft = new Vector2(objbounds.center.x - objbounds.extents.x, objbounds.center.y - objbounds.extents.y);
         Vector2 objtopleft = new Vector2(objbounds.center.x - objbounds.extents.x, objbounds.center.y + objbounds.extents.y);
         Vector2 objbotright = new Vector2(objbounds.center.x + objbounds.extents.x, objbounds.center.y - objbounds.extents.y);
@@ -119,6 +128,9 @@ public class PortalManager : MonoBehaviour
         List<List<GameObject>> horizontalPieces = new List<List<GameObject>>();
         horizontalPieces.Add(null);
         horizontalPieces.Add(null);
+
+        print("Object bounds: " + objbounds);
+        print("Selection: " + selectbounds);
 
         if (selecttopright.x > objtopleft.x && selecttopright.x < objtopright.x)
         {
@@ -149,26 +161,31 @@ public class PortalManager : MonoBehaviour
         //Index 0 of the pieces list is the "original" object. Index 1 is the created "Clone"
         if ((horizontalPieces[0] != null || horizontalPieces[1] != null) && (verticalPieces[0] != null || verticalPieces[1] != null))
         {
-            GameObject myGameObject = new GameObject("GluedObj");
-            myGameObject.AddComponent<Rigidbody2D>();
+            GameObject mergedParent = null;
             for (int i = 0; i < 2; i++)
             {
                 if (horizontalPieces[i] != null)
                 {
-                    Destroy(horizontalPieces[i][1].GetComponent<Rigidbody2D>());
-                    horizontalPieces[i][1].transform.parent = myGameObject.transform;
+                    if (mergedParent == null) mergedParent = horizontalPieces[i][1];
+                    else
+                    {
+                        transferChildren(horizontalPieces[i][1].transform, mergedParent.transform);
+                        Destroy(horizontalPieces[i][1]);
+                    }
                 }
                 if (verticalPieces[i] != null)
                 {
-                    Destroy(verticalPieces[i][1].GetComponent<Rigidbody2D>());
-                    verticalPieces[i][1].transform.parent = myGameObject.transform;
+                    if (mergedParent == null) mergedParent = verticalPieces[i][1];
+                    else
+                    {
+                        transferChildren(verticalPieces[i][1].transform, mergedParent.transform);
+                        Destroy(verticalPieces[i][1]);
+                    }
                 }
             }
-
-            myGameObject.transform.position = selectableObject.transform.parent.position;
-            myGameObject.transform.rotation = selectableObject.transform.parent.rotation;
         }
     }
+
 
     void OnGUI()
     {
