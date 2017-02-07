@@ -129,9 +129,6 @@ public class PortalManager : MonoBehaviour
         horizontalPieces.Add(null);
         horizontalPieces.Add(null);
 
-        print("Object bounds: " + objbounds);
-        print("Selection: " + selectbounds);
-
         if (selecttopright.x > objtopleft.x && selecttopright.x < objtopright.x)
         {
             //Right of selection is greater than left of object

@@ -45,20 +45,6 @@ public class Splittable : MonoBehaviour {
         }
     }
 
-    void Update()
-    {
-        // DEBUG: click and drag to draw a line and split across it
-        if (Input.GetMouseButtonDown(0))
-        {
-            startPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        }
-        if (Input.GetMouseButtonUp(0))
-        {
-            Vector3 endPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            SplitOnPlane(startPoint, endPoint - startPoint);
-        }
-    }
-
     // Split the object along a plane defined by anchor and dir.
     // Return the other half, or null if the plane did not intersect.
     public List<GameObject> SplitOnPlane(Vector2 anchor, Vector2 dir)
