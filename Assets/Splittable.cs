@@ -72,9 +72,12 @@ public class Splittable : MonoBehaviour {
 
         // Copy over physics info
         Rigidbody2D leftPhys = GetComponent<Rigidbody2D>();
-        Rigidbody2D rightPhys = rightParent.GetComponent<Rigidbody2D>();
-        rightPhys.velocity = leftPhys.velocity;
-        rightPhys.angularVelocity = leftPhys.angularVelocity;
+        if (leftPhys != null)
+        {
+            Rigidbody2D rightPhys = rightParent.GetComponent<Rigidbody2D>();
+            rightPhys.velocity = leftPhys.velocity;
+            rightPhys.angularVelocity = leftPhys.angularVelocity;
+        }
 
         bool anySplits = false;
         for (int i = 0; i < transform.childCount; ++i)
