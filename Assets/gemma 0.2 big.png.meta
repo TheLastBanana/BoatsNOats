@@ -1,0 +1,370 @@
+fileFormatVersion: 2
+guid: a8ca3067d4bec4043b1fa7ca1e614803
+timeCreated: 1486426224
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: body
+    21300002: l_eye_back
+    21300004: l_eye_pupil
+    21300006: r_eye_white
+    21300008: r_eye_pupil
+    21300010: r_eye_back
+    21300012: l_eye_white
+    21300014: beak
+    21300016: r_leg_up
+    21300018: r_leg_low
+    21300020: r_toe_1
+    21300022: l_leg_up
+    21300024: l_leg_low
+    21300026: r_toe_2
+    21300028: r_toe_4
+    21300030: l_toe_1
+    21300032: l_toe_4
+    21300034: r_toe_3
+    21300036: l_toe_2
+    21300038: l_toe_3
+    21300040: wing
+  serializedVersion: 4
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: -1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Standalone
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: body
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 526
+        width: 392
+        height: 339
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: l_eye_back
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 755
+        width: 106
+        height: 112
+      alignment: 9
+      pivot: {x: 0.42472205, y: 0.58549446}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: l_eye_pupil
+      rect:
+        serializedVersion: 2
+        x: 582
+        y: 852
+        width: 17
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: r_eye_white
+      rect:
+        serializedVersion: 2
+        x: 692
+        y: 756
+        width: 196
+        height: 111
+      alignment: 9
+      pivot: {x: 0.5162849, y: 0.58626467}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: r_eye_pupil
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 770
+        width: 45
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: r_eye_back
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 520
+        width: 118
+        height: 168
+      alignment: 9
+      pivot: {x: 0.5135247, y: 0.5854943}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: l_eye_white
+      rect:
+        serializedVersion: 2
+        x: 584
+        y: 657
+        width: 66
+        height: 77
+      alignment: 9
+      pivot: {x: 0.6209014, y: 0.4792742}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: beak
+      rect:
+        serializedVersion: 2
+        x: 692
+        y: 675
+        width: 161
+        height: 61
+      alignment: 9
+      pivot: {x: 0.95597017, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: r_leg_up
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 306
+        width: 74
+        height: 173
+      alignment: 9
+      pivot: {x: 0.025544656, y: 0.96124125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: r_leg_low
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 195
+        width: 70
+        height: 282
+      alignment: 9
+      pivot: {x: 0.65958947, y: 0.9300992}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: r_toe_1
+      rect:
+        serializedVersion: 2
+        x: 357
+        y: 457
+        width: 65
+        height: 14
+      alignment: 9
+      pivot: {x: 0.9910452, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: l_leg_up
+      rect:
+        serializedVersion: 2
+        x: 610
+        y: 433
+        width: 78
+        height: 174
+      alignment: 9
+      pivot: {x: 0.029415816, y: 0.99527746}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: l_leg_low
+      rect:
+        serializedVersion: 2
+        x: 749
+        y: 321
+        width: 82
+        height: 298
+      alignment: 9
+      pivot: {x: 0.69462174, y: 0.9284283}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: r_toe_2
+      rect:
+        serializedVersion: 2
+        x: 349
+        y: 375
+        width: 83
+        height: 31
+      alignment: 9
+      pivot: {x: 0.9230082, y: 0.9633238}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: r_toe_4
+      rect:
+        serializedVersion: 2
+        x: 474
+        y: 399
+        width: 38
+        height: 13
+      alignment: 9
+      pivot: {x: -0.003966482, y: 0.13171622}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: l_toe_1
+      rect:
+        serializedVersion: 2
+        x: 579
+        y: 386
+        width: 66
+        height: 14
+      alignment: 9
+      pivot: {x: 0.98360467, y: 0.044030327}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: l_toe_4
+      rect:
+        serializedVersion: 2
+        x: 687
+        y: 364
+        width: 38
+        height: 12
+      alignment: 9
+      pivot: {x: -0.04596429, y: 0.36700693}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: r_toe_3
+      rect:
+        serializedVersion: 2
+        x: 356
+        y: 303
+        width: 57
+        height: 38
+      alignment: 9
+      pivot: {x: 1.0319648, y: 0.9619695}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: l_toe_2
+      rect:
+        serializedVersion: 2
+        x: 577
+        y: 322
+        width: 86
+        height: 24
+      alignment: 9
+      pivot: {x: 1.0010369, y: 0.8989741}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: l_toe_3
+      rect:
+        serializedVersion: 2
+        x: 586
+        y: 259
+        width: 61
+        height: 34
+      alignment: 9
+      pivot: {x: 0.9970823, y: 1.0163188}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: wing
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 176
+        width: 121
+        height: 73
+      alignment: 9
+      pivot: {x: 0.011998957, y: 0.84978455}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
