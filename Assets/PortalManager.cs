@@ -93,6 +93,7 @@ public class PortalManager : MonoBehaviour
             portalDragSound.pitch = Mathf.Lerp(dragPitchLow, dragPitchHigh, sizeFactor);
 
             // Update low-pass filter on alternate world ambience
+            altWorldAmbienceLPF.enabled = true;
             altWorldAmbienceLPF.cutoffFrequency = Mathf.Lerp(dragLpfLow, dragLpfHigh, sizeFactor);
         }
     }
