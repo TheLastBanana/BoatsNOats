@@ -191,9 +191,17 @@ public class PortalManager : MonoBehaviour
     // Move a Transform's children to another Transform
     static void transferChildren(Transform oldParent, Transform newParent)
     {
+        List<Transform> children = new List<Transform>();
+
         for (int i = 0; i < oldParent.childCount; ++i)
         {
-            oldParent.GetChild(i).SetParent(newParent);
+            children.Add(oldParent.GetChild(i));
+        }
+
+        // Do this in a separate loop so we don't modify the loop counter as we change parents
+        foreach (Transform child in children)
+        {
+            child.SetParent(newParent);
         }
     }
 
@@ -257,8 +265,10 @@ public class PortalManager : MonoBehaviour
                     if (mergedParent == null) mergedParent = horizontalPieces[i][1];
                     else
                     {
-                        transferChildren(horizontalPieces[i][1].transform, mergedParent.transform);
-                        Destroy(horizontalPieces[i][1]);
+                        // Merge into one parent and delete the other parent
+                        GameObject sacrifice = horizontalPieces[i][1];
+                        transferChildren(sacrifice.transform, mergedParent.transform);
+                        Destroy(sacrifice);
                     }
                 }
                 if (verticalPieces[i] != null)
@@ -266,8 +276,9 @@ public class PortalManager : MonoBehaviour
                     if (mergedParent == null) mergedParent = verticalPieces[i][1];
                     else
                     {
-                        transferChildren(verticalPieces[i][1].transform, mergedParent.transform);
-                        Destroy(verticalPieces[i][1]);
+                        GameObject sacrifice = verticalPieces[i][1];
+                        transferChildren(sacrifice.transform, mergedParent.transform);
+                        Destroy(sacrifice);
                     }
                 }
             }
