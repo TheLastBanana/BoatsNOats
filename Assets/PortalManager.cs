@@ -16,9 +16,12 @@ public class PortalManager : MonoBehaviour
     public float dragPitchLow = 1.0f;
     public float dragPitchHigh = 2.0f;
 
+    public Camera mainCam;
+
+    // Current portal selection info
     bool isSelecting = false;
-    Vector3 mousePosition1;
-    Rect rect;
+    Vector3 portPos1; // These are in world coords
+    Vector3 portPos2;
 
     AudioEffects afx;
 
@@ -31,11 +34,11 @@ public class PortalManager : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        // If we press the right mouse button, save mouse location and begin selection box
+        // If we press the right mouse button, save mouse location and portal creation
         if (Input.GetMouseButtonDown(1))
         {
             isSelecting = true;
-            mousePosition1 = Input.mousePosition;
+            portPos1 = mainCam.ScreenToWorldPoint(Input.mousePosition);
 
             timeStopSound.Play();
             portalDragSound.Play();
@@ -47,18 +50,33 @@ public class PortalManager : MonoBehaviour
             foreach (var physicsObject in FindObjectsOfType<Rigidbody2D>())
                 physicsObject.simulated = false;
         }
+
+        // Here we update the secondary position of the portal while we're 
+        // selecting. We need to do this before checking if mouse button up so
+        // we can update the final mouse position
+        if (isSelecting)
+            portPos2 = mainCam.ScreenToWorldPoint(Input.mousePosition);
+
         // If we let go of the right mouse button, end selection
         if (Input.GetMouseButtonUp(1))
         {
-            var v1 = Camera.main.ScreenToWorldPoint(mousePosition1);
-            var v2 = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            var min = Vector3.Min(v1, v2);
-            var max = Vector3.Max(v1, v2);
+            // Find max and min of vectors to make bounding box
+            var min = Vector3.Min(portPos1, portPos2);
+            var max = Vector3.Max(portPos1, portPos2);
             min.z = 0;
             max.z = 0;
+
+            // Change portpos 1 and 2 to be these new vectors so that more
+            // math isn't needed later. Might as well do it right when we
+            // know it's relevant
+            portPos1 = min; // top left corner
+            portPos2 = max; // bottom right corner
+
+            // Make bounds to find objects to split
             var bounds = new Bounds();
             bounds.SetMinMax(min, max);
-
+            // TODO add cutting for alt world
+            
             //Iterate through the splittable objects
             bool anyCuts = false;
             foreach (var selectableObject in FindObjectsOfType<Splittable>())
@@ -73,7 +91,7 @@ public class PortalManager : MonoBehaviour
             }
             isSelecting = false;
 
-            // Enable physics
+            // Re-enable physics now that we're no longer building the portal
             foreach (var physicsObject in FindObjectsOfType<Rigidbody2D>())
                 physicsObject.simulated = true;
 
@@ -86,7 +104,7 @@ public class PortalManager : MonoBehaviour
         if (isSelecting)
         {
             // Get size of selection box
-            float selectionSize = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - Camera.main.ScreenToWorldPoint(mousePosition1)).magnitude;
+            float selectionSize = (portPos2 - portPos1).magnitude;
             float sizeFactor = selectionSize / portalSoundMaxSize;
 
             // Update pitch of drag sound
@@ -190,7 +208,9 @@ public class PortalManager : MonoBehaviour
         if (isSelecting)
         {
             // Create a rect from both mouse positions
-            rect = Selectionbox.GetScreenRect(mousePosition1, Input.mousePosition);
+            Vector3 topLeft = mainCam.WorldToScreenPoint(portPos1);
+            Vector3 bottomRight = mainCam.WorldToScreenPoint(portPos2);
+            Rect rect = Selectionbox.GetScreenRect(topLeft, bottomRight);
             Selectionbox.DrawScreenRect(rect, new Color(0.8f, 0.8f, 0.95f, 0.25f));
             Selectionbox.DrawScreenRectBorder(rect, 2, new Color(0.8f, 0.8f, 0.95f));
         }
