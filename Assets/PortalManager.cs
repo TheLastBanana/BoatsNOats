@@ -22,6 +22,7 @@ public class PortalManager : MonoBehaviour
 
     // Current portal selection info
     bool isSelecting = false;
+    bool isOpen = false;
     Vector3 portPos1; // These are in world coords
     Vector3 portPos2;
 
@@ -36,8 +37,22 @@ public class PortalManager : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
+        if (isOpen && Input.GetMouseButtonDown(1))
+        {
+            // Kill the portal
+            isOpen = false;
+            // TODO close Mike's portal
+
+            // Transfer objects in the portal home
+            bool anyCuts = portalTransfer(portPos1, portPos2);
+
+            // Play cut noises if necessary
+            if (anyCuts)
+                objectCutSound.Play();
+        }
+
         // If we press the right mouse button, save mouse location and portal creation
-        if (Input.GetMouseButtonDown(0))
+        if (!isOpen && Input.GetMouseButtonDown(0))
         {
             isSelecting = true;
             portPos1 = mainCam.ScreenToWorldPoint(Input.mousePosition);
@@ -60,8 +75,12 @@ public class PortalManager : MonoBehaviour
             portPos2 = mainCam.ScreenToWorldPoint(Input.mousePosition);
 
         // If we let go of the right mouse button, end selection
-        if (Input.GetMouseButtonUp(0))
+        if (!isOpen && Input.GetMouseButtonUp(0))
         {
+            // We're no longer selecting the portal
+            isSelecting = false;
+            isOpen = true; // But it IS open
+
             // Find max and min of vectors to make bounding box
             var min = Vector3.Min(portPos1, portPos2);
             var max = Vector3.Max(portPos1, portPos2);
@@ -73,34 +92,11 @@ public class PortalManager : MonoBehaviour
             // know it's relevant
             portPos1 = min; // top left corner
             portPos2 = max; // bottom right corner
-
-            // Make bounds to find objects to split
-            var bounds = new Bounds();
-            bounds.SetMinMax(min, max);
-
-            // TODO add cutting for alt world
             
-            //Iterate through the splittable objects
-            bool anyCuts = false;
-            List<GameObject> cuts = new List<GameObject>();
-            foreach (var selectableObject in FindObjectsOfType<Splittable>())
-            {
-                //If the object and the selection box bounds touch figure out where they do for cutting purposes
-                if (bounds.Intersects(selectableObject.totalBounds))
-                {
-                    cutObject(selectableObject, bounds);
-                    anyCuts = true;
-                    cuts.Add(selectableObject.gameObject);
-                }
+            // Do the portal transfer
+            bool anyCuts = portalTransfer(portPos1, portPos2);
 
-            }
-            isSelecting = false;
-
-            foreach (GameObject obj in cuts)
-            {
-                Debug.Log("Sending " + obj);
-                obj.transform.position += offs.offset;
-            }
+            // TODO open mike's portal object business
 
             // Re-enable physics now that we're no longer building the portal
             foreach (var physicsObject in FindObjectsOfType<Rigidbody2D>())
@@ -109,7 +105,8 @@ public class PortalManager : MonoBehaviour
             afx.smoothStop(portalDragSound);
             afx.smoothStop(altWorldAmbience);
             timeStartSound.Play();
-            if (anyCuts) objectCutSound.Play();
+            if (anyCuts)
+                objectCutSound.Play();
         }
 
         if (isSelecting)
@@ -127,12 +124,84 @@ public class PortalManager : MonoBehaviour
         }
     }
 
+    // Transfers between portals in the main and alternate world
+    // Expects two vectors, one is top left, the other bottom right that
+    // represent the portal corners.
+    // Returns true if any objects were sent
+    bool portalTransfer(Vector3 min, Vector3 max)
+    {
+        // Make bounds to find objects to split in main world
+        var mainBounds = new Bounds();
+        mainBounds.SetMinMax(min, max);
+
+        // Make bounds for alternate world to split things and bring them back
+        var altBounds = mainBounds;
+        altBounds.center += offs.offset;
+
+        // Cut objects in portal bounds
+        // This is a potential performans hit because we iterate through
+        // every splittable twice. Will it likely matter? No.
+        List<GameObject> mainCuts = cutInBounds(mainBounds);
+        List<GameObject> altCuts = cutInBounds(altBounds);
+
+        // Send and receive objects
+        moveBetweenWorlds(mainCuts, true); // True means send
+        moveBetweenWorlds(altCuts, false);
+
+        // Return if we cut any objects
+        return mainCuts.Count > 0 || altCuts.Count > 0;
+    }
+
+    // Cuts all splittables inside the bounds provided
+    // Returns a list of the objects that are inside the bounds post-split
+    List<GameObject> cutInBounds(Bounds bounds)
+    {
+        // List of cut objects inside portal
+        List<GameObject> cuts = new List<GameObject>();
+
+        // Loop over splittables
+        foreach (var selectableObject in FindObjectsOfType<Splittable>())
+        {
+            //If the object and the selection box bounds touch figure out where they do for cutting purposes
+            if (bounds.Intersects(selectableObject.totalBounds))
+            {
+                // Intersection means cut
+                cutObject(selectableObject, bounds);
+
+                // The original object is now the object inside the portal
+                cuts.Add(selectableObject.gameObject);
+            }
+        }
+
+        return cuts;
+    }
+
+    // Transfers objects between worlds.
+    // Send == true means main -> alt
+    // Send == false means alt -> main
+    void moveBetweenWorlds(List<GameObject> objs, bool send)
+    {
+        Debug.Log("Got objs " + objs.Count + " send " + send);
+        // Send means positive offset, not send means receive (negative offset)
+        Vector3 offset = send ? offs.offset : -offs.offset;
+        foreach (GameObject obj in objs)
+            obj.transform.position += offset;
+    }
+
     // Move a Transform's children to another Transform
     static void transferChildren(Transform oldParent, Transform newParent)
     {
+        List<Transform> children = new List<Transform>();
+
         for (int i = 0; i < oldParent.childCount; ++i)
         {
-            oldParent.GetChild(i).SetParent(newParent);
+            children.Add(oldParent.GetChild(i));
+        }
+
+        // Do this in a separate loop so we don't modify the loop counter as we change parents
+        foreach (Transform child in children)
+        {
+            child.SetParent(newParent);
         }
     }
 
@@ -196,8 +265,10 @@ public class PortalManager : MonoBehaviour
                     if (mergedParent == null) mergedParent = horizontalPieces[i][1];
                     else
                     {
-                        transferChildren(horizontalPieces[i][1].transform, mergedParent.transform);
-                        Destroy(horizontalPieces[i][1]);
+                        // Merge into one parent and delete the other parent
+                        GameObject sacrifice = horizontalPieces[i][1];
+                        transferChildren(sacrifice.transform, mergedParent.transform);
+                        Destroy(sacrifice);
                     }
                 }
                 if (verticalPieces[i] != null)
@@ -205,8 +276,9 @@ public class PortalManager : MonoBehaviour
                     if (mergedParent == null) mergedParent = verticalPieces[i][1];
                     else
                     {
-                        transferChildren(verticalPieces[i][1].transform, mergedParent.transform);
-                        Destroy(verticalPieces[i][1]);
+                        GameObject sacrifice = verticalPieces[i][1];
+                        transferChildren(sacrifice.transform, mergedParent.transform);
+                        Destroy(sacrifice);
                     }
                 }
             }
@@ -216,7 +288,9 @@ public class PortalManager : MonoBehaviour
 
     void OnGUI()
     {
-        if (isSelecting)
+
+        // TODO Note that this is debug code, this will eventually be replaced with Mike's object
+        if (isSelecting || isOpen)
         {
             // Create a rect from both mouse positions
             Vector3 topLeft = mainCam.WorldToScreenPoint(portPos1);
