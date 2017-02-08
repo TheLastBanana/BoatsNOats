@@ -35,7 +35,7 @@ public class PortalManager : MonoBehaviour
 	void Update ()
     {
         // If we press the right mouse button, save mouse location and portal creation
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(0))
         {
             isSelecting = true;
             portPos1 = mainCam.ScreenToWorldPoint(Input.mousePosition);
@@ -58,7 +58,7 @@ public class PortalManager : MonoBehaviour
             portPos2 = mainCam.ScreenToWorldPoint(Input.mousePosition);
 
         // If we let go of the right mouse button, end selection
-        if (Input.GetMouseButtonUp(1))
+        if (Input.GetMouseButtonUp(0))
         {
             // Find max and min of vectors to make bounding box
             var min = Vector3.Min(portPos1, portPos2);
