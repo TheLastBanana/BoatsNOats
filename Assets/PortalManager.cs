@@ -22,6 +22,7 @@ public class PortalManager : MonoBehaviour
 
     // Current portal selection info
     bool isSelecting = false;
+    bool isOpen = false;
     Vector3 portPos1; // These are in world coords
     Vector3 portPos2;
 
@@ -36,8 +37,11 @@ public class PortalManager : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
+        if (isOpen && Input.GetMouseButtonDown(1))
+            isOpen = false;
+
         // If we press the right mouse button, save mouse location and portal creation
-        if (Input.GetMouseButtonDown(0))
+        if (!isOpen && Input.GetMouseButtonDown(0))
         {
             isSelecting = true;
             portPos1 = mainCam.ScreenToWorldPoint(Input.mousePosition);
@@ -60,10 +64,11 @@ public class PortalManager : MonoBehaviour
             portPos2 = mainCam.ScreenToWorldPoint(Input.mousePosition);
 
         // If we let go of the right mouse button, end selection
-        if (Input.GetMouseButtonUp(0))
+        if (!isOpen && Input.GetMouseButtonUp(0))
         {
             // We're no longer selecting the portal
             isSelecting = false;
+            isOpen = true; // But it IS open
 
             // Find max and min of vectors to make bounding box
             var min = Vector3.Min(portPos1, portPos2);
@@ -261,7 +266,7 @@ public class PortalManager : MonoBehaviour
 
     void OnGUI()
     {
-        if (isSelecting)
+        if (isSelecting || isOpen)
         {
             // Create a rect from both mouse positions
             Vector3 topLeft = mainCam.WorldToScreenPoint(portPos1);
