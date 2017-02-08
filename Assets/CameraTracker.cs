@@ -49,8 +49,6 @@ public class CameraTracker : MonoBehaviour {
         mainCamTrans.position = pos;
 
         // Offset for the alt cam
-        pos.x += offs.x;
-        pos.y += offs.y;
-        altCamTrans.position = pos;
+        altCamTrans.position = pos + offs.offset;
 	}
 }
