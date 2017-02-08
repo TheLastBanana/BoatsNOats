@@ -48,7 +48,7 @@ public class Splittable : MonoBehaviour
     }
 
     // Split the object along a plane defined by anchor and dir.
-    // Return the other half, or null if the plane did not intersect.
+    // Return a list. The first entry is the object on the left; the second entry is the object on the right
     public List<GameObject> SplitOnPlane(Vector2 anchor, Vector2 dir)
     {
         anchor = transform.InverseTransformPoint(anchor);
