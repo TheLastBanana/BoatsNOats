@@ -76,24 +76,11 @@ public class PortalManager : MonoBehaviour
             // know it's relevant
             portPos1 = min; // top left corner
             portPos2 = max; // bottom right corner
-
-            // Make bounds to find objects to split in main world
-            var mainBounds = new Bounds();
-            mainBounds.SetMinMax(min, max);
-
-            // Make bounds for alternate world to split things and bring them back
-            var altBounds = mainBounds;
-            altBounds.center += offs.offset;
             
-            // Cut objects in portal bounds
-            // This is a potential performans hit because we iterate through
-            // every splittable twice. Will it likely matter? No.
-            List<GameObject> mainCuts = cutInBounds(mainBounds);
-            List<GameObject> altCuts = cutInBounds(altBounds);
+            // Do the portal transfer
+            bool anyCuts = portalTransfer(portPos1, portPos2);
 
-            // Send and receive objects
-            moveBetweenWorlds(mainCuts, true); // True means send
-            moveBetweenWorlds(altCuts, false);
+            // TODO open mike's portal object business
 
             // Re-enable physics now that we're no longer building the portal
             foreach (var physicsObject in FindObjectsOfType<Rigidbody2D>())
@@ -102,7 +89,7 @@ public class PortalManager : MonoBehaviour
             afx.smoothStop(portalDragSound);
             afx.smoothStop(altWorldAmbience);
             timeStartSound.Play();
-            if (mainCuts.Count > 0 || altCuts.Count > 0)
+            if (anyCuts)
                 objectCutSound.Play();
         }
 
@@ -119,6 +106,34 @@ public class PortalManager : MonoBehaviour
             altWorldAmbienceLPF.enabled = true;
             altWorldAmbienceLPF.cutoffFrequency = Mathf.Lerp(dragLpfLow, dragLpfHigh, sizeFactor);
         }
+    }
+
+    // Transfers between portals in the main and alternate world
+    // Expects two vectors, one is top left, the other bottom right that
+    // represent the portal corners.
+    // Returns true if any objects were sent
+    bool portalTransfer(Vector3 min, Vector3 max)
+    {
+        // Make bounds to find objects to split in main world
+        var mainBounds = new Bounds();
+        mainBounds.SetMinMax(min, max);
+
+        // Make bounds for alternate world to split things and bring them back
+        var altBounds = mainBounds;
+        altBounds.center += offs.offset;
+
+        // Cut objects in portal bounds
+        // This is a potential performans hit because we iterate through
+        // every splittable twice. Will it likely matter? No.
+        List<GameObject> mainCuts = cutInBounds(mainBounds);
+        List<GameObject> altCuts = cutInBounds(altBounds);
+
+        // Send and receive objects
+        moveBetweenWorlds(mainCuts, true); // True means send
+        moveBetweenWorlds(altCuts, false);
+
+        // Return if we cut any objects
+        return mainCuts.Count > 0 || altCuts.Count > 0;
     }
 
     // Cuts all splittables inside the bounds provided
@@ -145,6 +160,9 @@ public class PortalManager : MonoBehaviour
         return cuts;
     }
 
+    // Transfers objects between worlds.
+    // Send == true means main -> alt
+    // Send == false means alt -> main
     void moveBetweenWorlds(List<GameObject> objs, bool send)
     {
         Debug.Log("Got objs " + objs.Count + " send " + send);
