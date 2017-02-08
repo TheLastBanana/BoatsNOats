@@ -16,7 +16,9 @@ public class PortalManager : MonoBehaviour
     public float dragPitchLow = 1.0f;
     public float dragPitchHigh = 2.0f;
 
+    // World info
     public Camera mainCam;
+    public WorldOffsets offs;
 
     // Current portal selection info
     bool isSelecting = false;
@@ -75,10 +77,12 @@ public class PortalManager : MonoBehaviour
             // Make bounds to find objects to split
             var bounds = new Bounds();
             bounds.SetMinMax(min, max);
+
             // TODO add cutting for alt world
             
             //Iterate through the splittable objects
             bool anyCuts = false;
+            List<GameObject> cuts = new List<GameObject>();
             foreach (var selectableObject in FindObjectsOfType<Splittable>())
             {
                 //If the object and the selection box bounds touch figure out where they do for cutting purposes
@@ -86,14 +90,21 @@ public class PortalManager : MonoBehaviour
                 {
                     cutObject(selectableObject, bounds);
                     anyCuts = true;
+                    cuts.Add(selectableObject.gameObject);
                 }
 
             }
             isSelecting = false;
 
+            foreach (GameObject obj in cuts)
+            {
+                Debug.Log("Sending " + obj);
+                obj.transform.position += offs.offset;
+            }
+
             // Re-enable physics now that we're no longer building the portal
-            foreach (var physicsObject in FindObjectsOfType<Rigidbody2D>())
-                physicsObject.simulated = true;
+            //foreach (var physicsObject in FindObjectsOfType<Rigidbody2D>())
+            //    physicsObject.simulated = true;
 
             afx.smoothStop(portalDragSound);
             afx.smoothStop(altWorldAmbience);
