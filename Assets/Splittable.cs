@@ -4,7 +4,8 @@ using UnityEngine;
 using System.Reflection;
 
 // An object which can be split up by the portal.
-public class Splittable : MonoBehaviour {
+public class Splittable : MonoBehaviour
+{
     private Vector3 startPoint;
 
     // Represents an edge between two vertices
@@ -38,7 +39,8 @@ public class Splittable : MonoBehaviour {
         }
     }
 
-    void Start () {
+    void Start()
+    {
         for (int i = 0; i < transform.childCount; ++i)
         {
             ConvertToMesh(transform.GetChild(i).gameObject);
@@ -79,7 +81,8 @@ public class Splittable : MonoBehaviour {
             rightPhys.angularVelocity = leftPhys.angularVelocity;
         }
 
-        bool anySplits = false;
+        int leftChildren = transform.childCount;
+        int rightChildren = transform.childCount;
         for (int i = 0; i < transform.childCount; ++i)
         {
             GameObject leftChild = transform.GetChild(i).gameObject;
@@ -87,24 +90,39 @@ public class Splittable : MonoBehaviour {
             // Make a second object
             GameObject rightChild = rightParent.transform.GetChild(i).gameObject;
 
-            // If false, plane doesn't intersect collider, so don't split
-            if (!SplitCollider(leftChild, rightChild, matrix))
+            int splitResult = SplitCollider(leftChild, rightChild, matrix);
+
+            // On left; destroy right copy
+            if (splitResult == -1)
             {
                 Destroy(rightChild);
+                rightChildren--;
                 continue;
             }
+            // On right; destroy left copy
+            else if (splitResult == 1)
+            {
+                Destroy(leftChild);
+                leftChildren--;
+                continue;
+            }
+
+            // Split intersected, so continue
             SplitMesh(leftChild, rightChild, matrix);
 
             rightChild.transform.SetParent(rightParent.transform);
-
-            anySplits = true;
         }
 
-        if (!anySplits)
-        {
-            Destroy(rightParent);
-            return null;
-        }
+        bool anySplits = false;
+
+        // Clean up parents
+        if (rightChildren == 0) Destroy(rightParent);
+        else anySplits = true;
+
+        if (leftChildren == 0) Destroy(gameObject);
+        else anySplits = true;
+
+        if (!anySplits) return null;
 
         List<GameObject> gameObjectList = new List<GameObject>();
         gameObjectList.Add(gameObject);
@@ -371,7 +389,8 @@ public class Splittable : MonoBehaviour {
     }
 
     // Split leftObj's PolygonCollider2d into two (leftObj and rightObj) along a plane defined by anchor and dir
-    static private bool SplitCollider(GameObject leftObj, GameObject rightObj, Matrix4x4 matrix)
+    // Returns 0 if intersected, -1 if on left, 1 if on right
+    static private int SplitCollider(GameObject leftObj, GameObject rightObj, Matrix4x4 matrix)
     {
         PolygonCollider2D leftColl = leftObj.GetComponent<PolygonCollider2D>();
         PolygonCollider2D rightColl = rightObj.GetComponent<PolygonCollider2D>();
@@ -425,7 +444,7 @@ public class Splittable : MonoBehaviour {
             }
 
             // Everything is on one side
-            if (!switched) return false;
+            if (!switched) return wasLeft ? -1 : 1;
 
             // Transform back
             for (int i = 0; i < leftPoints.Count; ++i)
@@ -443,6 +462,6 @@ public class Splittable : MonoBehaviour {
             rightColl.SetPath(pathIndex, rightPoints.ToArray());
         }
 
-        return true;
+        return 0;
     }
 }
