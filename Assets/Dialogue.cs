@@ -31,6 +31,7 @@ public class Dialogue : MonoBehaviour {
             {
                 done = true;
                 textBubble.SetActive(false);
+                theText.text = "";
             }
             else
             {
