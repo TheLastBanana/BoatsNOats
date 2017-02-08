@@ -62,6 +62,9 @@ public class PortalManager : MonoBehaviour
         // If we let go of the right mouse button, end selection
         if (Input.GetMouseButtonUp(0))
         {
+            // We're no longer selecting the portal
+            isSelecting = false;
+
             // Find max and min of vectors to make bounding box
             var min = Vector3.Min(portPos1, portPos2);
             var max = Vector3.Max(portPos1, portPos2);
@@ -74,47 +77,23 @@ public class PortalManager : MonoBehaviour
             portPos1 = min; // top left corner
             portPos2 = max; // bottom right corner
 
-            // Make bounds to find objects to split
-            var bounds = new Bounds();
-            bounds.SetMinMax(min, max);
+            // Make bounds to find objects to split in main world
+            var mainBounds = new Bounds();
+            mainBounds.SetMinMax(min, max);
 
             // Make bounds for alternate world to split things and bring them back
-            var altBounds = bounds;
+            var altBounds = mainBounds;
             altBounds.center += offs.offset;
             
-            //Iterate through the splittable objects
-            bool anyCuts = false;
-            List<GameObject> mainCuts = new List<GameObject>();
-            List<GameObject> altCuts = new List<GameObject>();
-            foreach (var selectableObject in FindObjectsOfType<Splittable>())
-            {
-                //If the object and the selection box bounds touch figure out where they do for cutting purposes
-                if (bounds.Intersects(selectableObject.totalBounds))
-                {
-                    cutObject(selectableObject, bounds);
-                    anyCuts = true;
-                    mainCuts.Add(selectableObject.gameObject);
-                }
+            // Cut objects in portal bounds
+            // This is a potential performans hit because we iterate through
+            // every splittable twice. Will it likely matter? No.
+            List<GameObject> mainCuts = cutInBounds(mainBounds);
+            List<GameObject> altCuts = cutInBounds(altBounds);
 
-                // Same but for the alternate world
-                if (altBounds.Intersects(selectableObject.totalBounds))
-                {
-                    cutObject(selectableObject, altBounds);
-                    anyCuts = true;
-                    altCuts.Add(selectableObject.gameObject);
-                }
-            }
-            isSelecting = false;
-
-            foreach (GameObject obj in mainCuts)
-            {
-                obj.transform.position += offs.offset;
-            }
-
-            foreach (GameObject obj in altCuts)
-            {
-                obj.transform.position -= offs.offset;
-            }
+            // Send and receive objects
+            moveBetweenWorlds(mainCuts, true); // True means send
+            moveBetweenWorlds(altCuts, false);
 
             // Re-enable physics now that we're no longer building the portal
             foreach (var physicsObject in FindObjectsOfType<Rigidbody2D>())
@@ -123,7 +102,8 @@ public class PortalManager : MonoBehaviour
             afx.smoothStop(portalDragSound);
             afx.smoothStop(altWorldAmbience);
             timeStartSound.Play();
-            if (anyCuts) objectCutSound.Play();
+            if (mainCuts.Count > 0 || altCuts.Count > 0)
+                objectCutSound.Play();
         }
 
         if (isSelecting)
@@ -139,6 +119,39 @@ public class PortalManager : MonoBehaviour
             altWorldAmbienceLPF.enabled = true;
             altWorldAmbienceLPF.cutoffFrequency = Mathf.Lerp(dragLpfLow, dragLpfHigh, sizeFactor);
         }
+    }
+
+    // Cuts all splittables inside the bounds provided
+    // Returns a list of the objects that are inside the bounds post-split
+    List<GameObject> cutInBounds(Bounds bounds)
+    {
+        // List of cut objects inside portal
+        List<GameObject> cuts = new List<GameObject>();
+
+        // Loop over splittables
+        foreach (var selectableObject in FindObjectsOfType<Splittable>())
+        {
+            //If the object and the selection box bounds touch figure out where they do for cutting purposes
+            if (bounds.Intersects(selectableObject.totalBounds))
+            {
+                // Intersection means cut
+                cutObject(selectableObject, bounds);
+
+                // The original object is now the object inside the portal
+                cuts.Add(selectableObject.gameObject);
+            }
+        }
+
+        return cuts;
+    }
+
+    void moveBetweenWorlds(List<GameObject> objs, bool send)
+    {
+        Debug.Log("Got objs " + objs.Count + " send " + send);
+        // Send means positive offset, not send means receive (negative offset)
+        Vector3 offset = send ? offs.offset : -offs.offset;
+        foreach (GameObject obj in objs)
+            obj.transform.position += offset;
     }
 
     // Move a Transform's children to another Transform
