@@ -209,6 +209,7 @@ MonoBehaviour:
   dragLpfHigh: 3000
   dragPitchLow: 1
   dragPitchHigh: 2
+  mainCam: {fileID: 1038241252}
 --- !u!4 &211395736
 Transform:
   m_ObjectHideFlags: 0
