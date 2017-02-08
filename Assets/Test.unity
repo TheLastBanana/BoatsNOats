@@ -305,6 +305,7 @@ MonoBehaviour:
   dragPitchLow: 1
   dragPitchHigh: 2
   mainCam: {fileID: 1038241252}
+  offs: {fileID: 1034332575}
 --- !u!4 &211395736
 Transform:
   m_ObjectHideFlags: 0
@@ -2308,8 +2309,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d0e109ce0ca81b488bbaf18d37527b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  x: 54
-  y: 0
+  offset: {x: 54, y: 0, z: 0}
 --- !u!1 &1038241248
 GameObject:
   m_ObjectHideFlags: 0

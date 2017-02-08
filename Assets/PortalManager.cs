@@ -103,8 +103,8 @@ public class PortalManager : MonoBehaviour
             }
 
             // Re-enable physics now that we're no longer building the portal
-            //foreach (var physicsObject in FindObjectsOfType<Rigidbody2D>())
-            //    physicsObject.simulated = true;
+            foreach (var physicsObject in FindObjectsOfType<Rigidbody2D>())
+                physicsObject.simulated = true;
 
             afx.smoothStop(portalDragSound);
             afx.smoothStop(altWorldAmbience);
