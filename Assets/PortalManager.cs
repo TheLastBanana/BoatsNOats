@@ -78,11 +78,14 @@ public class PortalManager : MonoBehaviour
             var bounds = new Bounds();
             bounds.SetMinMax(min, max);
 
-            // TODO add cutting for alt world
+            // Make bounds for alternate world to split things and bring them back
+            var altBounds = bounds;
+            altBounds.center += offs.offset;
             
             //Iterate through the splittable objects
             bool anyCuts = false;
-            List<GameObject> cuts = new List<GameObject>();
+            List<GameObject> mainCuts = new List<GameObject>();
+            List<GameObject> altCuts = new List<GameObject>();
             foreach (var selectableObject in FindObjectsOfType<Splittable>())
             {
                 //If the object and the selection box bounds touch figure out where they do for cutting purposes
@@ -90,16 +93,27 @@ public class PortalManager : MonoBehaviour
                 {
                     cutObject(selectableObject, bounds);
                     anyCuts = true;
-                    cuts.Add(selectableObject.gameObject);
+                    mainCuts.Add(selectableObject.gameObject);
                 }
 
+                // Same but for the alternate world
+                if (altBounds.Intersects(selectableObject.totalBounds))
+                {
+                    cutObject(selectableObject, altBounds);
+                    anyCuts = true;
+                    altCuts.Add(selectableObject.gameObject);
+                }
             }
             isSelecting = false;
 
-            foreach (GameObject obj in cuts)
+            foreach (GameObject obj in mainCuts)
             {
-                Debug.Log("Sending " + obj);
                 obj.transform.position += offs.offset;
+            }
+
+            foreach (GameObject obj in altCuts)
+            {
+                obj.transform.position -= offs.offset;
             }
 
             // Re-enable physics now that we're no longer building the portal
