@@ -156,6 +156,8 @@ public class PortalManager : MonoBehaviour
     // Returns a list of the objects that are inside the bounds post-split
     List<GameObject> cutInBounds(Bounds bounds)
     {
+        print("Cutting bounds: " + bounds);
+
         // List of cut objects inside portal
         List<GameObject> cuts = new List<GameObject>();
 
@@ -166,10 +168,13 @@ public class PortalManager : MonoBehaviour
             if (bounds.Intersects(selectableObject.totalBounds))
             {
                 // Intersection means cut
-                cutObject(selectableObject, bounds);
+                bool result = cutObject(selectableObject, bounds);
 
-                // The original object is now the object inside the portal
-                cuts.Add(selectableObject.gameObject);
+                // The original object was cut, or the original object is fully contained in the portal
+                if (result || (bounds.Contains(selectableObject.totalBounds.min) && bounds.Contains(selectableObject.totalBounds.max)))
+                {
+                    cuts.Add(selectableObject.gameObject);
+                }
             }
         }
 
@@ -181,7 +186,6 @@ public class PortalManager : MonoBehaviour
     // Send == false means alt -> main
     void moveBetweenWorlds(List<GameObject> objs, bool send)
     {
-        Debug.Log("Got objs " + objs.Count + " send " + send);
         // Send means positive offset, not send means receive (negative offset)
         Vector3 offset = send ? offs.offset : -offs.offset;
         foreach (GameObject obj in objs)
@@ -191,14 +195,22 @@ public class PortalManager : MonoBehaviour
     // Move a Transform's children to another Transform
     static void transferChildren(Transform oldParent, Transform newParent)
     {
+        List<Transform> children = new List<Transform>();
+
         for (int i = 0; i < oldParent.childCount; ++i)
         {
-            oldParent.GetChild(i).SetParent(newParent);
+            children.Add(oldParent.GetChild(i));
+        }
+
+        // Do this in a separate loop so we don't modify the loop counter as we change parents
+        foreach (Transform child in children)
+        {
+            child.SetParent(newParent);
         }
     }
 
     //Figure out the 4 corners of the bounds for both the selection box and the object and do AABB to figure out where they overlap
-    void cutObject(Splittable selectableObject, Bounds selectbounds)
+    bool cutObject(Splittable selectableObject, Bounds selectbounds)
     {
 
         //Check which edge intersects the object or if the selection box is all around the object
@@ -245,8 +257,8 @@ public class PortalManager : MonoBehaviour
             horizontalPieces[1] = selectableObject.SplitOnPlane(selecttopright, selecttopleft - selecttopright);
         }
 
-
-        //Index 0 of the pieces list is the "original" object. Index 1 is the created "Clone"
+        // Merge parents if multiple cuts at different angles happened
+        // Index 0 of the pieces list is the "original" object. Index 1 is the created "Clone"
         if ((horizontalPieces[0] != null || horizontalPieces[1] != null) && (verticalPieces[0] != null || verticalPieces[1] != null))
         {
             GameObject mergedParent = null;
@@ -257,8 +269,10 @@ public class PortalManager : MonoBehaviour
                     if (mergedParent == null) mergedParent = horizontalPieces[i][1];
                     else
                     {
-                        transferChildren(horizontalPieces[i][1].transform, mergedParent.transform);
-                        Destroy(horizontalPieces[i][1]);
+                        // Merge into one parent and delete the other parent
+                        GameObject sacrifice = horizontalPieces[i][1];
+                        transferChildren(sacrifice.transform, mergedParent.transform);
+                        Destroy(sacrifice);
                     }
                 }
                 if (verticalPieces[i] != null)
@@ -266,12 +280,16 @@ public class PortalManager : MonoBehaviour
                     if (mergedParent == null) mergedParent = verticalPieces[i][1];
                     else
                     {
-                        transferChildren(verticalPieces[i][1].transform, mergedParent.transform);
-                        Destroy(verticalPieces[i][1]);
+                        GameObject sacrifice = verticalPieces[i][1];
+                        transferChildren(sacrifice.transform, mergedParent.transform);
+                        Destroy(sacrifice);
                     }
                 }
             }
         }
+
+        // If any are non-null, a cut was made
+        return horizontalPieces[0] != null || horizontalPieces[1] != null || verticalPieces[0] != null || verticalPieces[1] != null;
     }
 
 
