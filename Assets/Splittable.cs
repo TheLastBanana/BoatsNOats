@@ -6,6 +6,7 @@ using System.Reflection;
 // An object which can be split up by the portal.
 public class Splittable : MonoBehaviour
 {
+    static private float minColliderMagnitude = 0.001f;
     private Vector3 startPoint;
 
     // Represents an edge between two vertices
@@ -81,9 +82,11 @@ public class Splittable : MonoBehaviour
             rightPhys.angularVelocity = leftPhys.angularVelocity;
         }
 
-        int leftChildren = transform.childCount;
-        int rightChildren = transform.childCount;
-        for (int i = 0; i < transform.childCount; ++i)
+        int childCount = transform.childCount;
+        int leftChildren = childCount;
+        int rightChildren = childCount;
+
+        for (int i = 0; i < childCount; ++i)
         {
             GameObject leftChild = transform.GetChild(i).gameObject;
 
@@ -92,25 +95,25 @@ public class Splittable : MonoBehaviour
 
             int splitResult = SplitCollider(leftChild, rightChild, matrix);
 
+            bool intersected = true;
             // On left; destroy right copy
-            if (splitResult == -1)
+            if (splitResult == -1 || rightChild.GetComponent<PolygonCollider2D>().bounds.extents.magnitude < minColliderMagnitude)
             {
                 Destroy(rightChild);
                 rightChildren--;
-                continue;
+                intersected = false;
             }
+            
             // On right; destroy left copy
-            else if (splitResult == 1)
+            if (splitResult == 1 || leftChild.GetComponent<PolygonCollider2D>().bounds.extents.magnitude < minColliderMagnitude)
             {
                 Destroy(leftChild);
                 leftChildren--;
-                continue;
+                intersected = false;
             }
 
             // Split intersected, so continue
-            SplitMesh(leftChild, rightChild, matrix);
-
-            rightChild.transform.SetParent(rightParent.transform);
+            if (intersected) SplitMesh(leftChild, rightChild, matrix);
         }
 
         bool anySplits = false;
