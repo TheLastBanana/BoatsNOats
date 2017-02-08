@@ -38,7 +38,18 @@ public class PortalManager : MonoBehaviour
 	void Update ()
     {
         if (isOpen && Input.GetMouseButtonDown(1))
+        {
+            // Kill the portal
             isOpen = false;
+            // TODO close Mike's portal
+
+            // Transfer objects in the portal home
+            bool anyCuts = portalTransfer(portPos1, portPos2);
+
+            // Play cut noises if necessary
+            if (anyCuts)
+                objectCutSound.Play();
+        }
 
         // If we press the right mouse button, save mouse location and portal creation
         if (!isOpen && Input.GetMouseButtonDown(0))
@@ -266,6 +277,8 @@ public class PortalManager : MonoBehaviour
 
     void OnGUI()
     {
+
+        // TODO Note that this is debug code, this will eventually be replaced with Mike's object
         if (isSelecting || isOpen)
         {
             // Create a rect from both mouse positions
