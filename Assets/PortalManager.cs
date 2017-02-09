@@ -18,6 +18,7 @@ public class PortalManager : MonoBehaviour
 
     // World info
     public Camera mainCam;
+    public Camera portalCam;
     public WorldOffsets offs;
 
     // Current portal selection info
@@ -54,6 +55,8 @@ public class PortalManager : MonoBehaviour
         // If we press the right mouse button, save mouse location and portal creation
         if (!isOpen && Input.GetMouseButtonDown(0))
         {
+            portalCam.enabled = true;
+
             isSelecting = true;
             portPos1 = mainCam.ScreenToWorldPoint(Input.mousePosition);
 
@@ -72,7 +75,13 @@ public class PortalManager : MonoBehaviour
         // selecting. We need to do this before checking if mouse button up so
         // we can update the final mouse position
         if (isSelecting)
-            portPos2 = mainCam.ScreenToWorldPoint(Input.mousePosition);
+        {
+            Vector2 clampedMousePos = new Vector2(
+                Mathf.Clamp(Input.mousePosition.x, 0, mainCam.pixelWidth),
+                Mathf.Clamp(Input.mousePosition.y, 0, 2 * mainCam.pixelHeight)
+            );
+            portPos2 = mainCam.ScreenToWorldPoint(clampedMousePos);
+        }
 
         // If we let go of the right mouse button, end selection
         if (!isOpen && Input.GetMouseButtonUp(0))
@@ -80,6 +89,9 @@ public class PortalManager : MonoBehaviour
             // We're no longer selecting the portal
             isSelecting = false;
             isOpen = true; // But it IS open
+
+            portalCam.enabled = false;
+            portalCam.rect = new Rect();
 
             // Find max and min of vectors to make bounding box
             var min = Vector3.Min(portPos1, portPos2);
@@ -306,6 +318,43 @@ public class PortalManager : MonoBehaviour
             Rect rect = Selectionbox.GetScreenRect(topLeft, bottomRight);
             Selectionbox.DrawScreenRect(rect, new Color(0.8f, 0.8f, 0.95f, 0.25f));
             Selectionbox.DrawScreenRectBorder(rect, 2, new Color(0.8f, 0.8f, 0.95f));
+        }
+    }
+
+    void OnRenderObject()
+    {
+        if (isSelecting)
+        {
+            // Get camera resolution
+            Vector2 camRes = new Vector2(mainCam.pixelWidth, mainCam.pixelHeight);
+
+            // Get the screen positions of the two points
+            Vector2 screenPos1 = mainCam.WorldToScreenPoint(portPos1);
+            Vector2 screenPos2 = mainCam.WorldToScreenPoint(portPos2);
+
+            // Convert to min and max points
+            Vector2 minPos = Vector2.Min(screenPos1, screenPos2);
+            Vector2 maxPos = Vector2.Max(screenPos1, screenPos2);
+
+            minPos.x /= camRes.x;
+            minPos.y /= camRes.y;
+            maxPos.x /= camRes.x;
+            maxPos.y /= camRes.y;
+
+            Rect newRect = new Rect(minPos, maxPos - minPos);
+
+            if (newRect.xMax < 0 || newRect.xMin > 1 || newRect.yMax < 0 || newRect.yMin > 1
+                || newRect.width == 0 || newRect.height == 0)
+            {
+                return;
+            }
+
+            // Change portal size
+            portalCam.orthographicSize = Mathf.Abs(portPos2.y - portPos1.y) / 2;
+            portalCam.rect = newRect;
+
+            // Change portal position
+            portalCam.transform.position = (portPos1 + portPos2) / 2 + offs.offset;
         }
     }
 }
