@@ -286,10 +286,10 @@ MonoBehaviour:
   theText: {fileID: 1599130239}
   textLines:
   - Hello world!                  <Press 'enter'>
-  - My name is Gemma!
-  - This is my great gambit!
-  - 
-  - 
+  - My name is Gemma and this is my great gambit!
+  - Use WASD to move and spacebar to jump!
+  - Hold tab to view the other world!
+  - Left click and drag to create a portal! Right click to destroy the portal!
   - 
   - 
   - 
@@ -1964,8 +1964,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -481.94, y: -209.44}
-  m_SizeDelta: {x: 254.55, y: 104.22}
+  m_AnchoredPosition: {x: -481.94, y: -209.49}
+  m_SizeDelta: {x: 254.55, y: 124.26}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1599130239
 MonoBehaviour:
