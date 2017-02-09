@@ -6,7 +6,7 @@ using System.Reflection;
 // An object which can be split up by the portal.
 public class Splittable : MonoBehaviour
 {
-    static private float minColliderMagnitude = 0.001f;
+    static private float minColliderMagnitude = 0.00001f;
     private Vector3 startPoint;
 
     // Represents an edge between two vertices
@@ -82,47 +82,53 @@ public class Splittable : MonoBehaviour
             rightPhys.angularVelocity = leftPhys.angularVelocity;
         }
 
+        // Get children so we can remove them as we go
         int childCount = transform.childCount;
-        int leftChildren = childCount;
-        int rightChildren = childCount;
+        List<Transform> leftChildren = new List<Transform>();
+        List<Transform> rightChildren = new List<Transform>();
 
         for (int i = 0; i < childCount; ++i)
         {
-            GameObject leftChild = transform.GetChild(i).gameObject;
+            leftChildren.Add(transform.GetChild(i));
+            rightChildren.Add(rightParent.transform.GetChild(i));
+        }
 
-            // Make a second object
-            GameObject rightChild = rightParent.transform.GetChild(i).gameObject;
+        // Split children
+        for (int i = 0; i < childCount; ++i)
+        {
+            Transform leftChild = leftChildren[i];
+            Transform rightChild = rightChildren[i];
 
-            int splitResult = SplitCollider(leftChild, rightChild, matrix);
+            int splitResult = SplitCollider(leftChild.gameObject, rightChild.gameObject, matrix);
 
             bool intersected = true;
             // On left; destroy right copy
-            if (splitResult == -1 || rightChild.GetComponent<PolygonCollider2D>().bounds.extents.magnitude < minColliderMagnitude)
+            if (splitResult == -1 || rightChild.GetComponent<PolygonCollider2D>().bounds.extents.sqrMagnitude < minColliderMagnitude)
             {
-                Destroy(rightChild);
-                rightChildren--;
+                rightChild.parent = null;
+                Destroy(rightChild.gameObject);
                 intersected = false;
             }
             
             // On right; destroy left copy
-            if (splitResult == 1 || leftChild.GetComponent<PolygonCollider2D>().bounds.extents.magnitude < minColliderMagnitude)
+            if (splitResult == 1 || leftChild.GetComponent<PolygonCollider2D>().bounds.extents.sqrMagnitude < minColliderMagnitude)
             {
-                Destroy(leftChild);
-                leftChildren--;
+                leftChild.parent = null;
+                Destroy(leftChild.gameObject);
                 intersected = false;
             }
 
             // Split intersected, so continue
-            if (intersected) SplitMesh(leftChild, rightChild, matrix);
+            if (intersected) SplitMesh(leftChild.gameObject, rightChild.gameObject, matrix);
         }
 
         bool anySplits = false;
 
         // Clean up parents
-        if (rightChildren == 0) Destroy(rightParent);
+        if (rightParent.transform.childCount == 0) Destroy(rightParent);
         else anySplits = true;
 
-        if (leftChildren == 0) Destroy(gameObject);
+        if (transform.childCount == 0) Destroy(gameObject);
         else anySplits = true;
 
         if (!anySplits) return null;

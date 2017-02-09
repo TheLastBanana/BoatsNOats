@@ -156,7 +156,8 @@ public class PortalManager : MonoBehaviour
     // Returns a list of the objects that are inside the bounds post-split
     List<GameObject> cutInBounds(Bounds bounds)
     {
-        print("Cutting bounds: " + bounds);
+        Bounds expandedBounds = bounds;
+        expandedBounds.Expand(0.01f); // Add some wiggle room for sending things between worlds
 
         // List of cut objects inside portal
         List<GameObject> cuts = new List<GameObject>();
@@ -168,10 +169,10 @@ public class PortalManager : MonoBehaviour
             if (bounds.Intersects(selectableObject.totalBounds))
             {
                 // Intersection means cut
-                bool result = cutObject(selectableObject, bounds);
-
+                cutObject(selectableObject, bounds);
+                
                 // The original object was cut, or the original object is fully contained in the portal
-                if (result || (bounds.Contains(selectableObject.totalBounds.min) && bounds.Contains(selectableObject.totalBounds.max)))
+                if (expandedBounds.Contains(selectableObject.totalBounds.min) && expandedBounds.Contains(selectableObject.totalBounds.max))
                 {
                     cuts.Add(selectableObject.gameObject);
                 }
