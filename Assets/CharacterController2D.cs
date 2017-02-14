@@ -379,7 +379,12 @@ public class CharacterController2D : MonoBehaviour
 				}
 
 				// set our new deltaMovement and recalculate the rayDistance taking it into account
-				deltaMovement.x = _raycastHit.point.x - ray.x;
+                if(_raycastHit.rigidbody != null)
+                {
+                    var force = new Vector2(velocity.x * 8, 0);
+                    _raycastHit.rigidbody.AddForce(force);
+                }
+                deltaMovement.x = _raycastHit.point.x - ray.x;
 				rayDistance = Mathf.Abs( deltaMovement.x );
 
 				// remember to remove the skinWidth from our deltaMovement
@@ -489,8 +494,13 @@ public class CharacterController2D : MonoBehaviour
 			_raycastHit = Physics2D.Raycast( ray, rayDirection, rayDistance, mask );
 			if( _raycastHit )
 			{
-				// set our new deltaMovement and recalculate the rayDistance taking it into account
-				deltaMovement.y = _raycastHit.point.y - ray.y;
+                // set our new deltaMovement and recalculate the rayDistance taking it into account
+                if (_raycastHit.rigidbody != null)
+                {
+                    var force = new Vector2(0, velocity.y * 8);
+                    _raycastHit.rigidbody.AddForce(force);
+                }
+                deltaMovement.y = _raycastHit.point.y - ray.y;
 				rayDistance = Mathf.Abs( deltaMovement.y );
 
 				// remember to remove the skinWidth from our deltaMovement

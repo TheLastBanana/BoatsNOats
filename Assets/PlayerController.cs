@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviour
 		if( Input.GetKey( KeyCode.D ) )
 		{
 			normalizedHorizontalSpeed = 1;
-			if( transform.localScale.x < 0f )
+			if( transform.localScale.x > 0f )
 				transform.localScale = new Vector3( -transform.localScale.x, transform.localScale.y, transform.localScale.z );
 
 			if( _controller.isGrounded )
@@ -80,7 +80,7 @@ public class PlayerController : MonoBehaviour
 		else if( Input.GetKey( KeyCode.A ) )
 		{
 			normalizedHorizontalSpeed = -1;
-			if( transform.localScale.x > 0f )
+			if( transform.localScale.x < 0f )
 				transform.localScale = new Vector3( -transform.localScale.x, transform.localScale.y, transform.localScale.z );
 
 			if( _controller.isGrounded )
