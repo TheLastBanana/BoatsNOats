@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
 	public float inAirDamping = 5f;
 	public float jumpHeight = 3f;
 
-	[HideInInspector]
+    [HideInInspector]
 	private float normalizedHorizontalSpeed = 0;
 
 	private CharacterController2D _controller;
@@ -66,9 +66,12 @@ public class PlayerController : MonoBehaviour
 	void Update()
 	{
 		if( _controller.isGrounded )
-			_velocity.y = 0;
+        {
+            _velocity.y = 0;
+            _animator.SetBool("Ground", true);
+        }
 
-		if( Input.GetKey( KeyCode.D ) )
+        if ( Input.GetKey( KeyCode.D ) )
 		{
 			normalizedHorizontalSpeed = 1;
 			if( transform.localScale.x > 0f )
@@ -101,11 +104,12 @@ public class PlayerController : MonoBehaviour
 			_velocity.y = Mathf.Sqrt( 2f * jumpHeight * -gravity );
 			_animator.Play( Animator.StringToHash( "Jump" ) );
             _sound.PlayJumpSound();
-		}
+            _animator.SetBool("Ground", false);
+        }
 
 
-		// apply horizontal speed smoothing it. dont really do this with Lerp. Use SmoothDamp or something that provides more control
-		var smoothedMovementFactor = _controller.isGrounded ? groundDamping : inAirDamping; // how fast do we change direction?
+        // apply horizontal speed smoothing it. dont really do this with Lerp. Use SmoothDamp or something that provides more control
+        var smoothedMovementFactor = _controller.isGrounded ? groundDamping : inAirDamping; // how fast do we change direction?
 		_velocity.x = Mathf.Lerp( _velocity.x, normalizedHorizontalSpeed * runSpeed, Time.deltaTime * smoothedMovementFactor );
 
 		// apply gravity before moving
@@ -119,6 +123,7 @@ public class PlayerController : MonoBehaviour
 			_controller.ignoreOneWayPlatformsThisFrame = true;
 		}
 
+        _animator.SetFloat("Speed", Mathf.Abs(_velocity.x));
 		_controller.move( _velocity * Time.deltaTime );
 
 		// grab our current _velocity to use as a base for all calculations
