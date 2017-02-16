@@ -1394,7 +1394,8 @@ Prefab:
       propertyPath: textLines.Array.data[1]
       value: '- Use AD to move and SPACEBAR to jump                              -
         Drag and release the mouse (left click) to create a portal                                                      -
-        Right click to remove the portal'
+        Right click to remove the portal                                     - Press
+        R to restart a level if you mess up'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d8273429c1a1a5d46bd301700e50764c, type: 2}
