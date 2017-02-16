@@ -132,6 +132,23 @@ public class TypewriterText : MonoBehaviour {
             dialogs.Add(new Dialog(actualLine, tags));
         }
 	}
+
+    // Set to xml text file
+    void setText(TextAsset asset)
+    {
+        dialogFile = asset;
+        // Parse file
+    }
+
+    void startText()
+    {
+        return;
+    }
+
+    bool isTextDone()
+    {
+        return true;
+    }
 	
 	// Update is called once per frame
 	void Update ()
