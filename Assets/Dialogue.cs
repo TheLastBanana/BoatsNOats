@@ -14,22 +14,22 @@ public class Dialogue : MonoBehaviour {
     private static int size = 12;
     public string[] textLines = new string[size];
     private int currentLine = 0;
-    private bool done = false;
+    static public bool doneDialogue;
 
 	// Use this for initialization
 	void Start () {
-		
+        doneDialogue = false;
 	}
 
     // Update is called once per frame
     void Update() {
-        if (!done)
+        if (!doneDialogue)
         {
             string currentText = textLines[currentLine];
 
             if (currentLine >= size || currentText == "")
             {
-                done = true;
+                doneDialogue = true;
                 textBubble.SetActive(false);
                 theText.text = "";
             }
