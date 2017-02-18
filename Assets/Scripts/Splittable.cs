@@ -71,7 +71,7 @@ public class Splittable : MonoBehaviour
             Vector3.one
         );
 
-        GameObject rightParent = Instantiate(gameObject);
+        GameObject rightParent = Instantiate(gameObject, transform.parent);
 
         // Copy over physics info
         Rigidbody2D leftPhys = GetComponent<Rigidbody2D>();
