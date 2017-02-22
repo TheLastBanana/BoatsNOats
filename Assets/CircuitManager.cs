@@ -60,7 +60,13 @@ public class CircuitManager : MonoBehaviour
         }
 
         // With IDs assigned to pixels, we can determine each circuit's ID.
-
+        var circuits = FindObjectsOfType<Circuit>();
+        foreach (var circuit in circuits)
+        {
+            var texPos = cam.WorldToScreenPoint(circuit.transform.position);
+            var pixel = tex.GetPixel((int)texPos.x, (int)texPos.y);
+            circuit.circuitId = (int)(pixel.r * 255);
+        }
     }
 
     // Change camera settings to include all circuitry

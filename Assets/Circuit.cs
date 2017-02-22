@@ -5,9 +5,5 @@ using UnityEngine;
 public class Circuit : MonoBehaviour
 {
     public bool powered = false;
-
-    void Start()
-    {
-        
-    }
+    public int circuitId = 0;
 }
