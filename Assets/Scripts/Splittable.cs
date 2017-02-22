@@ -6,7 +6,7 @@ using System.Reflection;
 // An object which can be split up by the portal.
 public class Splittable : MonoBehaviour
 {
-    static private float minColliderMagnitude = 0.00001f;
+    static private float minSizeMagnitude = 0.00001f;
     private Vector3 startPoint;
 
     // Represents an edge between two vertices
@@ -99,27 +99,27 @@ public class Splittable : MonoBehaviour
             Transform leftChild = leftChildren[i];
             Transform rightChild = rightChildren[i];
 
-            int splitResult = SplitCollider(leftChild.gameObject, rightChild.gameObject, matrix);
+            int splitResult = SplitMesh(leftChild.gameObject, rightChild.gameObject, matrix);
 
             bool intersected = true;
             // On left; destroy right copy
-            if (splitResult == -1 || rightChild.GetComponent<PolygonCollider2D>().bounds.extents.sqrMagnitude < minColliderMagnitude)
+            if (splitResult == -1 || rightChild.GetComponent<Renderer>().bounds.extents.sqrMagnitude < minSizeMagnitude)
             {
                 rightChild.parent = null;
                 Destroy(rightChild.gameObject);
                 intersected = false;
             }
-            
+
             // On right; destroy left copy
-            if (splitResult == 1 || leftChild.GetComponent<PolygonCollider2D>().bounds.extents.sqrMagnitude < minColliderMagnitude)
+            if (splitResult == 1 || leftChild.GetComponent<Renderer>().bounds.extents.sqrMagnitude < minSizeMagnitude)
             {
                 leftChild.parent = null;
                 Destroy(leftChild.gameObject);
                 intersected = false;
             }
 
-            // Split intersected, so continue
-            if (intersected) SplitMesh(leftChild.gameObject, rightChild.gameObject, matrix);
+            // Split intersected, so split collider
+            if (intersected) SplitCollider(leftChild.gameObject, rightChild.gameObject, matrix);
         }
 
         bool anySplits = false;
@@ -172,7 +172,8 @@ public class Splittable : MonoBehaviour
     }
 
     // Split leftObj's mesh into two (leftObj and rightObj) along a plane defined by anchor and dir
-    static private void SplitMesh(GameObject leftObj, GameObject rightObj, Matrix4x4 matrix)
+    // Returns 0 if intersected, -1 if entirely on left, 1 if entirely on right
+    static private int SplitMesh(GameObject leftObj, GameObject rightObj, Matrix4x4 matrix)
     {
         Mesh rightMesh = rightObj.GetComponent<MeshFilter>().mesh;
         Mesh leftMesh = leftObj.GetComponent<MeshFilter>().mesh;
@@ -329,6 +330,10 @@ public class Splittable : MonoBehaviour
         // Recalculate bounds for renderer
         leftMesh.RecalculateBounds();
         rightMesh.RecalculateBounds();
+
+        if (leftTris.Count == 0) return 1;
+        else if (rightTris.Count == 0) return -1;
+        else return 0; // Note this is also triggered if the mesh is empty
     }
 
     // Used within SplitMesh to find the intersection point between the plane and a mesh edge
@@ -398,8 +403,7 @@ public class Splittable : MonoBehaviour
     }
 
     // Split leftObj's PolygonCollider2d into two (leftObj and rightObj) along a plane defined by anchor and dir
-    // Returns 0 if intersected, -1 if on left, 1 if on right
-    static private int SplitCollider(GameObject leftObj, GameObject rightObj, Matrix4x4 matrix)
+    static private void SplitCollider(GameObject leftObj, GameObject rightObj, Matrix4x4 matrix)
     {
         PolygonCollider2D leftColl = leftObj.GetComponent<PolygonCollider2D>();
         PolygonCollider2D rightColl = rightObj.GetComponent<PolygonCollider2D>();
@@ -421,7 +425,6 @@ public class Splittable : MonoBehaviour
 
             // Whether the last point was on the left
             bool wasLeft = oldPoints[0].x < 0;
-            bool switched = false;
 
             for (int i = 0; i < oldPoints.Count + 1; ++i)
             {
@@ -438,8 +441,6 @@ public class Splittable : MonoBehaviour
 
                     leftPoints.Add(inter);
                     rightPoints.Add(inter);
-
-                    switched = true;
                 }
 
                 // Don't duplicate the last point if we're not interpolating it
@@ -451,9 +452,6 @@ public class Splittable : MonoBehaviour
 
                 wasLeft = isLeft;
             }
-
-            // Everything is on one side
-            if (!switched) return wasLeft ? -1 : 1;
 
             // Transform back
             for (int i = 0; i < leftPoints.Count; ++i)
@@ -467,10 +465,11 @@ public class Splittable : MonoBehaviour
                 rightPoints[i] = matrix.inverse * point;
             }
 
-            leftColl.SetPath(pathIndex, leftPoints.ToArray());
-            rightColl.SetPath(pathIndex, rightPoints.ToArray());
-        }
+            if (leftPoints.Count == 0) Destroy(leftColl);
+            else leftColl.SetPath(pathIndex, leftPoints.ToArray());
 
-        return 0;
+            if (rightPoints.Count == 0) Destroy(rightColl);
+            else rightColl.SetPath(pathIndex, rightPoints.ToArray());
+        }
     }
 }
