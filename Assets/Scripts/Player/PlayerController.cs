@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
         // Read the inputs.
         bool crouch = Input.GetKey(KeyCode.LeftControl);
         float h = CrossPlatformInputManager.GetAxis("Horizontal");
-        if (Dialogue.doneDialogue)
+        if (Dialogue.getDoneDialogue())
         {
             // Pass all parameters to the character control script.
             m_Character.Move(h, crouch, m_Jump);
