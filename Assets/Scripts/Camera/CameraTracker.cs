@@ -43,7 +43,6 @@ public class CameraTracker : MonoBehaviour {
             return;
 
         updateCamera();
-        Dialogue.setCameraReset(false);
     }
 
     private void updateCamera()

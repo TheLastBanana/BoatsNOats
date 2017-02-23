@@ -18,6 +18,7 @@ public class Dialogue : MonoBehaviour {
     static private bool doneDialogue = false;
     static private bool cameraReset = true;
     static private bool cameraPanning = false;
+    private float startLevelTime;
 
     public float panTime = 2.0f;  // Time it will take to pan from one place to another
     private int panState = 0;  // To keep track of where we are in a pan cutscene
@@ -28,13 +29,23 @@ public class Dialogue : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        
+        currentLine = 0;
+        panState = 0;
+        doneDialogue = false;
+
+        // To ensure camera gets centered on Gemma every level start
+        setCameraReset(true);
+        startLevelTime = Time.time;
 	}
 
     // Update is called once per frame
     void Update() {
         if (getDoneDialogue())
             return;
+
+        // Needs a bit of time at the start of a level to properly set camera
+        if (Time.time - startLevelTime >= 0.1f)
+            setCameraReset(false);
 
         if (zoom1AtLine == currentLine && panState == 0 && zoom1 != null)
         {
@@ -128,7 +139,7 @@ public class Dialogue : MonoBehaviour {
     }
 }
 
-public class CameraPanInfo : MonoBehaviour
+public class CameraPanInfo
 {
     public GameObject from;
     public GameObject to;
