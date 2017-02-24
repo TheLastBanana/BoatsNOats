@@ -59,7 +59,6 @@ class FormatTag : Tag
                 ++i;
             }
             string ret = name + string.Join(" ", joinedParams);
-            Debug.Log("Format tag start" + ret);
             return name + string.Join(" ", joinedParams);
         }
     }
@@ -74,9 +73,9 @@ class SpeedTag : Tag
 {
     public int start { get; set; }
     public int end { get; set; }
-    public int speed { get; set; }
+    public float speed { get; set; }
 
-    public SpeedTag(int speed, int start, int end)
+    public SpeedTag(float speed, int start, int end)
     {
         this.speed = speed;
         this.start = start;
@@ -108,16 +107,23 @@ class Dialog
 {
     public string text { get; set; }
     public List<FormatTag> format { get; private set; }
+    public List<SpeedTag> speeds { get; private set; }
 
     public Dialog()
     {
         text = "";
         format = new List<FormatTag>();
+        speeds = new List<SpeedTag>();
     }
 
     public void addTag(FormatTag tag)
     {
         format.Add(tag);
+    }
+
+    public void addSpeed(SpeedTag tag)
+    {
+        speeds.Add(tag);
     }
 }
 
@@ -137,6 +143,7 @@ public class TypewriterText : MonoBehaviour {
             parseFile();
 	}
 
+    // Figure out how to parse a tag string and return an appropriate tag while adding it to the dialog
     private Tag addTag(ref Dialog dia, string tagString, int start, int end)
     {
         Tag t;
@@ -165,10 +172,10 @@ public class TypewriterText : MonoBehaviour {
             {
                 string[] speedSplit = split[1].Split('=');
                 Debug.Assert(speedSplit.Length == 2, "Speed split not 2");
-
-                Debug.Log("Bringing in int: " + speedSplit[1]);
-                int speed = int.Parse(speedSplit[1].Replace("\"", "")); // Values are quoted..
+                
+                float speed = float.Parse(speedSplit[1].Replace("\"", "")); // Values are quoted..
                 SpeedTag st = new SpeedTag(speed, start, end);
+                dia.addSpeed(st);
                 t = st;
             }
             else
@@ -183,6 +190,10 @@ public class TypewriterText : MonoBehaviour {
 
     void parseFile()
     {
+        // If we've already parsed a file one, then we need
+        if (dialogs.Count > 0)
+            dialogs.Clear();
+
         XmlDocument doc = new XmlDocument(); // Get the XML document
         doc.LoadXml(dialogFile.text);  // Load the text asset into the XML document
 
@@ -193,11 +204,9 @@ public class TypewriterText : MonoBehaviour {
             Dialog dia = new Dialog();
             Stack<Tag> currentTags = new Stack<Tag>();
             string line = node.InnerXml;
-            Debug.Log("line: " + line);
             string actualLine = "";
             for (int i = 0; i < line.Length; ++i)
             {
-                //Debug.Log("here " + line[i]);
                 // Tag starting
                 if (line[i] == '<')
                 {
@@ -233,7 +242,6 @@ public class TypewriterText : MonoBehaviour {
                     else
                     {
                         Tag t = addTag(ref dia, tag, start, -1); // Default end to -1, we'll update when we find the end tag
-                        Debug.Log("After adding '" + tag + "', " + dia.format.Count);
                         currentTags.Push(t);
                     }
                 } // End tag parsing
@@ -254,82 +262,115 @@ public class TypewriterText : MonoBehaviour {
             dialogs.Add(dia);
         }
     }
-
-    // Set to xml text file
-    void setText(TextAsset asset)
-    {
-        dialogFile = asset;
-        // Parse file
-    }
-
-    void startText()
-    {
-        return;
-    }
-
-    bool isTextDone()
-    {
-        return true;
-    }
 	
 	// Update is called once per frame
 	void Update ()
     {
         if (Input.GetKeyDown(KeyCode.P) && !runText)
         {
-            Debug.Log("Starting text.");
             runText = true;
         }
 
         if (runText && !started)
         {
             Debug.Log("Starting text.");
-            StartCoroutine(AnimateText());
+            StartCoroutine(AnimateText(1));
             started = true;
         }
 	}
 
-    IEnumerator AnimateText()
+    IEnumerator AnimateText(int dialogNum)
     {
-        string fullLine = dialogs[0].text;
-        List<FormatTag> tags = dialogs[0].format;
-        Debug.Log("Got " + tags.Count + " tags");
-        float delay = .125f;
+        string fullLine = dialogs[dialogNum].text; // The full text of this line
+        List<FormatTag> fTags = dialogs[dialogNum].format; // The formatters for this line
+        List<SpeedTag> sTags = dialogs[dialogNum].speeds;
 
+        // Keep track of what speed we're putting letters out at
+        Stack<SpeedTag> activeSTags = new Stack<SpeedTag>();
+        activeSTags.Push(new SpeedTag(.125f, 0, fullLine.Length)); // Default here
+
+        // Iterate once for each character in the full string
         for (int i = 0; i < fullLine.Length; ++i)
         {
+            // Pop speeds that end this character
+            while (activeSTags.Peek().end == i)
+                activeSTags.Pop();
+
+            // Push speeds that begin this character
+            foreach (SpeedTag tag in sTags)
+                if (tag.start == i)
+                    activeSTags.Push(tag);
+
             string line = "";
-            Stack<FormatTag> activeTags = new Stack<FormatTag>();
+            Stack<FormatTag> activeFTags = new Stack<FormatTag>();
+            // Iterate once over every character up to where we are in the
+            // string to build up the next updated string
             for (int j = 0; j < i; ++j)
             {
-                // Push new starting tags
-                for (int tagNum = 0; tagNum < tags.Count; ++tagNum )
+                // Push new starting tags and append the ending tag to the text
+                foreach (FormatTag tag in fTags)
                 {
-                    FormatTag tag = tags[tagNum];
                     if (tag.start == j)
                     {
                         line += '<' + tag.startTag + '>';
-                        activeTags.Push(tag);
+                        activeFTags.Push(tag);
                     }
                 }
 
-                while (activeTags.Count > 0 && activeTags.Peek().end == j)
+                // Pop tags and append the ending tag to the text
+                while (activeFTags.Count > 0 && activeFTags.Peek().end == j)
                 {
-                    FormatTag tag = activeTags.Pop();
+                    FormatTag tag = activeFTags.Pop();
                     line += "</" + tag.endTag + '>';
                 }
 
                 line += fullLine[j];
             }
-            
-            while (activeTags.Count > 0)
+
+            // We haven't reached the point in the full string where these tags
+            // terminate, but we still need to terminate them
+            while (activeFTags.Count > 0)
             {
-                FormatTag tag = activeTags.Pop();
+                FormatTag tag = activeFTags.Pop();
                 line += "</" + tag.endTag + '>';
             }
 
+            // Update the text
             text.text = line;
-            yield return new WaitForSeconds(delay);
+
+            // Delay the correct amount before our next string
+            yield return new WaitForSeconds(activeSTags.Peek().speed);
         }
+
+        // We're done animating
+        started = false;
+    }
+
+
+    // -------- Here lies the external interface
+    // Set to xml text file
+    public void setText(TextAsset asset)
+    {
+        dialogFile = asset;
+        parseFile();
+    }
+
+    // Call to start animating the text
+    public void startText(int dialogNum)
+    {
+        Debug.Log("Starting dialog number " + dialogNum);
+        StartCoroutine(AnimateText(dialogNum));
+        started = true;
+    }
+
+    // Check if the text is done animating
+    public bool isTextDone()
+    {
+        return started;
+    }
+
+    public int numDialogsLoaded()
+    {
+        return dialogs.Count;
     }
 }
