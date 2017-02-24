@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dialog>
-  <text>
-    <b>this is some bold text <color=#00ffffff> that's also underlined</color>?</b> <i>Italics!</i>
+  <text xml:space="preserve">
+This is some <b>bold text <custom color="#00ffffff">that's also colored</custom>?</b>       <i>Italics!</i>
   </text>
-  <text>
-    Hey this is some <speed v="10"><b>text!</b></speed> hello
+  <text xml:space="preserve">
+    Hey this is some <custom speed=".01"><b>teeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeext!</b></custom> <custom speed="2"> hello </custom>
   </text>
   <text>
     This is some more text, what do?
