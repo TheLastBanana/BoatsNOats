@@ -10,6 +10,8 @@ public class PortalManager : MonoBehaviour
     public AudioSource timeStartSound;
     public AudioSource objectCutSound;
     public AudioLowPassFilter altWorldAmbienceLPF;
+    public MusicManager musicManager;
+    public float portalMusicVolume = 0.3f;
     public float portalSoundMaxSize = 20.0f;
     public float dragLpfLow = 200.0f;
     public float dragLpfHigh = 3000.0f;
@@ -81,6 +83,8 @@ public class PortalManager : MonoBehaviour
                 Mathf.Clamp(Input.mousePosition.y, 0, 2 * mainCam.pixelHeight)
             );
             portPos2 = mainCam.ScreenToWorldPoint(clampedMousePos);
+
+            musicManager.volume = portalMusicVolume;
         }
 
         // If we let go of the right mouse button, end selection
@@ -119,6 +123,8 @@ public class PortalManager : MonoBehaviour
             timeStartSound.Play();
             if (anyCuts)
                 objectCutSound.Play();
+
+            musicManager.volume = 1.0f;
         }
 
         if (isSelecting)

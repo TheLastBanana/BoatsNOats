@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraSwitcher : MonoBehaviour
 {
     public AudioSource altWorldAmbience;
-
+    public MusicManager musicManager;
     public Camera cMain;
     public Camera cAlt;
 
@@ -35,6 +35,9 @@ public class CameraSwitcher : MonoBehaviour
             switched = false;
 
             afx.smoothStop(altWorldAmbience);
+            musicManager.muffled = false;
         }
+
+        if (switched) musicManager.muffled = true;
     }
 }
