@@ -5,7 +5,7 @@ using UnityEngine;
 public class CircuitManager : MonoBehaviour
 {
     public Vector2 resolution;
-    public Texture2D tex;
+    public Camera circuitCamera;
 
 	void Start()
     {
@@ -18,16 +18,15 @@ public class CircuitManager : MonoBehaviour
         UpdateCamera();
 
         // Render to the texture
-        var cam = GetComponent<Camera>();
-        var rt = cam.targetTexture;
-        cam.Render();
+        var rt = circuitCamera.targetTexture;
+        circuitCamera.Render();
 
         // Set it as the active texture
         var oldRT = RenderTexture.active;
         RenderTexture.active = rt;
 
         // Copy its pixels
-        tex = new Texture2D(rt.width, rt.height, TextureFormat.RGB24, false);
+        var tex = new Texture2D(rt.width, rt.height, TextureFormat.RGB24, false);
         tex.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0);
 
         // Reset active RenderTexture
@@ -63,7 +62,7 @@ public class CircuitManager : MonoBehaviour
         var circuits = FindObjectsOfType<Circuit>();
         foreach (var circuit in circuits)
         {
-            var texPos = cam.WorldToScreenPoint(circuit.transform.position);
+            var texPos = circuitCamera.WorldToScreenPoint(circuit.transform.position);
             var pixel = tex.GetPixel((int)texPos.x, (int)texPos.y);
             circuit.circuitId = (int)(pixel.r * 255);
         }
@@ -103,12 +102,10 @@ public class CircuitManager : MonoBehaviour
         transform.position = newPos;
 
         // Resize camera to see all objects
-        Camera cam = GetComponent<Camera>();
-
         // Sizes accommodating the horizontal and vertical bounds
-        float hSize = cam.orthographicSize = bounds.extents.x / cam.aspect;
+        float hSize = circuitCamera.orthographicSize = bounds.extents.x / circuitCamera.aspect;
         float vSize = bounds.extents.y;
 
-        cam.orthographicSize = Mathf.Max(hSize, vSize);
+        circuitCamera.orthographicSize = Mathf.Max(hSize, vSize);
     }
 }

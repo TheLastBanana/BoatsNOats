@@ -815,7 +815,6 @@ GameObject:
   m_Component:
   - component: {fileID: 827129840}
   - component: {fileID: 827129841}
-  - component: {fileID: 827129842}
   m_Layer: 0
   m_Name: Circuitry Camera
   m_TagString: Untagged
@@ -872,19 +871,6 @@ Camera:
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
   m_StereoMirrorMode: 0
---- !u!114 &827129842
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 827129839}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e449e54ca7b613446b1232bc7c72da2a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resolution: {x: 320, y: 240}
-  tex: {fileID: 0}
 --- !u!1 &831177388 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1359047794276204, guid: c86eda601f8a9cc40b2f7577bccf4596,
@@ -1464,6 +1450,48 @@ Transform:
   m_Father: {fileID: 1635334564}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1302247123
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1302247124}
+  - component: {fileID: 1302247125}
+  m_Layer: 0
+  m_Name: Circuit Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1302247124
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1302247123}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1848048288}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1302247125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1302247123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e449e54ca7b613446b1232bc7c72da2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resolution: {x: 320, y: 240}
+  circuitCamera: {fileID: 827129841}
 --- !u!1 &1308490077
 GameObject:
   m_ObjectHideFlags: 0
@@ -2489,6 +2517,11 @@ Transform:
   m_Father: {fileID: 1635334564}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1848048288 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4309580097185996, guid: 06d7fe0b7b7ba4844835d6b3b4400e43,
+    type: 2}
+  m_PrefabInternal: {fileID: 1716019796}
 --- !u!1 &1933798332
 GameObject:
   m_ObjectHideFlags: 0
