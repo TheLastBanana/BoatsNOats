@@ -4,16 +4,22 @@ using UnityEngine;
 
 public class CircuitManager : MonoBehaviour
 {
-    public Vector2 resolution;
+    public Texture2D tex;
     public Camera circuitCamera;
 
     static List<List<Circuit>> groups;
+    int circuitLayer = -1;
 
-	void Start()
+    void Awake()
+    {
+        circuitLayer = LayerMask.NameToLayer("Circuitry");
+    }
+
+    void Start()
     {
         RecalculateGroups();
     }
-
+    
     // Recalculate the power for a given group
     static public void RecalculatePower(int groupId)
     {
@@ -49,7 +55,7 @@ public class CircuitManager : MonoBehaviour
         RenderTexture.active = rt;
 
         // Copy its pixels
-        var tex = new Texture2D(rt.width, rt.height, TextureFormat.RGB24, false);
+        tex = new Texture2D(rt.width, rt.height, TextureFormat.RGB24, false);
         tex.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0);
 
         // Reset active RenderTexture
@@ -94,15 +100,33 @@ public class CircuitManager : MonoBehaviour
             var circuits = FindObjectsOfType<Circuit>();
             foreach (var circuit in circuits)
             {
-                // Find the R value at this pixel and convert it to an integer to get the circuit ID
-                var texPos = circuitCamera.WorldToScreenPoint(circuit.transform.position);
-                var pixel = tex.GetPixel((int)texPos.x, (int)texPos.y);
-                int groupId = (int)(pixel.r * 255);
-                
-                Debug.Assert(groupId != 0, "Circuit \"" + circuit.gameObject.name + "\" has invalid group ID (0)");
+                // Get one of the circuit graphics' center points to check
+                Transform checkChild = null;
+                for (int i = 0; i < circuit.transform.childCount; ++i)
+                {
+                    var child = circuit.transform.GetChild(i);
+                    if (child.gameObject.layer != circuitLayer) continue;
 
-                // Add to the group
-                groups[groupId - 1].Add(circuit);
+                    // This child is on the circuit layer, so it should have been rendered in the circuit camera
+                    checkChild = child;
+                    break;
+                }
+
+                int groupId = 0;
+
+                // If no child is found, this circuit's group should be left as 0
+                if (checkChild != null)
+                {
+                    // Find the R value at this pixel and convert it to an integer to get the circuit ID
+                    var center = checkChild.GetComponent<Renderer>().bounds.center;
+                    var texPos = circuitCamera.WorldToScreenPoint(center);
+                    var pixel = tex.GetPixel((int)texPos.x, (int)texPos.y);
+                    groupId = (int)(pixel.r * 255);
+
+                    // Add to the group; otherwise, group will be 0 and the circuit can't be powered
+                    if (groupId != 0)
+                        groups[groupId - 1].Add(circuit);
+                }
 
                 var powerSource = circuit.GetComponent<PowerSource>();
                 if (powerSource != null) powerSource.groupId = groupId;
@@ -118,7 +142,6 @@ public class CircuitManager : MonoBehaviour
     {
         // Get bounds of all GameObjects in circuit layer
         var objects = FindObjectsOfType<GameObject>();
-        var circuitLayer = LayerMask.NameToLayer("Circuitry");
         var bounds = new Bounds();
         var boundsSet = false;
 

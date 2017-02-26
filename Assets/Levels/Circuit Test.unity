@@ -1351,8 +1351,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa05ef1c754414b48ade300f6dab91b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startsOn: 0
-  groupId: -1
+  startsOn: 1
+  groupId: 0
 --- !u!114 &1234551771
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1484,7 +1484,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e449e54ca7b613446b1232bc7c72da2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resolution: {x: 320, y: 240}
   circuitCamera: {fileID: 827129841}
 --- !u!1 &1308490077
 GameObject:
