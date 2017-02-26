@@ -6,14 +6,17 @@ public class CircuitTest : MonoBehaviour
 {
     void Update()
     {
-        Material mat = transform.GetChild(0).GetComponent<Renderer>().material;
-        if (GetComponent<Circuit>().powered)
+        for (int i = 0; i < transform.childCount; ++i)
         {
-            mat.color = new Color(0, 1, 0);
-        }
-        else
-        {
-            mat.color = new Color(1, 0, 0);
+            Material mat = transform.GetChild(i).GetComponent<Renderer>().material;
+            if (GetComponent<Circuit>().powered)
+            {
+                mat.color = new Color(0, 1, 0);
+            }
+            else
+            {
+                mat.color = new Color(1, 0, 0);
+            }
         }
     }
 }
