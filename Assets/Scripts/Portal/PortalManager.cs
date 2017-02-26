@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PortalManager : MonoBehaviour
 {
+    // Sound stuff
     public AudioSource timeStopSound;
     public AudioSource altWorldAmbience;
     public AudioSource portalDragSound;
@@ -22,6 +23,7 @@ public class PortalManager : MonoBehaviour
     public Camera mainCam;
     public Camera portalCam;
     public WorldOffsets offs;
+    public CircuitManager circuitManager;
 
     // Current portal selection info
     bool isSelecting = false;
@@ -165,6 +167,8 @@ public class PortalManager : MonoBehaviour
         // Send and receive objects
         moveBetweenWorlds(mainCuts, true); // True means send
         moveBetweenWorlds(altCuts, false);
+
+        circuitManager.RecalculateGroups();
 
         // Return if we cut any objects
         return mainCuts.Count > 0 || altCuts.Count > 0;

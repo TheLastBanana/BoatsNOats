@@ -346,7 +346,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powered: 0
-  circuitId: 0
 --- !u!1001 &349808799
 Prefab:
   m_ObjectHideFlags: 0
@@ -499,7 +498,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powered: 0
-  circuitId: 0
 --- !u!1 &595970050 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1563996884988258, guid: 210ecc0da6b67064eac6dc200457573a,
@@ -522,7 +520,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powered: 0
-  circuitId: 0
 --- !u!1001 &604157034
 Prefab:
   m_ObjectHideFlags: 0
@@ -608,7 +605,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powered: 0
-  circuitId: 0
 --- !u!114 &604157038
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -804,7 +800,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powered: 0
-  circuitId: 0
 --- !u!1 &827129839
 GameObject:
   m_ObjectHideFlags: 0
@@ -960,7 +955,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powered: 0
-  circuitId: 0
 --- !u!1 &885896423
 GameObject:
   m_ObjectHideFlags: 0
@@ -1079,7 +1073,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powered: 0
-  circuitId: 0
 --- !u!1 &902874096
 GameObject:
   m_ObjectHideFlags: 0
@@ -1358,6 +1351,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa05ef1c754414b48ade300f6dab91b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startsOn: 0
+  groupId: -1
 --- !u!114 &1234551771
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1370,7 +1365,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powered: 0
-  circuitId: 0
 --- !u!1 &1300275163
 GameObject:
   m_ObjectHideFlags: 0
@@ -1794,7 +1788,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powered: 0
-  circuitId: 0
 --- !u!1001 &1430786752
 Prefab:
   m_ObjectHideFlags: 0
@@ -1880,7 +1873,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powered: 0
-  circuitId: 0
 --- !u!1 &1433810505
 GameObject:
   m_ObjectHideFlags: 0
@@ -2141,7 +2133,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powered: 0
-  circuitId: 0
 --- !u!1001 &1617820763
 Prefab:
   m_ObjectHideFlags: 0
@@ -2296,6 +2287,16 @@ Prefab:
       propertyPath: m_CullingMask.m_Bits
       value: 4294967039
       objectReference: {fileID: 0}
+    - target: {fileID: 114580626449500856, guid: 06d7fe0b7b7ba4844835d6b3b4400e43,
+        type: 2}
+      propertyPath: circuitMan
+      value: 
+      objectReference: {fileID: 1302247125}
+    - target: {fileID: 114580626449500856, guid: 06d7fe0b7b7ba4844835d6b3b4400e43,
+        type: 2}
+      propertyPath: circuitManager
+      value: 
+      objectReference: {fileID: 1302247125}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 06d7fe0b7b7ba4844835d6b3b4400e43, type: 2}
   m_IsPrefabParent: 0
@@ -2792,7 +2793,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powered: 0
-  circuitId: 0
 --- !u!114 &1984178169
 MonoBehaviour:
   m_ObjectHideFlags: 0

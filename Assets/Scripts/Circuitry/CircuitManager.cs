@@ -7,13 +7,36 @@ public class CircuitManager : MonoBehaviour
     public Vector2 resolution;
     public Camera circuitCamera;
 
+    static List<List<Circuit>> groups;
+
 	void Start()
     {
-        UpdateConnections();	
-	}
+        RecalculateGroups();
+    }
+
+    // Recalculate the power for a given group
+    static public void RecalculatePower(int groupId)
+    {
+        var group = groups[groupId - 1];
+        bool powered = false;
+
+        foreach (var circuit in group)
+        {
+            var powerSource = circuit.GetComponent<PowerSource>();
+            if (powerSource == null || !powerSource.isOn) continue;
+
+            // If this is providing power, we're done
+            powered = true;
+            break;
+        }
+
+        // Now tell the circuits whether they're powered
+        foreach (var circuit in group)
+            circuit.powered = powered;
+    }
 
     // Update circuit objects' connections
-    void UpdateConnections()
+    public void RecalculateGroups()
     {
         UpdateCamera();
 
@@ -44,7 +67,7 @@ public class CircuitManager : MonoBehaviour
         // Now we want to group areas of the circuit. To do that, we flood fill white areas with a color,
         // increasing the R value by 1 each time we do a flood fill. The result is that each group of white
         // pixels (i.e. a connected circuit) has an ID (its R value).
-        int curID = 1;
+        int curId = 1;
         for (int x = 0; x < tex.width; ++x)
         {
             for (int y = 0; y < tex.height; ++y)
@@ -52,19 +75,41 @@ public class CircuitManager : MonoBehaviour
                 // If it's white, it's an unfilled circuit area
                 if (tex.GetPixel(x, y).r == 1.0f)
                 {
-                    tex.FloodFillArea(x, y, new Color(curID / 255.0f, 0, 0));
-                    ++curID;
+                    tex.FloodFillArea(x, y, new Color(curId / 255.0f, 0, 0));
+                    ++curId;
                 }
             }
         }
 
-        // With IDs assigned to pixels, we can determine each circuit's ID.
-        var circuits = FindObjectsOfType<Circuit>();
-        foreach (var circuit in circuits)
+        int numGroups = curId - 1;
+        if (numGroups > 1)
         {
-            var texPos = circuitCamera.WorldToScreenPoint(circuit.transform.position);
-            var pixel = tex.GetPixel((int)texPos.x, (int)texPos.y);
-            circuit.circuitId = (int)(pixel.r * 255);
+            groups = new List<List<Circuit>>();
+            for (int i = 0; i < numGroups; ++i)
+            {
+                groups.Add(new List<Circuit>());
+            }
+
+            // Assign circuit objects to circuit groups
+            var circuits = FindObjectsOfType<Circuit>();
+            foreach (var circuit in circuits)
+            {
+                // Find the R value at this pixel and convert it to an integer to get the circuit ID
+                var texPos = circuitCamera.WorldToScreenPoint(circuit.transform.position);
+                var pixel = tex.GetPixel((int)texPos.x, (int)texPos.y);
+                int groupId = (int)(pixel.r * 255);
+                
+                Debug.Assert(groupId != 0, "Circuit \"" + circuit.gameObject.name + "\" has invalid group ID (0)");
+
+                // Add to the group
+                groups[groupId - 1].Add(circuit);
+
+                var powerSource = circuit.GetComponent<PowerSource>();
+                if (powerSource != null) powerSource.groupId = groupId;
+            }
+
+            for (int i = 0; i < numGroups; ++i)
+                RecalculatePower(i + 1);
         }
     }
 
@@ -99,7 +144,7 @@ public class CircuitManager : MonoBehaviour
         // Move to center of bounds
         Vector3 newPos = bounds.center;
         newPos.z = -10;
-        transform.position = newPos;
+        circuitCamera.transform.position = newPos;
 
         // Resize camera to see all objects
         // Sizes accommodating the horizontal and vertical bounds
