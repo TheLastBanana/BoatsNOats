@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4593978416431674}
   - component: {fileID: 212778308596423164}
   - component: {fileID: 114785541778419156}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: TextBubble
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -161,6 +161,13 @@ MonoBehaviour:
   textBubble: {fileID: 1309821564858432}
   theText: {fileID: 114086773803518016}
   textLines:
+  - We join our hero, Gemma, after she has found a mystical artifact that has transported
+    her to another world. She is now learning how to harness its power and must escape
+    from prison. (press ENTER)
+  - '- Use AD to move and SPACEBAR to jump                              - Drag and
+    release the mouse (left click) to create a portal                                                      -
+    Right click to remove the portal                                     - Press R
+    to restart a level if you mess up'
   - 
   - 
   - 
@@ -171,8 +178,8 @@ MonoBehaviour:
   - 
   - 
   - 
-  - 
-  - 
+  panTime: 2
+  zoom1: {fileID: 0}
 --- !u!212 &212778308596423164
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -257,7 +264,7 @@ RectTransform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1467794980912856}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -267,6 +274,6 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 4.2509003, y: 10.011339}
+  m_AnchoredPosition: {x: -2.097579, y: 8.299065}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
