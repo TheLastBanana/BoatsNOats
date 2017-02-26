@@ -8,6 +8,7 @@ public class CameraSwitcher : MonoBehaviour
     public MusicManager musicManager;
     public Camera cMain;
     public Camera cAlt;
+    public Camera cChar;
 
     bool switched = false;
     AudioEffects afx;
@@ -22,6 +23,7 @@ public class CameraSwitcher : MonoBehaviour
 		if (!switched && Input.GetKeyDown(KeyCode.Tab))
         {
             cMain.enabled = false;
+            cChar.enabled = false;
             cAlt.enabled = true;
             switched = true;
 
@@ -31,6 +33,7 @@ public class CameraSwitcher : MonoBehaviour
         else if (switched && Input.GetKeyUp(KeyCode.Tab))
         {
             cMain.enabled = true;
+            cChar.enabled = true;
             cAlt.enabled = false;
             switched = false;
 
