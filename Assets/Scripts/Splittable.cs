@@ -9,6 +9,15 @@ public class Splittable : MonoBehaviour
     static private float minSizeMagnitude = 0.00001f;
     private Vector3 startPoint;
 
+    private bool _isSplit = false;
+    public bool isSplit
+    {
+        get
+        {
+            return _isSplit;
+        }
+    }
+
     // Represents an edge between two vertices
     private struct Edge
     {
@@ -132,6 +141,9 @@ public class Splittable : MonoBehaviour
         else anySplits = true;
 
         if (!anySplits) return null;
+
+        _isSplit = true;
+        if (rightParent) rightParent.GetComponent<Splittable>()._isSplit = true;
 
         List<GameObject> gameObjectList = new List<GameObject>();
         gameObjectList.Add(gameObject);

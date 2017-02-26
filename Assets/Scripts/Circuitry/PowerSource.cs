@@ -24,4 +24,14 @@ public class PowerSource : MonoBehaviour
     {
         _isOn = startsOn;
     }
+
+    void Update()
+    {
+        // The power source breaks if it's split
+        if (GetComponent<Splittable>().isSplit)
+        {
+            isOn = false;
+            Destroy(this);
+        }
+    }
 }
