@@ -408,6 +408,8 @@ public class Splittable : MonoBehaviour
         PolygonCollider2D leftColl = leftObj.GetComponent<PolygonCollider2D>();
         PolygonCollider2D rightColl = rightObj.GetComponent<PolygonCollider2D>();
 
+        if (leftColl == null || rightColl == null) return;
+
         for (int pathIndex = 0; pathIndex < leftColl.pathCount; ++pathIndex)
         {
             Vector2[] path = leftColl.GetPath(pathIndex);
