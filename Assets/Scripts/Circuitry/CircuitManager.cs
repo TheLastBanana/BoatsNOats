@@ -62,11 +62,12 @@ public class CircuitManager : MonoBehaviour
         RenderTexture.active = oldRT;
 
         // Apply a threshold. Any non-black pixels become fully white.
+        var black = new Color(0f, 0f, 0f);
         var white = new Color(1f, 1f, 1f);
         var pixels = tex.GetPixels();
         for (int i = 0; i < pixels.Length; ++i)
         {
-            if (pixels[i].r != 0f) pixels[i] = white;
+            if (pixels[i] != black) pixels[i] = white;
         }
         tex.SetPixels(pixels);
 
