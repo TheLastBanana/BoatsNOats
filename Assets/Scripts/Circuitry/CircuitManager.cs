@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class CircuitManager : MonoBehaviour
 {
-    public Texture2D tex;
     public Camera circuitCamera;
 
     static List<List<Circuit>> groups;
@@ -55,7 +54,7 @@ public class CircuitManager : MonoBehaviour
         RenderTexture.active = rt;
 
         // Copy its pixels
-        tex = new Texture2D(rt.width, rt.height, TextureFormat.RGB24, false);
+        var tex = new Texture2D(rt.width, rt.height, TextureFormat.RGB24, false);
         tex.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0);
 
         // Reset active RenderTexture
