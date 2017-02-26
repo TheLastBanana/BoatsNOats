@@ -129,6 +129,9 @@ public class CircuitManager : MonoBehaviour
                         groups[groupId - 1].Add(circuit);
                 }
 
+                // No power to ungrouped (i.e. broken) circuit pieces
+                if (groupId == 0) circuit.powered = false;
+
                 var powerSource = circuit.GetComponent<PowerSource>();
                 if (powerSource != null) powerSource.groupId = groupId;
             }
