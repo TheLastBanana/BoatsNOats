@@ -22,6 +22,9 @@ public class CircuitManager : MonoBehaviour
     // Recalculate the power for a given group
     static public void RecalculatePower(int groupId)
     {
+        if (groupId == 0)
+            return;
+
         var group = groups[groupId - 1];
         bool powered = false;
 
