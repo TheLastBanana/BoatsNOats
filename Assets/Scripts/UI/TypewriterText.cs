@@ -320,6 +320,7 @@ public class TypewriterText : MonoBehaviour {
 
         if (runText && !started)
         {
+            runText = false;
             Debug.Log("Starting text.");
             StartCoroutine(AnimateText(1));
             started = true;
