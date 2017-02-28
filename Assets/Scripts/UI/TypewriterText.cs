@@ -103,6 +103,22 @@ class ColorTag : FormatTag
     }
 }
 
+class PanTag : Tag
+{
+    public int start { get; set; }
+    public int end { get { return start; } set { this.start = value; } }
+    public string objName { get; private set; }
+    public float delay { get; private set; }
+
+    public PanTag(string objName, float delay, int start)
+    {
+        this.objName = objName;
+        this.delay = delay;
+        this.start = start;
+
+    }
+}
+
 class Dialog
 {
     public string text { get; set; }
@@ -178,6 +194,22 @@ public class TypewriterText : MonoBehaviour {
                 dia.addSpeed(st);
                 t = st;
             }
+            else if (split[1].StartsWith("pan"))
+            {
+                Debug.Assert(split.Length > 2, "Not enough parameters for pan");
+                string[] objNameSplit = split[1].Split('=');
+                string[] speedSplit = split[2].Split('=');
+                Debug.Assert(objNameSplit.Length == 2, "objNameSplit didn't have key value");
+                Debug.Assert(speedSplit.Length == 2, "pan speedSplit didn't have key value");
+
+                string objName = objNameSplit[1].Replace("\"", ""); // Values are quoted..
+                float speed = float.Parse(speedSplit[1].Replace("\"", "")); // Values are quoted..
+
+                PanTag pt = new PanTag(objName, speed, start);
+                //dia.addPan(pt);
+
+                t = pt;
+            }
             else
             {
                 Debug.Assert(false, "Unknown custom tag");
@@ -213,6 +245,7 @@ public class TypewriterText : MonoBehaviour {
                     string tag = ""; // This holds all text inside the tag including parameters
                     int start = actualLine.Length;
                     bool endTag = false; // Set if this tag starts with </
+                    bool atomTag = false; // Set if this tag ends with />
 
                     ++i; // Advance past <
                     
@@ -226,6 +259,14 @@ public class TypewriterText : MonoBehaviour {
                     // Parse until end of tag
                     while (line[i] != '>')
                     {
+                        // We founds the end of the tag and it's an atomic tag
+                        if (line[i] == '/' && line[i+1] == '>')
+                        {
+                            Debug.Log("Found atomic tag: " + tag);
+                            atomTag = true;
+                            ++i; // Skip the /, we don't want it in the tag string
+                            continue; // just go back to checking the loop (should be > now)
+                        }
                         tag += line[i];
                         ++i; // Advance past this character
                     }
@@ -237,6 +278,12 @@ public class TypewriterText : MonoBehaviour {
                     {
                         Tag lastTag = currentTags.Pop();
                         lastTag.end = actualLine.Length;
+                    }
+                    else if (atomTag)
+                    {
+                        // We don't need to hold onto a reference to this
+                        // because we don't need to pop it from a stack
+                        addTag(ref dia, tag, start, start); // it only exists in this position
                     }
                     // Start tag, make a tagdef and push onto stack
                     else
