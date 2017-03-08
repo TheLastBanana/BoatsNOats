@@ -68,6 +68,7 @@ public class MusicManager : MonoBehaviour
 
     void Start()
     {
+        volume = _volume;
         playMusic();
     }
 
