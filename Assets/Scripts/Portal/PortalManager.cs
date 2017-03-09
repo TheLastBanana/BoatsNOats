@@ -231,7 +231,14 @@ public class PortalManager : MonoBehaviour
             child.SetParent(newParent);
         }
     }
-
+    static void checkIfRobot(Splittable selectableObject)
+    {
+        if (selectableObject.GetComponent<RobotAI>()!=null)
+        {
+            selectableObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            Destroy(selectableObject.GetComponent<RobotAI>());
+        }
+    }
     //Figure out the 4 corners of the bounds for both the selection box and the object and do AABB to figure out where they overlap
     bool cutObject(Splittable selectableObject, Bounds selectbounds)
     {
@@ -259,12 +266,14 @@ public class PortalManager : MonoBehaviour
         if (selecttopright.x > objtopleft.x && selecttopright.x < objtopright.x)
         {
             //Right of selection is greater than left of object
+            checkIfRobot(selectableObject);
             verticalPieces[0] = selectableObject.SplitOnPlane(selectbotright, selecttopright - selectbotright);
         }
 
         if (selecttopleft.x < objtopright.x && selecttopleft.x > objtopleft.x)
         {
             //Left of selection is less than right of object
+            checkIfRobot(selectableObject);
             verticalPieces[1] = selectableObject.SplitOnPlane(selecttopleft, selectbotleft - selecttopleft);
 
         }
@@ -272,12 +281,14 @@ public class PortalManager : MonoBehaviour
         if (selectbotleft.y < objtopleft.y && selectbotleft.y > objbotleft.y)
         {
             //Bottom of selection is less than top of Object
+            checkIfRobot(selectableObject);
             horizontalPieces[0] = selectableObject.SplitOnPlane(selectbotleft, selectbotright - selectbotleft);
         }
 
         if (selecttopright.y > objbotleft.y && selecttopright.y < objtopleft.y)
         {
             //Top of selection is greater than bottom of Object
+            checkIfRobot(selectableObject);
             horizontalPieces[1] = selectableObject.SplitOnPlane(selecttopright, selecttopleft - selecttopright);
         }
 
