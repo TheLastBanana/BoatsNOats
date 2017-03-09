@@ -20,13 +20,23 @@ public class Piston : MonoBehaviour
 	void Update ()
     {
         float posDelta = 0;
-        if (Input.GetKey(KeyCode.RightBracket))
+
+        //Reset box collider offset
+        head.GetComponent<PolygonCollider2D>().offset = new Vector2(0, 0);
+
+        //Use GetComponent<Circuit>().powered to use the power from a circuit
+        if (Input.GetKey(KeyCode.RightBracket) && rod.transform.localScale.y < 2.5)
+        {
             posDelta = speed;
+            //if head is going up account for character feet sinking by offsetting box collider
+            head.GetComponent<PolygonCollider2D>().offset = new Vector2(0,2);
+        }
+            
         else if (Input.GetKey(KeyCode.LeftBracket) && head.transform.localPosition.y > headMin)
             posDelta = -speed;
 
         float scaleDelta = 0;
-        if (Input.GetKey(KeyCode.RightBracket))
+        if (Input.GetKey(KeyCode.RightBracket) && rod.transform.localScale.y < 2.5)
             scaleDelta = scaleSpeed;
         else if (Input.GetKey(KeyCode.LeftBracket) && rod.transform.localScale.y > 0)
             scaleDelta = -scaleSpeed;
