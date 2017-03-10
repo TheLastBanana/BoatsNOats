@@ -4,6 +4,7 @@ using UnityEngine;
 public class Voice : MonoBehaviour
 {
     WeightedClip[] clips;
+
     IEnumerator coroutine = null;
     public float delay = 0f;
 
@@ -35,12 +36,27 @@ public class Voice : MonoBehaviour
 
     IEnumerator PlayClip()
     {
+        var prevSources = new AudioSource[] { null, null };
+
         while (true)
         {
             var source = GetRandomSource();
+
+            // Don't repeat yourself more than once
+            if (clips.Length > 1)
+            {
+                while (source == prevSources[0] && source == prevSources[1])
+                {
+                    source = GetRandomSource();
+                }
+            }
+
             source.Play();
 
             yield return new WaitForSecondsRealtime(source.clip.length + delay);
+
+            prevSources[1] = prevSources[0];
+            prevSources[0] = source;
         }
     }
 
