@@ -36,32 +36,33 @@ public class Voice : MonoBehaviour
 
     IEnumerator PlayClip()
     {
-        var prevSources = new AudioSource[] { null, null };
+        var prevSources = new WeightedClip[] { null, null };
 
         while (true)
         {
-            var source = GetRandomSource();
+            var wClip = GetRandomClip();
 
             // Don't repeat yourself more than once
             if (clips.Length > 1)
             {
-                while (source == prevSources[0] && source == prevSources[1])
+                while (wClip == prevSources[0] && wClip == prevSources[1])
                 {
-                    source = GetRandomSource();
+                    wClip = GetRandomClip();
                 }
             }
 
+            var source = wClip.GetComponent<AudioSource>();
             source.Play();
 
-            yield return new WaitForSecondsRealtime(source.clip.length + delay);
+            yield return new WaitForSecondsRealtime(source.clip.length - wClip.overplay + delay);
 
             prevSources[1] = prevSources[0];
-            prevSources[0] = source;
+            prevSources[0] = wClip;
         }
     }
 
     // Randomly pick one of the clips, taking into account their weights.
-	AudioSource GetRandomSource()
+	WeightedClip GetRandomClip()
     {
         // Determine total weight of clips
         float total = 0f;
@@ -77,8 +78,7 @@ public class Voice : MonoBehaviour
         {
             if (sum + clip.weight > chosen)
             {
-                var source = clip.GetComponent<AudioSource>();
-                return source;
+                return clip;
             }
 
             sum += clip.weight;
