@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using UnityEngine;
 
+[RequireComponent (typeof (AudioSource))]
 public class Voice : MonoBehaviour
 {
     WeightedClip[] clips;
+    AudioSource source;
 
     IEnumerator coroutine = null;
     public float delay = 0f;
@@ -16,6 +18,7 @@ public class Voice : MonoBehaviour
     public void Awake()
     {
         clips = transform.GetComponentsInChildren<WeightedClip>();
+        source = GetComponent<AudioSource>();
     }
 
     public void Play()
@@ -34,6 +37,7 @@ public class Voice : MonoBehaviour
         coroutine = null;
     }
 
+    // Coroutine that plays clips
     IEnumerator PlayClip()
     {
         var prevSources = new WeightedClip[] { null, null };
@@ -50,11 +54,11 @@ public class Voice : MonoBehaviour
                     wClip = GetRandomClip();
                 }
             }
+            
+            source.PlayOneShot(wClip.clip, wClip.volume);
 
-            var source = wClip.GetComponent<AudioSource>();
-            source.Play();
-
-            yield return new WaitForSecondsRealtime(source.clip.length - wClip.overplay + delay);
+            // Wait to play the next clip
+            yield return new WaitForSecondsRealtime(wClip.clip.length - wClip.overplay + delay);
 
             prevSources[1] = prevSources[0];
             prevSources[0] = wClip;

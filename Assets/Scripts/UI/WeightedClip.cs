@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 
-[RequireComponent (typeof (AudioSource))]
 public class WeightedClip : MonoBehaviour
 {
+    public AudioClip clip;
+
+    public float volume = 1f;
+
     // How likely is this to play?
     public float weight = 1f;
 
