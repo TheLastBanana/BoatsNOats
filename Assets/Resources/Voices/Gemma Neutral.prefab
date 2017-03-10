@@ -433,7 +433,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clip: {fileID: 8300000, guid: fef5873b437ea5b4d9a00cfbbf18174f, type: 3}
-  volume: 1
+  volume: 0.7
   weight: 1
   overplay: 0.09
 --- !u!114 &114034546881802580
@@ -448,7 +448,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clip: {fileID: 8300000, guid: 96fd4d027e5f68b4ab0bc82ae61caf59, type: 3}
-  volume: 1
+  volume: 0.7
   weight: 1
   overplay: 0.09
 --- !u!114 &114096190986123834
@@ -463,7 +463,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clip: {fileID: 8300000, guid: cff4abfef35783f49a747870f5612297, type: 3}
-  volume: 1
+  volume: 0.7
   weight: 1
   overplay: 0.09
 --- !u!114 &114129754066586258
@@ -478,7 +478,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clip: {fileID: 8300000, guid: fb6aac232044ab84db2faaca04507f14, type: 3}
-  volume: 1
+  volume: 0.7
   weight: 1
   overplay: 0.09
 --- !u!114 &114166984968148762
@@ -493,7 +493,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clip: {fileID: 8300000, guid: b9125359e799fd4479d108ed2c27dca0, type: 3}
-  volume: 1
+  volume: 0.7
   weight: 1
   overplay: 0.09
 --- !u!114 &114255361272777526
@@ -508,7 +508,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clip: {fileID: 8300000, guid: 88510e6faacc13f4e8dccaef9e510a68, type: 3}
-  volume: 1
+  volume: 0.7
   weight: 1
   overplay: 0.09
 --- !u!114 &114677483910495068
@@ -523,7 +523,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clip: {fileID: 8300000, guid: 3d84b3a398be90c4985d3f4f3627476b, type: 3}
-  volume: 1
+  volume: 0.7
   weight: 1
   overplay: 0.08
 --- !u!114 &114763277262211472
@@ -538,7 +538,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clip: {fileID: 8300000, guid: 06c9a899d67739c4f9d35f6bac5f4d74, type: 3}
-  volume: 1
+  volume: 0.7
   weight: 1
   overplay: 0.1
 --- !u!114 &114827315801792050
@@ -553,9 +553,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clip: {fileID: 8300000, guid: 9937be0a8ebc5e74b830e309986371cd, type: 3}
-  volume: 1
+  volume: 0.7
   weight: 1
-  overplay: 0.08
+  overplay: 0.09
 --- !u!114 &114899276815749244
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -580,6 +580,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clip: {fileID: 8300000, guid: 1796ad123911db5418115fd90f6e3e41, type: 3}
-  volume: 1
+  volume: 0.8
   weight: 1
   overplay: 0.09
