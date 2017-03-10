@@ -238,6 +238,11 @@ public class PortalManager : MonoBehaviour
             selectableObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
             Destroy(selectableObject.GetComponent<RobotAI>());
         }
+        if (selectableObject.transform.parent.GetComponent<Piston>() != null)
+        {
+            Destroy(selectableObject.transform.parent.GetComponent<Piston>());
+        }
+
     }
     //Figure out the 4 corners of the bounds for both the selection box and the object and do AABB to figure out where they overlap
     bool cutObject(Splittable selectableObject, Bounds selectbounds)
