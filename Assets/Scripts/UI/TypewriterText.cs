@@ -369,6 +369,8 @@ public class TypewriterText : MonoBehaviour {
 
     IEnumerator AnimateText(int dialogNum)
     {
+        text = GetComponent<Text>();
+
         string fullLine = dialogs[dialogNum].text; // The full text of this line
         List<FormatTag> fTags = dialogs[dialogNum].format; // The formatters for this line
         List<SpeedTag> sTags = dialogs[dialogNum].speeds;
