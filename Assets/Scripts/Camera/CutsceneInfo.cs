@@ -8,7 +8,6 @@ public class CutsceneInfo : MonoBehaviour {
     public GameObject CutsceneManager;
     public static int size = 1;
     public TextAsset[] texts = new TextAsset[size];
-    public GameObject panTo = null;
 
     private CutsceneManager script;
 
@@ -26,7 +25,8 @@ public class CutsceneInfo : MonoBehaviour {
     {
         if (other.tag == "Player")
         {
-            script.RunCutscene(size, texts, panTo);
+            // Start the cutscene indicated in this object and deactivate this object
+            script.RunCutscene(size, texts);
             this.gameObject.SetActive(false);
         }
     }

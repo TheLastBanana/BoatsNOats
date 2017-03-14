@@ -171,7 +171,7 @@ class Dialog
 
 public class TypewriterText : MonoBehaviour {
     Text text;
-    public TextAsset dialogFile;
+    private TextAsset dialogFile = null;
     List<Dialog> dialogs = new List<Dialog>();
     bool runText = false;
     bool started = false;
@@ -181,11 +181,14 @@ public class TypewriterText : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-        // Get the text box for later use
-        text = GetComponent<Text>();
-        if (text != null)
-            parseFile();
+
 	}
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 
     // Figure out how to parse a tag string and return an appropriate tag while adding it to the dialog
     private Tag addTag(ref Dialog dia, string tagString, int start, int end)
@@ -350,25 +353,9 @@ public class TypewriterText : MonoBehaviour {
         }
     }
 	
-	// Update is called once per frame
-	void Update ()
-    {
-        if (Input.GetKeyDown(KeyCode.P) && !runText)
-        {
-            runText = true;
-        }
-
-        if (runText && !started)
-        {
-            runText = false;
-            Debug.Log("Starting text.");
-            StartCoroutine(AnimateText(0));
-            started = true;
-        }
-	}
-
     IEnumerator AnimateText(int dialogNum)
     {
+        // Grab the text box, has to be done here due to the text bubble being activated and deactivated
         text = GetComponent<Text>();
 
         string fullLine = dialogs[dialogNum].text; // The full text of this line

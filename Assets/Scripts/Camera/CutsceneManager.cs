@@ -15,11 +15,9 @@ public class CutsceneManager : MonoBehaviour {
 
     private int currentText;
     private int numTexts;
-    private GameObject panTo;
 
     private bool running;
     private bool startedText;
-    private bool firstText;
 
 	// Use this for initialization
 	void Start () {
@@ -31,7 +29,6 @@ public class CutsceneManager : MonoBehaviour {
 
         running = false;
         startedText = false;
-        firstText = false;
 	}
 	
 	// Update is called once per frame
@@ -44,17 +41,15 @@ public class CutsceneManager : MonoBehaviour {
         if (!running)
             return;
 
+        // Start the next text if we're not currently doing one and the previous has been finished
         if (!GemmaTT.isTextDone() && !startedText)
         {
-            if (firstText || Input.GetKeyDown(KeyCode.Return))
-            {
-                firstText = false;
-                startedText = true;
-                GemmaTextBubble.SetActive(true);
-                GemmaTT.startText(currentText);
-            }
+            startedText = true;
+            GemmaTextBubble.SetActive(true);
+            GemmaTT.startText(currentText);
         }
 
+        // If the text has gone through, wait for the player to hit enter before finishing the text
         if (startedText && !GemmaTT.isTextDone() && Input.GetKeyDown(KeyCode.Return))
         {
             startedText = false;
@@ -64,16 +59,14 @@ public class CutsceneManager : MonoBehaviour {
 
     }
 
-    public void RunCutscene (int NumTexts, TextAsset[] Texts, GameObject PanTo)
+    public void RunCutscene (int NumTexts, TextAsset[] Texts)
     {
-        for (int i = 0; i < NumTexts; i++)
-        {
-            GemmaTT.setText(Texts[i]);
-        }
+        // TODO: Set up properly to handle more than just Gemma talking
+        // TODO: Utilize custom pan tag to handle panning
+        GemmaTT.setText(Texts[0]);
 
-        numTexts += NumTexts;
-        panTo = PanTo;
+        currentText = 0;
+        numTexts = GemmaTT.numDialogsLoaded();
         running = true;
-        firstText = true;
     }
 }
