@@ -119,17 +119,38 @@ class PanTag : Tag
     }
 }
 
+class VoiceTag : Tag
+{
+    public int start { get; set; }
+    public int end { get; set; }
+    public string voice { get; set; }
+
+    public VoiceTag(string voice, int start, int end)
+    {
+        this.voice = voice;
+        this.start = start;
+        this.end = end;
+    }
+
+    public override string ToString()
+    {
+        return "VoiceTag(" + voice + ", " + start + ", " + end + ")";
+    }
+}
+
 class Dialog
 {
     public string text { get; set; }
     public List<FormatTag> format { get; private set; }
     public List<SpeedTag> speeds { get; private set; }
+    public List<VoiceTag> voices { get; private set; }
 
     public Dialog()
     {
         text = "";
         format = new List<FormatTag>();
         speeds = new List<SpeedTag>();
+        voices = new List<VoiceTag>();
     }
 
     public void addTag(FormatTag tag)
@@ -141,6 +162,11 @@ class Dialog
     {
         speeds.Add(tag);
     }
+
+    public void addVoice(VoiceTag tag)
+    {
+        voices.Add(tag);
+    }
 }
 
 public class TypewriterText : MonoBehaviour {
@@ -150,8 +176,10 @@ public class TypewriterText : MonoBehaviour {
     bool runText = false;
     bool started = false;
 
-	// Use this for initialization
-	void Start ()
+    Voice voice;
+
+    // Use this for initialization
+    void Start ()
     {
         // Get the text box for later use
         text = GetComponent<Text>();
@@ -209,6 +237,18 @@ public class TypewriterText : MonoBehaviour {
                 //dia.addPan(pt);
 
                 t = pt;
+            }
+            else if (split[1].StartsWith("voice"))
+            {
+                string[] voiceSplit = tagString.Split('=');
+                Debug.Assert(voiceSplit.Length == 2, "Voice split not 2");
+
+                string voice = voiceSplit[1].Replace("\"", ""); // Values are quoted..
+                voice = voice.Trim();
+                VoiceTag vt = new VoiceTag(voice, start, end);
+                dia.addVoice(vt);
+
+                t = vt;
             }
             else
             {
@@ -322,7 +362,7 @@ public class TypewriterText : MonoBehaviour {
         {
             runText = false;
             Debug.Log("Starting text.");
-            StartCoroutine(AnimateText(1));
+            StartCoroutine(AnimateText(0));
             started = true;
         }
 	}
@@ -332,6 +372,7 @@ public class TypewriterText : MonoBehaviour {
         string fullLine = dialogs[dialogNum].text; // The full text of this line
         List<FormatTag> fTags = dialogs[dialogNum].format; // The formatters for this line
         List<SpeedTag> sTags = dialogs[dialogNum].speeds;
+        List<VoiceTag> vTags = dialogs[dialogNum].voices;
 
         // Keep track of what speed we're putting letters out at
         Stack<SpeedTag> activeSTags = new Stack<SpeedTag>();
@@ -348,6 +389,18 @@ public class TypewriterText : MonoBehaviour {
             foreach (SpeedTag tag in sTags)
                 if (tag.start == i)
                     activeSTags.Push(tag);
+
+            // Change voice
+            foreach (VoiceTag tag in vTags)
+                if (tag.start == i)
+                    loadVoice(tag.voice);
+            
+            // Play voice and set its delay
+            if (voice != null)
+            {
+                if (!voice.isPlaying)
+                    voice.Play();
+            }
 
             string line = "";
             Stack<FormatTag> activeFTags = new Stack<FormatTag>();
@@ -390,10 +443,28 @@ public class TypewriterText : MonoBehaviour {
             yield return new WaitForSeconds(activeSTags.Peek().speed);
         }
 
+        if (voice != null)
+            voice.Stop();
+
         // We're done animating
         started = false;
     }
 
+    // Change the speaking voice by loading sounds from a prefab
+    void loadVoice(string voiceName)
+    {
+        Debug.Log("Changing to voice \"" + voiceName + "\"");
+
+        // Remove the old voice
+        if (voice != null)
+            Destroy(voice.gameObject);
+
+        // Instantiate the new one fromt he resources folder
+        Object prefab = Resources.Load("Voices/" + voiceName);
+        GameObject newObj = Instantiate(prefab, transform) as GameObject;
+
+        voice = newObj.GetComponent<Voice>();
+    }
 
     // -------- Here lies the external interface
     // Set to xml text file
