@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4046122447908382}
   - component: {fileID: 114383462217317510}
   m_Layer: 0
-  m_Name: Power Pole 1
+  m_Name: Power Pole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
