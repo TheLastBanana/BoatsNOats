@@ -33,7 +33,7 @@ public class RobotAI : MonoBehaviour {
     void FixedUpdate()
     {     
         rb.velocity = direction * speed;
-        if (!Physics2D.Raycast(transform.position + new Vector3(width/2,0,0), downdir, height) )
+        if (!Physics2D.Raycast(transform.position + new Vector3(width/2 +2,0,0), downdir, height) )
         {
             //print("Hits");
             rb.velocity = new Vector2(0,0);
