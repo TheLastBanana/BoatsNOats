@@ -10,10 +10,19 @@ public class CutsceneManager : MonoBehaviour {
     private PlayerMovement pm;
 
     public GameObject Gemma;
-    public GameObject GemmaTextBubble;
-    public Text GemmaText;
+    public GameObject Al;
 
+    // Gemma's text stuff
+    private Canvas GemmaCanvas;
+    private GameObject GemmaTextBubble;
+    private Text GemmaText;
     private TypewriterText GemmaTT;
+
+    // Al's text stuff
+    private Canvas AlCanvas;
+    private GameObject AlTextBubble;
+    private Text AlText;
+    private TypewriterText AlTT;
 
     private int currentText;
     private int numTexts;
@@ -25,8 +34,25 @@ public class CutsceneManager : MonoBehaviour {
 	void Start () {
         pm = Gemma.GetComponent<PlayerMovement>();
 
-        GemmaTT = GemmaText.GetComponent<TypewriterText>();
-        GemmaTextBubble.SetActive(false);
+        // Grab Gemma's text stuff
+        if (Gemma != null)
+        {
+            GemmaCanvas = Gemma.GetComponentInChildren<Canvas>(true);
+            GemmaTextBubble = GemmaCanvas.transform.FindChild("GemmaTextBubble").gameObject;
+            GemmaText = GemmaTextBubble.GetComponentInChildren<Text>(true);
+            GemmaTT = GemmaText.GetComponent<TypewriterText>();
+            GemmaTextBubble.SetActive(false);
+        }
+
+        // Grab Al's text stuff
+        if (Al != null)
+        {
+            AlCanvas = Al.GetComponentInChildren<Canvas>(true);
+            AlTextBubble = AlCanvas.transform.FindChild("AlTextBubble").gameObject;
+            AlText = AlTextBubble.GetComponentInChildren<Text>(true);
+            AlTT = AlText.GetComponent<TypewriterText>();
+            AlTextBubble.SetActive(false);
+        }
 
         currentText = 0;
         numTexts = 0;
