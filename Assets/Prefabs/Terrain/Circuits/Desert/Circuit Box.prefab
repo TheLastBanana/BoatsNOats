@@ -54,6 +54,7 @@ GameObject:
   - component: {fileID: 114383462217317510}
   - component: {fileID: 114031300728990154}
   - component: {fileID: 114671512559577360}
+  - component: {fileID: 114925885480209102}
   m_Layer: 0
   m_Name: Circuit Box
   m_TagString: Untagged
@@ -168,6 +169,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offSprite: {fileID: 1068390711880672}
   onSprite: {fileID: 1309596999661546}
+--- !u!114 &114925885480209102
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1567294092501502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa05ef1c754414b48ade300f6dab91b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startsOn: 1
+  groupId: 0
 --- !u!212 &212155942752551818
 SpriteRenderer:
   m_ObjectHideFlags: 1
