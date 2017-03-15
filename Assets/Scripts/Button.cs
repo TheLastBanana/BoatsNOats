@@ -5,32 +5,28 @@ using UnityEngine;
 public class Button : MonoBehaviour {
     public GameObject Source;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    // Use this for initialization
+    void Start() {
+
+    }
+
+    // Update is called once per frame
+    void Update() {
+
+    }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag == "Robot")
-        {
-            transform.position = new Vector3(transform.position.x, transform.position.y-0.2f, transform.position.z);
-            Source.GetComponent<PowerSource>().isOn = true;
-        }
+        transform.position = new Vector3(transform.position.x, transform.position.y-0.2f, transform.position.z);
+        Source.GetComponent<PowerSource>().isOn = true;
+     
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.tag == "Robot")
-        {
-            transform.position = new Vector3(transform.position.x, transform.position.y + 0.2f, transform.position.z);
-            Source.GetComponent<PowerSource>().isOn = false;
-        }
+        transform.position = new Vector3(transform.position.x, transform.position.y + 0.2f, transform.position.z);
+        Source.GetComponent<PowerSource>().isOn = false;
+    
     }
 
 }
