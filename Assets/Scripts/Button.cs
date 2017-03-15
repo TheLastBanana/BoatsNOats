@@ -19,14 +19,12 @@ public class Button : MonoBehaviour {
     {
         transform.position = new Vector3(transform.position.x, transform.position.y-0.2f, transform.position.z);
         Source.GetComponent<PowerSource>().isOn = true;
-     
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
         transform.position = new Vector3(transform.position.x, transform.position.y + 0.2f, transform.position.z);
         Source.GetComponent<PowerSource>().isOn = false;
-    
     }
 
 }
