@@ -27,20 +27,23 @@ public class Piston : MonoBehaviour
         head.transform.GetChild(0).GetComponent<PolygonCollider2D>().offset = new Vector2(0, 0);
         
         //Use base.GetComponent<Circuit>().powered to use the power from a circuit
-        if (Input.GetKey(KeyCode.RightBracket) && rod.transform.localScale.y < maxHeight)
+        //if (Input.GetKey(KeyCode.RightBracket) && rod.transform.localScale.y < maxHeight)
+        if (bottom.GetComponent<Circuit>().powered && rod.transform.localScale.y < maxHeight)
         {
             posDelta = speed;
             //if head is going up account for character feet sinking by offsetting box collider
             head.transform.GetChild(0).GetComponent<PolygonCollider2D>().offset = new Vector2(0,2);
         }
             
-        else if (Input.GetKey(KeyCode.LeftBracket) && head.transform.localPosition.y > headMin)
+        else if (!bottom.GetComponent<Circuit>().powered && head.transform.localPosition.y > headMin)
             posDelta = -speed;
 
         float scaleDelta = 0;
-        if (Input.GetKey(KeyCode.RightBracket) && rod.transform.localScale.y < maxHeight)
+        //if (Input.GetKey(KeyCode.RightBracket) && rod.transform.localScale.y < maxHeight)
+        if (bottom.GetComponent<Circuit>().powered && rod.transform.localScale.y < maxHeight)
             scaleDelta = scaleSpeed;
-        else if (Input.GetKey(KeyCode.LeftBracket) && rod.transform.localScale.y > 0)
+        //else if (Input.GetKey(KeyCode.LeftBracket) && rod.transform.localScale.y > 0)
+        else if (!bottom.GetComponent<Circuit>().powered && rod.transform.localScale.y > 0)
             scaleDelta = -scaleSpeed;
 
         if (posDelta != 0)
