@@ -238,9 +238,12 @@ public class PortalManager : MonoBehaviour
             selectableObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
             Destroy(selectableObject.GetComponent<RobotAI>());
         }
-        if (selectableObject.transform.parent.GetComponent<Piston>() != null)
+        if (selectableObject.transform.parent)
         {
-            Destroy(selectableObject.transform.parent.GetComponent<Piston>());
+            if (selectableObject.transform.parent.GetComponent<Piston>() != null)
+            {
+                Destroy(selectableObject.transform.parent.GetComponent<Piston>());
+            }
         }
 
     }

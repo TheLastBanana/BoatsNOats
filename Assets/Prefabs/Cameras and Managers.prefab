@@ -429,7 +429,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1690653638321038}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.5, y: 0.1, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4208140298275026}
@@ -496,7 +496,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1361433285267002}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -9.246691, y: -1.6056128, z: -10}
+  m_LocalPosition: {x: 72.485596, y: 5.9499993, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4208140298275026}
@@ -652,7 +652,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1543284928492214}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -9.246691, y: -1.6056128, z: -10}
+  m_LocalPosition: {x: 18.485598, y: 5.9499993, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4989196808640890}
@@ -893,7 +893,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 8
+  orthographic size: 0
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -1792,11 +1792,11 @@ MonoBehaviour:
   player: {fileID: 0}
   mainCam: {fileID: 20267623948367186}
   altCam: {fileID: 20490272858795104}
-  xMin: -12
-  xMax: 34
   yMin: -3
   yMax: 20
   offs: {fileID: 114537670656804216}
+  LeftBoundary: {fileID: 0}
+  RightBoundary: {fileID: 0}
 --- !u!124 &124435191619924504
 Behaviour:
   m_ObjectHideFlags: 1
@@ -1846,7 +1846,7 @@ AudioLowPassFilter:
     m_Curve:
     - serializedVersion: 2
       time: 0
-      value: 0.22727273
+      value: 0.008640291
       inSlope: 0
       outSlope: 0
       tangentMode: 0
