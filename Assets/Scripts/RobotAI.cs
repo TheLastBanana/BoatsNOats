@@ -35,7 +35,7 @@ public class RobotAI : MonoBehaviour {
         rb.velocity = direction * speed;
         if (direction.x > 0)
         {
-            if (!Physics2D.Raycast((Vector2)transform.position + new Vector2(width / 2 + 0.01f, -(height/2)), downdir, height))
+            if (!Physics2D.CircleCast((Vector2)transform.position + new Vector2(width / 2 + 1.01f, -(height/2)), 1, downdir, height))
             {
                 rb.velocity = new Vector2(0, 0);
                 direction.x *= -1;
@@ -44,7 +44,7 @@ public class RobotAI : MonoBehaviour {
         }
         else
         {
-            if (!Physics2D.Raycast((Vector2)transform.position - new Vector2(width / 2 + 0.01f, (height/2)), downdir, height))
+            if (!Physics2D.CircleCast((Vector2)transform.position - new Vector2(width / 2 + 1.01f, (height/2)), 1, downdir, height))
             {
                 rb.velocity = new Vector2(0, 0);
                 direction.x *= -1;
