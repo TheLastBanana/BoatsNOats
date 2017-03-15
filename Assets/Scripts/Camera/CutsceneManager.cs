@@ -7,6 +7,8 @@ public class CutsceneManager : MonoBehaviour {
 
     public GameObject sceneStart;
 
+    private PlayerMovement pm;
+
     public GameObject Gemma;
     public GameObject GemmaTextBubble;
     public Text GemmaText;
@@ -21,6 +23,8 @@ public class CutsceneManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        pm = Gemma.GetComponent<PlayerMovement>();
+
         GemmaTT = GemmaText.GetComponent<TypewriterText>();
         GemmaTextBubble.SetActive(false);
 
@@ -35,7 +39,10 @@ public class CutsceneManager : MonoBehaviour {
 	void Update () {
         // Check if we've gone through all of the texts
         if (currentText == numTexts)
+        {
             running = false;
+            pm.ResumeAfterCutscene();
+        }
 
         // We're not in a cutscene
         if (!running)
@@ -67,6 +74,8 @@ public class CutsceneManager : MonoBehaviour {
 
         currentText = 0;
         numTexts = GemmaTT.numDialogsLoaded();
+
         running = true;
+        pm.StopForCutscene();
     }
 }

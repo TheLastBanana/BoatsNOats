@@ -25,6 +25,8 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D m_Rigidbody2D;
     private bool m_FacingRight = true;  // For determining which way the player is currently facing.
 
+    private float lastDrag; // Record drag before we upscale it for cutscenes
+
     private void Awake()
     {
         // Setting up references.
@@ -117,5 +119,21 @@ public class PlayerMovement : MonoBehaviour
         Vector3 theScale = transform.localScale;
         theScale.x *= -1;
         transform.localScale = theScale;
+    }
+
+    public void StopForCutscene()
+    {
+        this.gameObject.GetComponent<PlayerController>().setCutscene(true);
+        m_Anim.SetFloat("Speed", 0f);
+        m_Rigidbody2D.velocity = Vector2.zero;
+
+        lastDrag = m_Rigidbody2D.drag;
+        m_Rigidbody2D.drag = 1000f;
+    }
+
+    public void ResumeAfterCutscene()
+    {
+        this.gameObject.GetComponent<PlayerController>().setCutscene(false);
+        m_Rigidbody2D.drag = lastDrag;
     }
 }

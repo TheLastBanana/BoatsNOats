@@ -9,11 +9,17 @@ public class PlayerController : MonoBehaviour
     private PlayerMovement m_Character;
     private bool m_Jump;
 
+    private bool inCutscene;
+
     private void Awake()
     {
         m_Character = GetComponent<PlayerMovement>();
     }
 
+    private void Start()
+    {
+        inCutscene = false;
+    }
 
     private void Update()
     {
@@ -30,11 +36,16 @@ public class PlayerController : MonoBehaviour
         // Read the inputs.
         bool crouch = Input.GetKey(KeyCode.LeftControl);
         float h = CrossPlatformInputManager.GetAxis("Horizontal");
-        if (!Dialogue.getDoneDialogue())
+        if (!inCutscene)
         {
             // Pass all parameters to the character control script.
             m_Character.Move(h, crouch, m_Jump);
         }
         m_Jump = false;
+    }
+
+    public void setCutscene(bool cutscene)
+    {
+        inCutscene = cutscene;
     }
 }
