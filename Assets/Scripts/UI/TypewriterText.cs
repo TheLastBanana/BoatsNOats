@@ -144,6 +144,7 @@ class Dialog
     public List<FormatTag> format { get; private set; }
     public List<SpeedTag> speeds { get; private set; }
     public List<VoiceTag> voices { get; private set; }
+    public List<PanTag> pans { get; private set; }
 
     public Dialog()
     {
@@ -151,6 +152,7 @@ class Dialog
         format = new List<FormatTag>();
         speeds = new List<SpeedTag>();
         voices = new List<VoiceTag>();
+        pans = new List<PanTag>();
     }
 
     public void addTag(FormatTag tag)
@@ -167,6 +169,11 @@ class Dialog
     {
         voices.Add(tag);
     }
+
+    public void addPan(PanTag tag)
+    {
+        pans.Add(tag);
+    }
 }
 
 public class TypewriterText : MonoBehaviour {
@@ -177,18 +184,6 @@ public class TypewriterText : MonoBehaviour {
     bool started = false;
 
     Voice voice;
-
-    // Use this for initialization
-    void Start ()
-    {
-
-	}
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
     // Figure out how to parse a tag string and return an appropriate tag while adding it to the dialog
     private Tag addTag(ref Dialog dia, string tagString, int start, int end)
@@ -237,7 +232,7 @@ public class TypewriterText : MonoBehaviour {
                 float speed = float.Parse(speedSplit[1].Replace("\"", "")); // Values are quoted..
 
                 PanTag pt = new PanTag(objName, speed, start);
-                //dia.addPan(pt);
+                dia.addPan(pt);
 
                 t = pt;
             }
@@ -362,6 +357,7 @@ public class TypewriterText : MonoBehaviour {
         List<FormatTag> fTags = dialogs[dialogNum].format; // The formatters for this line
         List<SpeedTag> sTags = dialogs[dialogNum].speeds;
         List<VoiceTag> vTags = dialogs[dialogNum].voices;
+        List<PanTag> pTags = dialogs[dialogNum].pans;
 
         // Keep track of what speed we're putting letters out at
         Stack<SpeedTag> activeSTags = new Stack<SpeedTag>();
@@ -383,7 +379,11 @@ public class TypewriterText : MonoBehaviour {
             foreach (VoiceTag tag in vTags)
                 if (tag.start == i)
                     loadVoice(tag.voice);
-            
+
+            //foreach (PanTag tag in pTags)
+            //    if (tag.start == i)
+            // Do a pan
+
             // Play voice and set its delay
             if (voice != null)
             {
