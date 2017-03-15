@@ -6,8 +6,7 @@ using UnityEngine.SceneManagement;
 public class CutsceneInfo : MonoBehaviour {
 
     public GameObject CutsceneManager;
-    public static int size = 1;
-    public TextAsset[] texts = new TextAsset[size];
+    public TextAsset textFile;
 
     private CutsceneManager script;
 
@@ -26,7 +25,7 @@ public class CutsceneInfo : MonoBehaviour {
         if (other.tag == "Player")
         {
             // Start the cutscene indicated in this object and deactivate this object
-            script.RunCutscene(size, texts);
+            script.RunCutscene(textFile);
             this.gameObject.SetActive(false);
         }
     }

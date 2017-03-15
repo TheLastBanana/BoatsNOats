@@ -92,11 +92,11 @@ public class CutsceneManager : MonoBehaviour {
 
     }
 
-    public void RunCutscene (int NumTexts, TextAsset[] Texts)
+    public void RunCutscene (TextAsset textFile)
     {
         // TODO: Set up properly to handle more than just Gemma talking
         // TODO: Utilize custom pan tag to handle panning
-        GemmaTT.setText(Texts[0]);
+        GemmaTT.setText(textFile);
 
         currentText = 0;
         numTexts = GemmaTT.numDialogsLoaded();
