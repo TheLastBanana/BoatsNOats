@@ -91,7 +91,7 @@ public class CircuitManager : MonoBehaviour
         }
 
         int numGroups = curId - 1;
-        if (numGroups > 1)
+        if (numGroups > 0)
         {
             groups = new List<List<Circuit>>();
             for (int i = 0; i < numGroups; ++i)
