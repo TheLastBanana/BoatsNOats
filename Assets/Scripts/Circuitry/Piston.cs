@@ -9,14 +9,14 @@ public class Piston : MonoBehaviour
     public GameObject rod;
     public GameObject bottom;
     public float maxHeight;
+    public float hackAmount = 1.5f;
     private const int dim = 256; // Size of square in pixels
     private const float unityDim = dim / 100f;
-    private const float headScale = .2f;
+    private const float headScale = .1f;
     private const float speed = unityDim / 20;
     private const float scaleSpeed = unityDim / speed / 100 / 4; // "uD / speed" is percent to scale by.
                                                                  // ".. / 100" turns into a decimal
     private const float headMin = unityDim / 2 + unityDim * headScale / 2;
-
 
 	// Update is called once per frame
 	void Update ()
@@ -50,7 +50,7 @@ public class Piston : MonoBehaviour
         {
             Vector3 headPos = head.transform.localPosition;
             Vector3 rodPos = rod.transform.localPosition;
-            headPos.y += posDelta;
+            headPos.y += posDelta * hackAmount;
             rodPos.y += posDelta / 2; // Only move half as much, scaling adds to both sides
             head.transform.localPosition = headPos;
             rod.transform.localPosition = rodPos;
