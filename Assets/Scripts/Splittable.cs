@@ -42,9 +42,13 @@ public class Splittable : MonoBehaviour
             for (int i = 1; i < transform.childCount; ++i)
             {
                 Transform child = transform.GetChild(i).transform;
-                totalBounds.Encapsulate(child.GetComponent<Renderer>().bounds);
+                var childBounds = child.GetComponent<Renderer>().bounds;
+
+                totalBounds.Encapsulate(childBounds);
             }
 
+            totalBounds.center = new Vector3(totalBounds.center.x, totalBounds.center.y, 0);
+            totalBounds.extents = new Vector3(totalBounds.extents.x, totalBounds.extents.y, 0);
             return totalBounds;
         }
     }
