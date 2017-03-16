@@ -180,6 +180,11 @@ Prefab:
       propertyPath: player
       value: 
       objectReference: {fileID: 831177388}
+    - target: {fileID: 114579673784047766, guid: 06d7fe0b7b7ba4844835d6b3b4400e43,
+        type: 2}
+      propertyPath: textFile
+      value: 
+      objectReference: {fileID: 4900000, guid: ace7c257cb9b6da46b8d76190b9da333, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 06d7fe0b7b7ba4844835d6b3b4400e43, type: 2}
   m_IsPrefabParent: 0

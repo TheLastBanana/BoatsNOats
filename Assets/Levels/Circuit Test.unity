@@ -2753,6 +2753,10 @@ Prefab:
       propertyPath: m_WhatIsGround.m_Bits
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1819506582287166, guid: c86eda601f8a9cc40b2f7577bccf4596, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c86eda601f8a9cc40b2f7577bccf4596, type: 2}
   m_IsPrefabParent: 0
@@ -2928,6 +2932,25 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
+--- !u!1 &2070663569 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1243738114671196, guid: 06d7fe0b7b7ba4844835d6b3b4400e43,
+    type: 2}
+  m_PrefabInternal: {fileID: 1716019796}
+--- !u!114 &2070663571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2070663569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bacee718136eecc4ab0193d448fad8d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectMaterial: {fileID: 2100000, guid: c2b2c30ec24dd924cbb32561da178352, type: 2}
+  displacement: {fileID: 0}
+  resolution: 256
 --- !u!1 &2107579376
 GameObject:
   m_ObjectHideFlags: 0

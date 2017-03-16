@@ -180,7 +180,6 @@ public class TypewriterText : MonoBehaviour {
     Text text;
     private TextAsset dialogFile = null;
     List<Dialog> dialogs = new List<Dialog>();
-    bool runText = false;
     bool started = false;
 
     Voice voice;

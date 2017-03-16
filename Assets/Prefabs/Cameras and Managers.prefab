@@ -1688,8 +1688,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CutsceneManager: {fileID: 1025430578642472}
-  texts:
-  - {fileID: 4900000, guid: ace7c257cb9b6da46b8d76190b9da333, type: 3}
+  textFile: {fileID: 4900000, guid: ace7c257cb9b6da46b8d76190b9da333, type: 3}
 --- !u!114 &114580626449500856
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1743,8 +1742,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneStart: {fileID: 1788449416716200}
   Gemma: {fileID: 0}
-  GemmaTextBubble: {fileID: 0}
-  GemmaText: {fileID: 0}
+  Al: {fileID: 0}
 --- !u!114 &114717450731081886
 MonoBehaviour:
   m_ObjectHideFlags: 1
