@@ -33,14 +33,11 @@ public class RobotAI : MonoBehaviour {
 
     void FixedUpdate()
     {     
-        rb.velocity = direction * speed;
         if (direction.x > 0)
         {
             if (!Physics2D.Raycast((Vector2)transform.position + new Vector2(width + 0.01f, -height + checkDist / 2f), downdir, checkDist))
             {
-                rb.velocity = new Vector2(0, 0);
                 direction.x *= -1;
-                rb.velocity = direction * speed;
             }
 
             transform.localScale = new Vector3(-.55f, .55f, .55f);
@@ -49,13 +46,13 @@ public class RobotAI : MonoBehaviour {
         {
             if (!Physics2D.Raycast((Vector2)transform.position + new Vector2(-width - 0.01f, -height + checkDist / 2f), downdir, checkDist))
             {
-                rb.velocity = new Vector2(0, 0);
                 direction.x *= -1;
-                rb.velocity = direction * speed;
             }
 
             transform.localScale = new Vector3(.55f, .55f, .55f);
         }
+
+        rb.velocity = new Vector2(direction.x * speed, rb.velocity.y);
     }
 
 }
