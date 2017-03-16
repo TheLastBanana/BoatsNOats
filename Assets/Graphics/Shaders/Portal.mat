@@ -43,7 +43,7 @@ Material:
         name: _Displacement
       second:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 10, y: 1}
+        m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - first:
         name: _EmissionMap
@@ -78,7 +78,7 @@ Material:
     m_Floats:
     - first:
         name: _Amplitude
-      second: 0.1
+      second: 4
     - first:
         name: _BumpScale
       second: 1
@@ -126,7 +126,7 @@ Material:
       second: 0
     - first:
         name: _Wobbliness
-      second: 1
+      second: 7
     - first:
         name: _ZWrite
       second: 1
@@ -137,3 +137,6 @@ Material:
     - first:
         name: _EmissionColor
       second: {r: 0, g: 0, b: 0, a: 1}
+    - first:
+        name: _Speed
+      second: {r: 100, g: 90, b: 0, a: 0}
