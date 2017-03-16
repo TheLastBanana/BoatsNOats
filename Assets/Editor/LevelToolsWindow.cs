@@ -41,19 +41,33 @@ class LevelToolsWindow : EditorWindow
         // Get prefab name
         var prefab = PrefabUtility.GetPrefabParent(obj);
         var prefabName = AssetDatabase.GetAssetPath(prefab);
+        GameObject newObj = null;
 
-        // Check if there's a wet version
-        var wetName = prefabName.Replace("Desert", "Wet");
-        var wetPrefab = AssetDatabase.LoadAssetAtPath<Object>(wetName);
-
-        if (wetPrefab != null)
+        if (prefabName == null || prefabName == "")
         {
-            Instantiate(wetPrefab, obj.position + offsets.offset, obj.rotation, dstObj);
+            newObj = Instantiate(obj.gameObject, null);
         }
         else
         {
-            Instantiate(obj, obj.position + offsets.offset, obj.rotation, dstObj);
+            // Check if there's a wet version
+            var wetName = prefabName.Replace("Desert", "Wet");
+            var wetPrefab = AssetDatabase.LoadAssetAtPath<Object>(wetName);
+
+            if (wetPrefab != null)
+            {
+                newObj = (GameObject)PrefabUtility.InstantiatePrefab(wetPrefab);
+            }
+            else
+            {
+                var dryPrefab = AssetDatabase.LoadAssetAtPath<Object>(prefabName);
+                newObj = (GameObject)PrefabUtility.InstantiatePrefab(dryPrefab);
+            }
         }
+
+        var newTrns = newObj.transform;
+        newTrns.position = obj.position + offsets.offset;
+        newTrns.rotation = obj.rotation;
+        newTrns.parent = dstObj;
     }
 
     void CopyChildren()
