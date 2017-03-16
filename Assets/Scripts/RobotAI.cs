@@ -11,6 +11,7 @@ public class RobotAI : MonoBehaviour {
     Vector3 rt;
     float width;
     float height;
+    public float checkDist = 0.1f;
 
     // Use this for initialization
     void Start () {
@@ -35,7 +36,7 @@ public class RobotAI : MonoBehaviour {
         rb.velocity = direction * speed;
         if (direction.x > 0)
         {
-            if (!Physics2D.Raycast((Vector2)transform.position + new Vector2(width / 2 + 0.01f, -(height/2)), downdir, height))
+            if (!Physics2D.Raycast((Vector2)transform.position + new Vector2(width / 2 + 0.01f, (-height + checkDist)/2), downdir, checkDist))
             {
                 rb.velocity = new Vector2(0, 0);
                 direction.x *= -1;
@@ -44,7 +45,7 @@ public class RobotAI : MonoBehaviour {
         }
         else
         {
-            if (!Physics2D.Raycast((Vector2)transform.position - new Vector2(width / 2 + 0.01f, (height/2)), downdir, height))
+            if (!Physics2D.Raycast((Vector2)transform.position + new Vector2(-width / 2 - 0.01f, (-height + checkDist) / 2), downdir, checkDist))
             {
                 rb.velocity = new Vector2(0, 0);
                 direction.x *= -1;
