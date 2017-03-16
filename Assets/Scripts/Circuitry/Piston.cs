@@ -9,7 +9,7 @@ public class Piston : MonoBehaviour
     public GameObject rod;
     public GameObject bottom;
     public float maxHeight;
-    public float hackAmount = 1.5f;
+    public float hackAmount = 1.5f; // PLEASE GOD FIX ME
     private const int dim = 256; // Size of square in pixels
     private const float unityDim = dim / 100f;
     private const float headScale = .1f;
