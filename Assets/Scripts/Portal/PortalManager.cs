@@ -25,6 +25,9 @@ public class PortalManager : MonoBehaviour
     public WorldOffsets offs;
     public CircuitManager circuitManager;
 
+    // Effects
+    public GameObject portalParticlePrefab;
+
     // Current portal selection info
     bool isSelecting = false;
     bool isOpen = false;
@@ -32,11 +35,13 @@ public class PortalManager : MonoBehaviour
     Vector3 portPos2;
 
     AudioEffects afx;
+    PortalParticles portalParticles;
 
     // Use this for initialization
     void Start ()
     {
         afx = GetComponent<AudioEffects>();
+        portalParticles = Instantiate(portalParticlePrefab).GetComponent<PortalParticles>();
     }
 	
 	// Update is called once per frame
@@ -46,6 +51,8 @@ public class PortalManager : MonoBehaviour
         {
             // Kill the portal
             isOpen = false;
+            portalParticles.portalShape = new Rect();
+            portalParticles.Disable();
             // TODO close Mike's portal
 
             // Transfer objects in the portal home
@@ -60,6 +67,8 @@ public class PortalManager : MonoBehaviour
         if (!isOpen && Input.GetMouseButtonDown(0))
         {
             portalCam.enabled = true;
+            portalParticles.Enable();
+            portalParticles.intensity = 1f;
 
             isSelecting = true;
             portPos1 = mainCam.ScreenToWorldPoint(Input.mousePosition);
@@ -96,6 +105,7 @@ public class PortalManager : MonoBehaviour
             isSelecting = false;
             isOpen = true; // But it IS open
 
+            portalParticles.intensity = 0.2f;
             portalCam.enabled = false;
             portalCam.rect = new Rect();
 
@@ -141,6 +151,8 @@ public class PortalManager : MonoBehaviour
             // Update low-pass filter on alternate world ambience
             altWorldAmbienceLPF.enabled = true;
             altWorldAmbienceLPF.cutoffFrequency = Mathf.Lerp(dragLpfLow, dragLpfHigh, sizeFactor);
+
+            portalParticles.portalShape = new Rect(portPos1, portPos2 - portPos1);
         }
     }
 
@@ -346,7 +358,6 @@ public class PortalManager : MonoBehaviour
             Vector3 topLeft = mainCam.WorldToScreenPoint(portPos1);
             Vector3 bottomRight = mainCam.WorldToScreenPoint(portPos2);
             Rect rect = Selectionbox.GetScreenRect(topLeft, bottomRight);
-            Selectionbox.DrawScreenRect(rect, new Color(0.8f, 0.8f, 0.95f, 0.25f));
             Selectionbox.DrawScreenRectBorder(rect, 2, new Color(0.8f, 0.8f, 0.95f));
         }
     }

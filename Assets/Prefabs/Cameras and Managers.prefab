@@ -134,6 +134,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4068139482076594}
   - component: {fileID: 20577989380547642}
+  - component: {fileID: 114474600437796694}
   m_Layer: 0
   m_Name: Portal Camera
   m_TagString: Untagged
@@ -795,7 +796,7 @@ Camera:
   m_Depth: 1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 544
+    m_Bits: 1568
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -829,7 +830,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294966495
+    m_Bits: 4294965471
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -1664,6 +1665,20 @@ MonoBehaviour:
   cMain: {fileID: 20267623948367186}
   cAlt: {fileID: 20490272858795104}
   cChar: {fileID: 20167617518070488}
+--- !u!114 &114474600437796694
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1243738114671196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bacee718136eecc4ab0193d448fad8d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectMaterial: {fileID: 2100000, guid: c2b2c30ec24dd924cbb32561da178352, type: 2}
+  displacement: {fileID: 0}
+  resolution: 256
 --- !u!114 &114537670656804216
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1717,6 +1732,8 @@ MonoBehaviour:
   portalCam: {fileID: 20577989380547642}
   offs: {fileID: 114537670656804216}
   circuitManager: {fileID: 114602999871736272}
+  portalParticlePrefab: {fileID: 1940903776598654, guid: 135be248ea11c454d999066952663673,
+    type: 2}
 --- !u!114 &114602999871736272
 MonoBehaviour:
   m_ObjectHideFlags: 1
