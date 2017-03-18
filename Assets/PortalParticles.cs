@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class PortalParticles : MonoBehaviour
 {
@@ -10,28 +11,41 @@ public class PortalParticles : MonoBehaviour
     ParticleSystem middle;
     float middleBaseRate;
 
-    ParticleSystem[] edgeSystems = new ParticleSystem[4];
     Transform[] transforms = new Transform[4];
-    ParticleSystem.EmissionModule[] emissions = new ParticleSystem.EmissionModule[4];
-    ParticleSystem.ShapeModule[] shapes = new ParticleSystem.ShapeModule[4];
-    float edgeBaseRate;
+    ParticleSystem[][] edgeSystems = new ParticleSystem[4][];
+    ParticleSystem.EmissionModule[][] emissions = new ParticleSystem.EmissionModule[4][];
+    ParticleSystem.ShapeModule[][] shapes = new ParticleSystem.ShapeModule[4][];
+    float[] edgeBaseRates;
 
     void Awake()
     {
         // Set up particle systems
         for (int i = 0; i < 4; ++i)
         {
-            edgeSystems[i] = Instantiate(edgePrefab, transform).GetComponent<ParticleSystem>();
-            shapes[i] = edgeSystems[i].shape;
-            emissions[i] = edgeSystems[i].emission;
-            transforms[i] = edgeSystems[i].transform;
+            var newObj = transforms[i] = Instantiate(edgePrefab, transform).transform;
             transforms[i].eulerAngles = new Vector3(-90 * i, 90, 0);
+
+            var systems = edgeSystems[i] = newObj.GetComponentsInChildren<ParticleSystem>();
+            shapes[i] = new ParticleSystem.ShapeModule[systems.Length];
+            emissions[i] = new ParticleSystem.EmissionModule[systems.Length];
+
+            for (int j = 0; j < systems.Length; ++j)
+            {
+                var system = systems[j];
+
+                shapes[i][j] = system.shape;
+                emissions[i][j] = system.emission;
+            }
         }
+
+
+        // Determine base spawn rates for edge systems
+        edgeBaseRates = new float[emissions[0].Length];
+        for (int i = 0; i < edgeBaseRates.Length; ++i)
+            edgeBaseRates[i] = emissions[0][i].rateOverTimeMultiplier;
 
         middle = Instantiate(middlePrefab, transform).GetComponent<ParticleSystem>();
         middle.transform.localPosition = new Vector3();
-
-        edgeBaseRate = emissions[0].rateOverTimeMultiplier;
         middleBaseRate = middle.emission.rateOverTimeMultiplier;
 
         Disable();
@@ -43,8 +57,12 @@ public class PortalParticles : MonoBehaviour
         float h = Mathf.Abs(portalShape.height);
 
         // Update edge sizes
-        shapes[0].radius = shapes[2].radius = h / 2;
-        shapes[1].radius = shapes[3].radius = w / 2;
+        for (int i = 0; i < edgeBaseRates.Length; ++i)
+        {
+            shapes[0][i].radius = shapes[2][i].radius = h / 2;
+            shapes[1][i].radius = shapes[3][i].radius = w / 2;
+        }
+
         var middleShape = middle.shape;
         middleShape.box = new Vector3(w, h);
 
@@ -56,8 +74,11 @@ public class PortalParticles : MonoBehaviour
 
         // Scale emission rate to size, so we get the same relative coverage
         for (int i = 0; i < 4; ++i)
-            emissions[i].rateOverTimeMultiplier =
-                shapes[i].radius == 0f ? 0f : edgeBaseRate * intensity * shapes[i].radius;
+            for (int j = 0; j < edgeBaseRates.Length; ++j)
+            {
+                emissions[i][j].rateOverTimeMultiplier =
+                    shapes[i][j].radius == 0f ? 0f : edgeBaseRates[j] * intensity * shapes[i][j].radius;
+            }
 
         // Middle is a square, so use area to scale emission rate
         var middleEmission = middle.emission;
@@ -71,8 +92,9 @@ public class PortalParticles : MonoBehaviour
     public void Clear()
     {
         middle.Clear();
-        foreach (var system in edgeSystems)
-            system.Clear();
+        foreach (var systemList in edgeSystems)
+            foreach (var system in systemList)
+                system.Clear();
     }
 
     // Enable emissions
@@ -83,7 +105,8 @@ public class PortalParticles : MonoBehaviour
         middleEmission.enabled = true;
 
         for (int i = 0; i < 4; ++i)
-            emissions[i].enabled = true;
+            for (int j = 0; j < edgeBaseRates.Length; ++j)
+            emissions[i][j].enabled = true;
     }
 
     // Disable emissions
@@ -93,6 +116,7 @@ public class PortalParticles : MonoBehaviour
         middleEmission.enabled = false;
 
         for (int i = 0; i < 4; ++i)
-            emissions[i].enabled = false;
+            for (int j = 0; j < edgeBaseRates.Length; ++j)
+                emissions[i][j].enabled = false;
     }
 }

@@ -358,7 +358,7 @@ public class PortalManager : MonoBehaviour
             Vector3 topLeft = mainCam.WorldToScreenPoint(portPos1);
             Vector3 bottomRight = mainCam.WorldToScreenPoint(portPos2);
             Rect rect = Selectionbox.GetScreenRect(topLeft, bottomRight);
-            Selectionbox.DrawScreenRectBorder(rect, 2, new Color(0.8f, 0.8f, 0.95f));
+            //Selectionbox.DrawScreenRectBorder(rect, 2, new Color(0.8f, 0.8f, 0.95f));
         }
     }
 
