@@ -67,7 +67,7 @@ public class PortalManager : MonoBehaviour
             // TODO close Mike's portal
 
             // Transfer objects in the portal home
-            bool anyCuts = portalTransfer(portPos1, portPos2);
+            bool anyCuts = portalTransfer(portalRect.min, portalRect.max);
 
             // Play cut noises if necessary
             if (anyCuts)
@@ -130,6 +130,14 @@ public class PortalManager : MonoBehaviour
             musicManager.volume = portalMusicVolume;
         }
 
+        // Make sure portal isn't too small
+        portalRect.size = new Vector2(
+            Mathf.Max(Mathf.Abs(movingPortalRect.size.x), minimumPortalSize),
+            Mathf.Max(Mathf.Abs(movingPortalRect.size.y), minimumPortalSize)
+        );
+        portalRect.center = movingPortalRect.center; // Need to re-set this in case size was changed
+        portalEffect.portalShape = portalRect;
+
         // If we let go of the right mouse button, end selection
         if (!isOpen && ((Input.GetMouseButtonUp(0) && !inCutscene) || (isSelecting && inCutscene)))
         {
@@ -137,24 +145,16 @@ public class PortalManager : MonoBehaviour
             isSelecting = false;
             isOpen = true; // But it IS open
 
+            // Stop portal from moving
+            portalSpeed = new Vector2();
+            portalSizeSpeed = new Vector2();
+
             portalEffect.particleIntensity = 0.2f;
             portalCam.enabled = false;
             portalCam.rect = new Rect();
-
-            // Find max and min of vectors to make bounding box
-            var min = Vector3.Min(portPos1, portPos2);
-            var max = Vector3.Max(portPos1, portPos2);
-            min.z = 0;
-            max.z = 0;
-
-            // Change portpos 1 and 2 to be these new vectors so that more
-            // math isn't needed later. Might as well do it right when we
-            // know it's relevant
-            portPos1 = min; // top left corner
-            portPos2 = max; // bottom right corner
             
             // Do the portal transfer
-            bool anyCuts = portalTransfer(portPos1, portPos2);
+            bool anyCuts = portalTransfer(portalRect.min, portalRect.max);
 
             // TODO open mike's portal object business
 
@@ -174,7 +174,7 @@ public class PortalManager : MonoBehaviour
         if (isSelecting)
         {
             // Get size of selection box
-            float selectionSize = (portPos2 - portPos1).magnitude;
+            float selectionSize = portalRect.size.magnitude;
             float sizeFactor = selectionSize / portalSoundMaxSize;
 
             // Update pitch of drag sound
@@ -184,14 +184,6 @@ public class PortalManager : MonoBehaviour
             altWorldAmbienceLPF.enabled = true;
             altWorldAmbienceLPF.cutoffFrequency = Mathf.Lerp(dragLpfLow, dragLpfHigh, sizeFactor);
         }
-
-        // Make sure portal isn't too small
-        portalRect.size = new Vector2(
-            Mathf.Max(Mathf.Abs(movingPortalRect.size.x), minimumPortalSize),
-            Mathf.Max(Mathf.Abs(movingPortalRect.size.y), minimumPortalSize)
-        );
-        portalRect.center = movingPortalRect.center; // Need to re-set this in case size was changed
-        portalEffect.portalShape = portalRect;
     }
 
     // Transfers between portals in the main and alternate world
