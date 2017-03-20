@@ -105,3 +105,4 @@ MonoBehaviour:
   maxBorderThickness: 0.2
   waveThickness: 0.3
   changeRate: 0.75
+  wavinessAreaThreshold: 3

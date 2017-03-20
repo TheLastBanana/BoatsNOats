@@ -18,6 +18,8 @@ public class PortalManager : MonoBehaviour
     public float dragLpfHigh = 3000.0f;
     public float dragPitchLow = 1.0f;
     public float dragPitchHigh = 2.0f;
+    public float portalAcceleration = 0.05f;
+    public float portalDamping = 0.82f;
 
     // World info
     public Camera mainCam;
@@ -33,6 +35,11 @@ public class PortalManager : MonoBehaviour
     bool isOpen = false;
     Vector3 portPos1; // These are in world coords
     Vector3 portPos2;
+    Rect portalRect;
+
+    // Portal juicy movement variables
+    Vector2 portalSpeed;
+    Vector2 portalSizeSpeed;
 
     private bool inCutscene;
     AudioEffects afx;
@@ -74,6 +81,7 @@ public class PortalManager : MonoBehaviour
 
             isSelecting = true;
             portPos1 = mainCam.ScreenToWorldPoint(Input.mousePosition);
+            portalRect = new Rect(portPos1, new Vector2());
 
             timeStopSound.Play();
             portalDragSound.Play();
@@ -96,6 +104,28 @@ public class PortalManager : MonoBehaviour
                 Mathf.Clamp(Input.mousePosition.y, 0, 2 * mainCam.pixelHeight)
             );
             portPos2 = mainCam.ScreenToWorldPoint(clampedMousePos);
+
+            // The further the current portal rectangle is from the target, the
+            // faster it accelerates towards it
+            var oldCenter = portalRect.center;
+            var targetCenter = (Vector2) (portPos1 + portPos2) / 2f;
+            var centerDir = targetCenter - oldCenter;
+            portalSpeed += centerDir.magnitude * portalAcceleration * centerDir.normalized;
+            
+            var oldSize = portalRect.size;
+            var targetSize = (Vector2)(portPos1 - portPos2);
+            var sizeDir = targetSize - oldSize;
+            portalSizeSpeed += sizeDir.magnitude * portalAcceleration * sizeDir.normalized;
+
+            // Apply damping
+            portalSpeed *= portalDamping;
+            portalSizeSpeed *= portalDamping;
+
+            // Move the portal rectangle
+            portalRect.center = portalRect.center + portalSpeed;
+            portalRect.size = portalRect.size + portalSizeSpeed;
+
+            portalEffect.portalShape = portalRect;
 
             musicManager.volume = portalMusicVolume;
         }
@@ -153,8 +183,6 @@ public class PortalManager : MonoBehaviour
             // Update low-pass filter on alternate world ambience
             altWorldAmbienceLPF.enabled = true;
             altWorldAmbienceLPF.cutoffFrequency = Mathf.Lerp(dragLpfLow, dragLpfHigh, sizeFactor);
-
-            portalEffect.portalShape = new Rect(portPos1, portPos2 - portPos1);
         }
     }
 
@@ -371,9 +399,12 @@ public class PortalManager : MonoBehaviour
             // Get camera resolution
             Vector2 camRes = new Vector2(mainCam.pixelWidth, mainCam.pixelHeight);
 
+            var portRectPos1 = new Vector3(portalRect.xMin, portalRect.yMin);
+            var portRectPos2 = new Vector3(portalRect.xMax, portalRect.yMax);
+
             // Get the screen positions of the two points
-            Vector2 screenPos1 = mainCam.WorldToScreenPoint(portPos1);
-            Vector2 screenPos2 = mainCam.WorldToScreenPoint(portPos2);
+            Vector2 screenPos1 = mainCam.WorldToScreenPoint(portRectPos1);
+            Vector2 screenPos2 = mainCam.WorldToScreenPoint(portRectPos2);
 
             // Convert to min and max points
             Vector2 minPos = Vector2.Min(screenPos1, screenPos2);
@@ -393,11 +424,13 @@ public class PortalManager : MonoBehaviour
             }
 
             // Change portal size
-            portalCam.orthographicSize = Mathf.Abs(portPos2.y - portPos1.y) / 2;
+            portalCam.orthographicSize = Mathf.Abs(portalRect.height) / 2;
             portalCam.rect = newRect;
 
             // Change portal position
-            portalCam.transform.position = (portPos1 + portPos2) / 2 + offs.offset;
+            portalCam.transform.position =
+                new Vector3(portalRect.center.x, portalRect.center.y, - 10) + offs.offset;
+
         }
     }
 
