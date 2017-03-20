@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class CameraPanner : MonoBehaviour {
     public Camera mainCam;
-    private int xMin, xMax;
-    private int yMin, yMax; // These could be floats
+    private float xMin, xMax;
+    private float yMin, yMax;
     public WorldOffsets offs;
     private GameObject LeftBoundary;
     private GameObject RightBoundary;
@@ -16,8 +16,8 @@ public class CameraPanner : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        xMin = (int)LeftBoundary.transform.position.x;
-        xMax = (int)RightBoundary.transform.position.x;
+        xMin = LeftBoundary.transform.position.x;
+        xMax = RightBoundary.transform.position.x;
         cutsceneManager = cutsceneManagerObj.GetComponent<CutsceneManager>();
 
         // These will be the same, this is so they aren't in two places
