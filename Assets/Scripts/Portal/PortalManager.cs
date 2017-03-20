@@ -18,8 +18,6 @@ public class PortalManager : MonoBehaviour
     public float dragLpfHigh = 3000.0f;
     public float dragPitchLow = 1.0f;
     public float dragPitchHigh = 2.0f;
-    public float portalAcceleration = 0.05f;
-    public float portalDamping = 0.82f;
 
     // World info
     public Camera mainCam;
@@ -31,15 +29,19 @@ public class PortalManager : MonoBehaviour
     public GameObject portalParticlePrefab;
 
     // Current portal selection info
+    public float minimumPortalSize = 0.1f;
     bool isSelecting = false;
     bool isOpen = false;
     Vector3 portPos1; // These are in world coords
     Vector3 portPos2;
-    Rect portalRect;
+    Rect portalRect = new Rect();
 
     // Portal juicy movement variables
+    public float portalAcceleration = 0.05f;
+    public float portalDamping = 0.82f;
     Vector2 portalSpeed;
     Vector2 portalSizeSpeed;
+    Rect movingPortalRect;
 
     private bool inCutscene;
     AudioEffects afx;
@@ -81,7 +83,7 @@ public class PortalManager : MonoBehaviour
 
             isSelecting = true;
             portPos1 = mainCam.ScreenToWorldPoint(Input.mousePosition);
-            portalRect = new Rect(portPos1, new Vector2());
+            movingPortalRect = new Rect(portPos1, new Vector2());
 
             timeStopSound.Play();
             portalDragSound.Play();
@@ -107,12 +109,12 @@ public class PortalManager : MonoBehaviour
 
             // The further the current portal rectangle is from the target, the
             // faster it accelerates towards it
-            var oldCenter = portalRect.center;
+            var oldCenter = movingPortalRect.center;
             var targetCenter = (Vector2) (portPos1 + portPos2) / 2f;
             var centerDir = targetCenter - oldCenter;
             portalSpeed += centerDir.magnitude * portalAcceleration * centerDir.normalized;
             
-            var oldSize = portalRect.size;
+            var oldSize = movingPortalRect.size;
             var targetSize = (Vector2)(portPos1 - portPos2);
             var sizeDir = targetSize - oldSize;
             portalSizeSpeed += sizeDir.magnitude * portalAcceleration * sizeDir.normalized;
@@ -122,10 +124,8 @@ public class PortalManager : MonoBehaviour
             portalSizeSpeed *= portalDamping;
 
             // Move the portal rectangle
-            portalRect.center = portalRect.center + portalSpeed;
-            portalRect.size = portalRect.size + portalSizeSpeed;
-
-            portalEffect.portalShape = portalRect;
+            movingPortalRect.center = movingPortalRect.center + portalSpeed;
+            movingPortalRect.size = movingPortalRect.size + portalSizeSpeed;
 
             musicManager.volume = portalMusicVolume;
         }
@@ -184,6 +184,14 @@ public class PortalManager : MonoBehaviour
             altWorldAmbienceLPF.enabled = true;
             altWorldAmbienceLPF.cutoffFrequency = Mathf.Lerp(dragLpfLow, dragLpfHigh, sizeFactor);
         }
+
+        // Make sure portal isn't too small
+        portalRect.size = new Vector2(
+            Mathf.Max(Mathf.Abs(movingPortalRect.size.x), minimumPortalSize),
+            Mathf.Max(Mathf.Abs(movingPortalRect.size.y), minimumPortalSize)
+        );
+        portalRect.center = movingPortalRect.center; // Need to re-set this in case size was changed
+        portalEffect.portalShape = portalRect;
     }
 
     // Transfers between portals in the main and alternate world
@@ -375,21 +383,6 @@ public class PortalManager : MonoBehaviour
 
         // If any are non-null, a cut was made
         return horizontalPieces[0] != null || horizontalPieces[1] != null || verticalPieces[0] != null || verticalPieces[1] != null;
-    }
-
-
-    void OnGUI()
-    {
-
-        // TODO Note that this is debug code, this will eventually be replaced with Mike's object
-        if (isSelecting || isOpen)
-        {
-            // Create a rect from both mouse positions
-            Vector3 topLeft = mainCam.WorldToScreenPoint(portPos1);
-            Vector3 bottomRight = mainCam.WorldToScreenPoint(portPos2);
-            Rect rect = Selectionbox.GetScreenRect(topLeft, bottomRight);
-            //Selectionbox.DrawScreenRectBorder(rect, 2, new Color(0.8f, 0.8f, 0.95f));
-        }
     }
 
     void OnRenderObject()
