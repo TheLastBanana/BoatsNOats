@@ -36,14 +36,14 @@ public class PortalManager : MonoBehaviour
 
     private bool inCutscene;
     AudioEffects afx;
-    PortalParticles portalParticles;
+    PortalEffect portalEffect;
 
     // Use this for initialization
     void Start ()
     {
         inCutscene = false;
         afx = GetComponent<AudioEffects>();
-        portalParticles = Instantiate(portalParticlePrefab).GetComponent<PortalParticles>();
+        portalEffect = Instantiate(portalParticlePrefab).GetComponent<PortalEffect>();
     }
 	
 	// Update is called once per frame
@@ -53,8 +53,8 @@ public class PortalManager : MonoBehaviour
         {
             // Kill the portal
             isOpen = false;
-            portalParticles.portalShape = new Rect();
-            portalParticles.Disable();
+            portalEffect.portalShape = new Rect();
+            portalEffect.Disable();
             // TODO close Mike's portal
 
             // Transfer objects in the portal home
@@ -69,8 +69,8 @@ public class PortalManager : MonoBehaviour
         if (!isOpen && Input.GetMouseButtonDown(0) && !inCutscene)
         {
             portalCam.enabled = true;
-            portalParticles.Enable();
-            portalParticles.intensity = 1f;
+            portalEffect.Enable();
+            portalEffect.particleIntensity = 1f;
 
             isSelecting = true;
             portPos1 = mainCam.ScreenToWorldPoint(Input.mousePosition);
@@ -107,7 +107,7 @@ public class PortalManager : MonoBehaviour
             isSelecting = false;
             isOpen = true; // But it IS open
 
-            portalParticles.intensity = 0.2f;
+            portalEffect.particleIntensity = 0.2f;
             portalCam.enabled = false;
             portalCam.rect = new Rect();
 
@@ -154,7 +154,7 @@ public class PortalManager : MonoBehaviour
             altWorldAmbienceLPF.enabled = true;
             altWorldAmbienceLPF.cutoffFrequency = Mathf.Lerp(dragLpfLow, dragLpfHigh, sizeFactor);
 
-            portalParticles.portalShape = new Rect(portPos1, portPos2 - portPos1);
+            portalEffect.portalShape = new Rect(portPos1, portPos2 - portPos1);
         }
     }
 
