@@ -6,6 +6,7 @@ public class PortalEffect : MonoBehaviour
     public GameObject edgePrefab;
     public GameObject middlePrefab;
     public Rect portalShape;
+    public float sizeSpeedCurve = 0.8f;
     public float particleIntensity = 1f;
     public float minBorderThickness = 0.1f;
     public float maxBorderThickness = 0.2f;
@@ -18,9 +19,11 @@ public class PortalEffect : MonoBehaviour
 
     Transform[] transforms = new Transform[4];
     ParticleSystem[][] edgeSystems = new ParticleSystem[4][];
+    ParticleSystem.MainModule[][] mains = new ParticleSystem.MainModule[4][];
     ParticleSystem.EmissionModule[][] emissions = new ParticleSystem.EmissionModule[4][];
     ParticleSystem.ShapeModule[][] shapes = new ParticleSystem.ShapeModule[4][];
     float[] edgeBaseRates;
+    float[] edgeBaseSpeeds;
 
     const int numBorderVerts = 20;
     const int numBorderTris = 16;
@@ -85,6 +88,7 @@ public class PortalEffect : MonoBehaviour
             var systems = edgeSystems[i] = newObj.GetComponentsInChildren<ParticleSystem>();
             shapes[i] = new ParticleSystem.ShapeModule[systems.Length];
             emissions[i] = new ParticleSystem.EmissionModule[systems.Length];
+            mains[i] = new ParticleSystem.MainModule[systems.Length];
 
             for (int j = 0; j < systems.Length; ++j)
             {
@@ -92,13 +96,18 @@ public class PortalEffect : MonoBehaviour
 
                 shapes[i][j] = system.shape;
                 emissions[i][j] = system.emission;
+                mains[i][j] = system.main;
             }
         }
 
         // Determine base spawn rates for edge systems
         edgeBaseRates = new float[emissions[0].Length];
+        edgeBaseSpeeds = new float[emissions[0].Length];
         for (int i = 0; i < edgeBaseRates.Length; ++i)
+        {
             edgeBaseRates[i] = emissions[0][i].rateOverTimeMultiplier;
+            edgeBaseSpeeds[i] = mains[0][i].startSpeedMultiplier;
+        }
 
         middle = Instantiate(middlePrefab, transform).GetComponent<ParticleSystem>();
         middle.transform.localPosition = new Vector3();
@@ -127,12 +136,17 @@ public class PortalEffect : MonoBehaviour
         transforms[2].localPosition = new Vector2(-w / 2, 0);
         transforms[3].localPosition = new Vector2(0, -h / 2);
 
-        // Scale emission rate to size, so we get the same relative coverage
+        // Scale emission rate and speed to size, so we get the same relative coverage
+        var minRadius = Mathf.Min(shapes[0][0].radius, shapes[1][0].radius);
         for (int i = 0; i < 4; ++i)
             for (int j = 0; j < edgeBaseRates.Length; ++j)
             {
                 emissions[i][j].rateOverTimeMultiplier =
-                    shapes[i][j].radius == 0f ? 0f : edgeBaseRates[j] * particleIntensity * shapes[i][j].radius;
+                    shapes[i][j].radius == 0f ? 0f : particleIntensity * shapes[i][j].radius * edgeBaseRates[j];
+                
+                // In this case, we want to scale to the minimum radius to avoid firing particles right out of thin/wide portals
+                mains[i][j].startSpeedMultiplier =
+                    shapes[i][j].radius == 0f ? 0f : particleIntensity * Mathf.Pow(minRadius, sizeSpeedCurve) * edgeBaseSpeeds[j];
             }
 
         // Middle is a square, so use area to scale emission rate
