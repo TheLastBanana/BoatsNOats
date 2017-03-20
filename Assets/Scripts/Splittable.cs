@@ -384,20 +384,23 @@ public class Splittable : MonoBehaviour
         List<Vector3> tempVerts = new List<Vector3>();
         List<Vector2> tempUV = new List<Vector2>();
         List<int> removed = new List<int>();
+        HashSet<int> usedVertices = new HashSet<int>();
 
+        for (int i = 0; i < mesh.triangles.Length; ++i)
+            usedVertices.Add(mesh.triangles[i]);
+
+        // Rebuild mesh list
         for (int i = 0; i < mesh.vertexCount; ++i)
         {
-            // Check if any triangle uses this index
-            if (Array.Exists(mesh.triangles, x => x == i))
+            // No triangle uses this index, so mark it to be removed
+            if (!usedVertices.Contains(i))
             {
-                tempVerts.Add(mesh.vertices[i]);
-                tempUV.Add(mesh.uv[i]);
-
+                removed.Add(i);
                 continue;
             }
 
-            // Otherwise, mark it to be removed
-            removed.Add(i);
+            tempVerts.Add(mesh.vertices[i]);
+            tempUV.Add(mesh.uv[i]);
         }
 
         // Reverse the list so we don't also have to decrement higher removed indices
