@@ -91,124 +91,6 @@ NavMeshSettings:
     cellSize: 0.16666667
     accuratePlacement: 0
   m_NavMeshData: {fileID: 0}
---- !u!1001 &175047554
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 1626337705}
-    m_Modifications:
-    - target: {fileID: 224564996728573954, guid: d8273429c1a1a5d46bd301700e50764c,
-        type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224564996728573954, guid: d8273429c1a1a5d46bd301700e50764c,
-        type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224564996728573954, guid: d8273429c1a1a5d46bd301700e50764c,
-        type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224564996728573954, guid: d8273429c1a1a5d46bd301700e50764c,
-        type: 2}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224564996728573954, guid: d8273429c1a1a5d46bd301700e50764c,
-        type: 2}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224564996728573954, guid: d8273429c1a1a5d46bd301700e50764c,
-        type: 2}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224564996728573954, guid: d8273429c1a1a5d46bd301700e50764c,
-        type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224564996728573954, guid: d8273429c1a1a5d46bd301700e50764c,
-        type: 2}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224564996728573954, guid: d8273429c1a1a5d46bd301700e50764c,
-        type: 2}
-      propertyPath: m_AnchoredPosition.x
-      value: 4.2509003
-      objectReference: {fileID: 0}
-    - target: {fileID: 224564996728573954, guid: d8273429c1a1a5d46bd301700e50764c,
-        type: 2}
-      propertyPath: m_AnchoredPosition.y
-      value: 10.011339
-      objectReference: {fileID: 0}
-    - target: {fileID: 224564996728573954, guid: d8273429c1a1a5d46bd301700e50764c,
-        type: 2}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224564996728573954, guid: d8273429c1a1a5d46bd301700e50764c,
-        type: 2}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224564996728573954, guid: d8273429c1a1a5d46bd301700e50764c,
-        type: 2}
-      propertyPath: m_AnchorMin.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224564996728573954, guid: d8273429c1a1a5d46bd301700e50764c,
-        type: 2}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224564996728573954, guid: d8273429c1a1a5d46bd301700e50764c,
-        type: 2}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224564996728573954, guid: d8273429c1a1a5d46bd301700e50764c,
-        type: 2}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224564996728573954, guid: d8273429c1a1a5d46bd301700e50764c,
-        type: 2}
-      propertyPath: m_Pivot.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 224564996728573954, guid: d8273429c1a1a5d46bd301700e50764c,
-        type: 2}
-      propertyPath: m_Pivot.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114785541778419156, guid: d8273429c1a1a5d46bd301700e50764c,
-        type: 2}
-      propertyPath: textLines.Array.data[0]
-      value: "Gemma makes a new friend, the artificial intelligence Al. With Al\u2019s
-        help she sets off to steal designs for the AI robots that exist in this world.
-        She\u2019ll steal them and bring them back to her own world to make a fortune."
-      objectReference: {fileID: 0}
-    - target: {fileID: 114785541778419156, guid: d8273429c1a1a5d46bd301700e50764c,
-        type: 2}
-      propertyPath: textLines.Array.data[1]
-      value: The two adventurers continue on, but Al starts to notice that the portals
-        Gemma leaves behind are damaging both worlds.
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: d8273429c1a1a5d46bd301700e50764c, type: 2}
-  m_IsPrefabParent: 0
---- !u!224 &175047555 stripped
-RectTransform:
-  m_PrefabParentObject: {fileID: 224564996728573954, guid: d8273429c1a1a5d46bd301700e50764c,
-    type: 2}
-  m_PrefabInternal: {fileID: 175047554}
 --- !u!1001 &808454123
 Prefab:
   m_ObjectHideFlags: 0
@@ -253,9 +135,32 @@ Prefab:
       propertyPath: player
       value: 
       objectReference: {fileID: 831177388}
+    - target: {fileID: 4638580808830708, guid: 06d7fe0b7b7ba4844835d6b3b4400e43, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 18.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 58269315086799122, guid: 06d7fe0b7b7ba4844835d6b3b4400e43,
+        type: 2}
+      propertyPath: m_Radius
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4910905410852998, guid: 06d7fe0b7b7ba4844835d6b3b4400e43, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 3.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4910905410852998, guid: 06d7fe0b7b7ba4844835d6b3b4400e43, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 30.65
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 06d7fe0b7b7ba4844835d6b3b4400e43, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &808454124 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114697566736478712, guid: 06d7fe0b7b7ba4844835d6b3b4400e43,
+    type: 2}
+  m_PrefabInternal: {fileID: 808454123}
+  m_Script: {fileID: 11500000, guid: 23129ebc973c194489634efc9b7ce7c1, type: 3}
 --- !u!1 &831177388 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1359047794276204, guid: c86eda601f8a9cc40b2f7577bccf4596,
@@ -559,7 +464,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4469480583452202, guid: 210ecc0da6b67064eac6dc200457573a, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 7.1
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4469480583452202, guid: 210ecc0da6b67064eac6dc200457573a, type: 2}
       propertyPath: m_LocalPosition.z
@@ -591,7 +496,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4469480583452202, guid: 210ecc0da6b67064eac6dc200457573a, type: 2}
       propertyPath: m_LocalScale.y
-      value: 2.2
+      value: 1.4
       objectReference: {fileID: 0}
     - target: {fileID: 1563996884988258, guid: 210ecc0da6b67064eac6dc200457573a, type: 2}
       propertyPath: m_Name
@@ -729,6 +634,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 810bbb47ce7d3a54ebabe39231a7c7af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cutsceneManager: {fileID: 0}
 --- !u!4 &1306316353
 Transform:
   m_ObjectHideFlags: 0
@@ -1064,7 +970,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4469480583452202, guid: 210ecc0da6b67064eac6dc200457573a, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 7.1
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4469480583452202, guid: 210ecc0da6b67064eac6dc200457573a, type: 2}
       propertyPath: m_LocalPosition.z
@@ -1096,7 +1002,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4469480583452202, guid: 210ecc0da6b67064eac6dc200457573a, type: 2}
       propertyPath: m_LocalScale.y
-      value: 2.2
+      value: 1.4
       objectReference: {fileID: 0}
     - target: {fileID: 1563996884988258, guid: 210ecc0da6b67064eac6dc200457573a, type: 2}
       propertyPath: m_Name
@@ -1211,7 +1117,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1961070144}
-  - {fileID: 175047555}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1485,6 +1390,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114094537650083764, guid: c86eda601f8a9cc40b2f7577bccf4596,
+        type: 2}
+      propertyPath: cutsceneManager
+      value: 
+      objectReference: {fileID: 808454124}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c86eda601f8a9cc40b2f7577bccf4596, type: 2}
   m_IsPrefabParent: 0

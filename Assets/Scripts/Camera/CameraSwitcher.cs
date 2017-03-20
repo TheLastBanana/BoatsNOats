@@ -10,17 +10,20 @@ public class CameraSwitcher : MonoBehaviour
     public Camera cAlt;
     public Camera cChar;
 
-    bool switched = false;
+    bool switched;
+    private bool inCutscene;
     AudioEffects afx;
 
     void Start ()
     {
+        switched = false;
+        inCutscene = false;
         afx = GetComponent<AudioEffects>();
     }
 
     // Update is called once per frame
     void Update () {
-		if (!switched && Input.GetKeyDown(KeyCode.Tab))
+		if (!switched && Input.GetKeyDown(KeyCode.Tab) && !inCutscene)
         {
             cMain.enabled = false;
             cChar.enabled = false;
@@ -30,7 +33,7 @@ public class CameraSwitcher : MonoBehaviour
             afx.cancelEffects(altWorldAmbience);
             altWorldAmbience.Play();
         }
-        else if (switched && Input.GetKeyUp(KeyCode.Tab))
+        else if ((switched && Input.GetKeyUp(KeyCode.Tab)) || (switched && inCutscene))
         {
             cMain.enabled = true;
             cChar.enabled = true;
@@ -42,5 +45,11 @@ public class CameraSwitcher : MonoBehaviour
         }
 
         if (switched) musicManager.muffled = true;
+    }
+
+    // Stop player from switching cameras during cutscene
+    public void SetCutscene(bool cutscene)
+    {
+        inCutscene = cutscene;
     }
 }

@@ -70,6 +70,7 @@ GameObject:
   - component: {fileID: 114359994334603174}
   - component: {fileID: 114940384822859624}
   - component: {fileID: 114863008017044136}
+  - component: {fileID: 114881361151321206}
   m_Layer: 0
   m_Name: CameraManager
   m_TagString: Untagged
@@ -252,6 +253,7 @@ GameObject:
   - component: {fileID: 114717450731081886}
   - component: {fileID: 249213219427466506}
   - component: {fileID: 58269315086799122}
+  - component: {fileID: 114685658873825840}
   m_Layer: 0
   m_Name: SceneTransition
   m_TagString: Untagged
@@ -1702,8 +1704,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f275cbacbd2c38c4e99a6fbee41aeb37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CutsceneManager: {fileID: 1025430578642472}
-  textFile: {fileID: 4900000, guid: ace7c257cb9b6da46b8d76190b9da333, type: 3}
+  cutsceneManager: {fileID: 114697566736478712}
+  textFile: {fileID: 0}
 --- !u!114 &114580626449500856
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1746,6 +1748,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   circuitCamera: {fileID: 20613930000914146}
+--- !u!114 &114685658873825840
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1555246752482372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f275cbacbd2c38c4e99a6fbee41aeb37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cutsceneManager: {fileID: 114697566736478712}
+  textFile: {fileID: 0}
 --- !u!114 &114697566736478712
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1758,7 +1773,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneStart: {fileID: 1788449416716200}
-  Gemma: {fileID: 0}
+  sceneTransition: {fileID: 1555246752482372}
+  cameraManager: {fileID: 1065581217306714}
+  portalManagerObj: {fileID: 1776842991236686}
+  Gemma: {fileID: 1194068344016752, guid: 0c5c6c18651b0ad40b9657453fab6d91, type: 2}
   Al: {fileID: 0}
 --- !u!114 &114717450731081886
 MonoBehaviour:
@@ -1771,6 +1789,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 810bbb47ce7d3a54ebabe39231a7c7af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cutsceneManager: {fileID: 114697566736478712}
 --- !u!114 &114863008017044136
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1782,6 +1801,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e49cb9b3e5b6abf498048481a2b0a472, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114881361151321206
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1065581217306714}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36edf53903a1f12428da0608eb723872, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCam: {fileID: 20267623948367186}
+  yMin: -3
+  yMax: 20
+  offs: {fileID: 114537670656804216}
+  LeftBoundary: {fileID: 0}
+  RightBoundary: {fileID: 0}
+  cutsceneManagerObj: {fileID: 1025430578642472}
 --- !u!114 &114927240289111764
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1804,7 +1841,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cff4ab9015361534eaeebc44e3f57849, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  Gemma: {fileID: 1194068344016752, guid: 0c5c6c18651b0ad40b9657453fab6d91, type: 2}
   mainCam: {fileID: 20267623948367186}
   altCam: {fileID: 20490272858795104}
   yMin: -3

@@ -2301,9 +2301,36 @@ Prefab:
       propertyPath: player
       value: 
       objectReference: {fileID: 831177388}
+    - target: {fileID: 114940384822859624, guid: 06d7fe0b7b7ba4844835d6b3b4400e43,
+        type: 2}
+      propertyPath: Gemma
+      value: 
+      objectReference: {fileID: 831177388}
+    - target: {fileID: 114940384822859624, guid: 06d7fe0b7b7ba4844835d6b3b4400e43,
+        type: 2}
+      propertyPath: LeftBoundary
+      value: 
+      objectReference: {fileID: 902874096}
+    - target: {fileID: 114940384822859624, guid: 06d7fe0b7b7ba4844835d6b3b4400e43,
+        type: 2}
+      propertyPath: RightBoundary
+      value: 
+      objectReference: {fileID: 1836440827}
+    - target: {fileID: 114697566736478712, guid: 06d7fe0b7b7ba4844835d6b3b4400e43,
+        type: 2}
+      propertyPath: Gemma
+      value: 
+      objectReference: {fileID: 1359047794276204, guid: c86eda601f8a9cc40b2f7577bccf4596,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 06d7fe0b7b7ba4844835d6b3b4400e43, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &1716019797 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114697566736478712, guid: 06d7fe0b7b7ba4844835d6b3b4400e43,
+    type: 2}
+  m_PrefabInternal: {fileID: 1716019796}
+  m_Script: {fileID: 11500000, guid: 23129ebc973c194489634efc9b7ce7c1, type: 3}
 --- !u!1 &1728870835
 GameObject:
   m_ObjectHideFlags: 0
@@ -2757,6 +2784,11 @@ Prefab:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114094537650083764, guid: c86eda601f8a9cc40b2f7577bccf4596,
+        type: 2}
+      propertyPath: cutsceneManager
+      value: 
+      objectReference: {fileID: 1716019797}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c86eda601f8a9cc40b2f7577bccf4596, type: 2}
   m_IsPrefabParent: 0
