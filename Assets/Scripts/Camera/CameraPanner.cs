@@ -16,16 +16,16 @@ public class CameraPanner : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        xMin = LeftBoundary.transform.position.x;
-        xMax = RightBoundary.transform.position.x;
-        cutsceneManager = cutsceneManagerObj.GetComponent<CutsceneManager>();
-
         // These will be the same, this is so they aren't in two places
         CameraTracker cameraTracker = this.GetComponent<CameraTracker>();
         yMin = cameraTracker.yMin;
         yMax = cameraTracker.yMax;
         LeftBoundary = cameraTracker.LeftBoundary;
         RightBoundary = cameraTracker.RightBoundary;
+
+        xMin = LeftBoundary.transform.position.x;
+        xMax = RightBoundary.transform.position.x;
+        cutsceneManager = cutsceneManagerObj.GetComponent<CutsceneManager>();
     }
 
     // Update is called once per frame
