@@ -16,7 +16,7 @@ public class CutsceneManager : MonoBehaviour {
     private PortalManager portalManager;
 
     public GameObject Gemma;
-    private PlayerMovement pm;
+    private PlayerController playerController;
     public GameObject Al;
 
     // Gemma's text stuff
@@ -49,7 +49,7 @@ public class CutsceneManager : MonoBehaviour {
 
         portalManager = portalManagerObj.GetComponent<PortalManager>();
 
-        pm = Gemma.GetComponent<PlayerMovement>();
+        playerController = Gemma.GetComponent<PlayerController>();
 
         // Grab Gemma's text stuff
         if (Gemma != null)
@@ -121,7 +121,7 @@ public class CutsceneManager : MonoBehaviour {
         numTexts = GemmaTT.numDialogsLoaded();
 
         running = true;
-        pm.StopForCutscene();
+        playerController.StopForCutscene();
         cameraSwitcher.SetCutscene(true);
         portalManager.SetCutscene(true);
     }
@@ -129,7 +129,7 @@ public class CutsceneManager : MonoBehaviour {
     private void EndCutscene()
     {
         running = false;
-        pm.ResumeAfterCutscene();
+        playerController.ResumeAfterCutscene();
         cameraSwitcher.SetCutscene(false);
         cameraTracker.UpdateTarget(Gemma);
         portalManager.SetCutscene(false);

@@ -123,7 +123,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void StopForCutscene()
     {
-        this.gameObject.GetComponent<PlayerController>().setCutscene(true);
+//        this.gameObject.GetComponent<PlayerController>().setCutscene(true);
         m_Anim.SetFloat("Speed", 0f);
         m_Rigidbody2D.velocity = Vector2.zero;
 
@@ -133,7 +133,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void ResumeAfterCutscene()
     {
-        this.gameObject.GetComponent<PlayerController>().setCutscene(false);
+//        this.gameObject.GetComponent<PlayerController>().setCutscene(false);
         m_Rigidbody2D.drag = lastDrag;
     }
 }
