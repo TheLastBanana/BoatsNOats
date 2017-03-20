@@ -9,54 +9,55 @@ public class Piston : MonoBehaviour
     public GameObject rod;
     public GameObject bottom;
     public float maxHeight;
-    public float hackAmount = 1.5f; // PLEASE GOD FIX ME
-    private const int dim = 256; // Size of square in pixels
-    private const float unityDim = dim / 100f;
-    private const float headScale = .1f;
-    private const float speed = unityDim / 20;
-    private const float scaleSpeed = unityDim / speed / 100 / 4; // "uD / speed" is percent to scale by.
-                                                                 // ".. / 100" turns into a decimal
-    private const float headMin = unityDim / 2 + unityDim * headScale / 2;
 
-	// Update is called once per frame
-	void Update ()
+    private Vector3 botSize;
+    private Vector3 rodSize;
+    private Vector3 headSize;
+    private float headMin;
+    private float speed;
+
+    private void Awake()
+    {
+        // Get sprite sizes
+        botSize = bottom.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.bounds.size;
+        rodSize = rod.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.bounds.size;
+        headSize = head.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.bounds.size;
+
+        // Head minimum
+        headMin = botSize.y / 2 + headSize.y / 2;
+
+        // Speed is arbitrarily a fifth of the head size I guess
+        speed = headSize.y / 5;
+    }
+
+    // Update is called once per frame
+    void Update ()
     {
         float posDelta = 0;
 
         //Reset box collider offset
-        head.transform.GetChild(0).GetComponent<PolygonCollider2D>().offset = new Vector2(0, 0);
-        
+        head.transform.GetChild(0).GetComponent<BoxCollider2D>().offset = new Vector2(0, 0);
+
         //Use base.GetComponent<Circuit>().powered to use the power from a circuit
         //if (Input.GetKey(KeyCode.RightBracket) && rod.transform.localScale.y < maxHeight)
         if (bottom.GetComponent<Circuit>().powered && rod.transform.localScale.y < maxHeight)
         {
             posDelta = speed;
             //if head is going up account for character feet sinking by offsetting box collider
-            head.transform.GetChild(0).GetComponent<PolygonCollider2D>().offset = new Vector2(0,2);
+            head.transform.GetChild(0).GetComponent<BoxCollider2D>().offset = new Vector2(0,2);
         }
-            
         else if (!bottom.GetComponent<Circuit>().powered && head.transform.localPosition.y > headMin)
             posDelta = -speed;
-
-        float scaleDelta = 0;
-        //if (Input.GetKey(KeyCode.RightBracket) && rod.transform.localScale.y < maxHeight)
-        if (bottom.GetComponent<Circuit>().powered && rod.transform.localScale.y < maxHeight)
-            scaleDelta = scaleSpeed;
-        //else if (Input.GetKey(KeyCode.LeftBracket) && rod.transform.localScale.y > 0)
-        else if (!bottom.GetComponent<Circuit>().powered && rod.transform.localScale.y > 0)
-            scaleDelta = -scaleSpeed;
 
         if (posDelta != 0)
         {
             Vector3 headPos = head.transform.localPosition;
-            Vector3 rodPos = rod.transform.localPosition;
-            headPos.y += posDelta * hackAmount;
-            rodPos.y += posDelta / 2; // Only move half as much, scaling adds to both sides
+            headPos.y += posDelta;
             head.transform.localPosition = headPos;
-            rod.transform.localPosition = rodPos;
-            
+
+            Debug.Log(headPos.y + " " + headMin + " " + (headPos.y - headMin) + " " + rodSize.y + " " + (headPos.y - headMin) / rodSize.y);
             Vector3 rodScale = rod.transform.localScale;
-            rodScale.y += scaleDelta;
+            rodScale.y = (headPos.y - headMin) / rodSize.y;
             rod.transform.localScale = rodScale;
         }
 	}
