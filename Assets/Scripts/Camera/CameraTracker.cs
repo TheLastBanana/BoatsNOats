@@ -15,8 +15,8 @@ public class CameraTracker : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        xMin = LeftBoundary.transform.position.x;
-        xMax = RightBoundary.transform.position.x;
+        xMin = (int)LeftBoundary.transform.position.x;
+        xMax = (int)RightBoundary.transform.position.x;
         currentTarget = Gemma;
     }
 	
