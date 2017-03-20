@@ -54,19 +54,31 @@ public class CameraPanner : MonoBehaviour {
         // Get position using interpolation between from and to
         Vector3 fromPos = fromTrans.position;
         Vector3 toPos = toTrans.position;
-        float newX = Mathf.Lerp(fromPos.x, toPos.x, interpolation);
-        float newY = Mathf.Lerp(fromPos.y, toPos.y, interpolation);
-        Vector3 pos = new Vector3(newX, newY, mainCamTrans.position.z); // Keep camera z
 
         // Calculate where the camera's bounding box is
         float camHeight = 2f * mainCam.orthographicSize;
         float camWidth = camHeight * mainCam.aspect;
+        fromPos = checkCameraBounds(fromPos, camHeight, camWidth);
+        toPos = checkCameraBounds(toPos, camHeight, camWidth);
+
+        float newX = Mathf.Lerp(fromPos.x, toPos.x, interpolation);
+        float newY = Mathf.Lerp(fromPos.y, toPos.y, interpolation);
+        Vector3 pos = new Vector3(newX, newY, mainCamTrans.position.z); // Keep camera z
+
+        // Set the transform position
+        mainCamTrans.position = pos;
+    }
+
+    // Change the given position such that a camera focused on it is within camera bounds
+    private Vector3 checkCameraBounds(Vector3 pos, float camHeight, float camWidth)
+    {
+        // Get camera edges
         float left = pos.x - (camWidth / 2);
         float right = pos.x + (camWidth / 2);
         float bottom = pos.y - (camHeight / 2);
         float top = pos.y + (camHeight / 2);
 
-        // Limit the camera to the bounds
+        // Move position so edges are in camera bounds
         if (yMin > bottom)
             pos.y = yMin + (camHeight / 2);
         else if (yMax < top)
@@ -77,7 +89,6 @@ public class CameraPanner : MonoBehaviour {
         else if (xMax < right)
             pos.x = xMax - (camWidth / 2);
 
-        // Set the transform position
-        mainCamTrans.position = pos;
+        return pos;
     }
 }
