@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
 	public float runSpeed = 8f;
 	public float groundDamping = 20f; // how fast do we change direction? higher means faster
 	public float inAirDamping = 5f;
-	public float jumpHeight = 3f;
+	public float jumpHeight = 3.5f;
 
     [HideInInspector]
 	private float normalizedHorizontalSpeed = 0;
@@ -141,7 +141,7 @@ public class PlayerController : MonoBehaviour
     public void StopForCutscene()
     {
         inCutscene = true;
-        this._animator.SetFloat("Speed", 0f);
+        _animator.SetFloat("Speed", 0f);
         _rigidbody.velocity = Vector2.zero;
     }
 
