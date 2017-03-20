@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
 	public float runSpeed = 8f;
 	public float groundDamping = 20f; // how fast do we change direction? higher means faster
 	public float inAirDamping = 5f;
-	public float jumpHeight = 2.5f;
+	public float jumpHeight = 3f;
 
     [HideInInspector]
 	private float normalizedHorizontalSpeed = 0;
@@ -79,7 +79,7 @@ public class PlayerController : MonoBehaviour
             _animator.SetBool("Ground", true);
         }
 
-        if ( Input.GetKey( KeyCode.D) && !inCutscene)
+        if ( Input.GetKey( KeyCode.D ) && !inCutscene)
 		{
 			normalizedHorizontalSpeed = 1;
 			if( transform.localScale.x > 0f )
@@ -88,7 +88,7 @@ public class PlayerController : MonoBehaviour
 			if( _controller.isGrounded )
 				_animator.Play( Animator.StringToHash( "Run" ) );
 		}
-		else if( Input.GetKey( KeyCode.A) && !inCutscene)
+		else if( Input.GetKey( KeyCode.A ) && !inCutscene)
 		{
 			normalizedHorizontalSpeed = -1;
 			if( transform.localScale.x < 0f )
@@ -107,7 +107,7 @@ public class PlayerController : MonoBehaviour
 
 
 		// we can only jump whilst grounded
-		if( _controller.isGrounded && Input.GetKeyDown( KeyCode.Space) && !inCutscene)
+		if( _controller.isGrounded && (Input.GetKeyDown( KeyCode.Space ) || Input.GetKeyDown( KeyCode.W )) && !inCutscene)
 		{
 			_velocity.y = Mathf.Sqrt( 2f * jumpHeight * -gravity );
 			_animator.Play( Animator.StringToHash( "Jump" ) );
@@ -141,16 +141,12 @@ public class PlayerController : MonoBehaviour
     public void StopForCutscene()
     {
         inCutscene = true;
-        _animator.SetFloat("Speed", 0f);
+        this._animator.SetFloat("Speed", 0f);
         _rigidbody.velocity = Vector2.zero;
-
-//        lastDrag = _rigidbody.drag;
-//        _rigidbody.drag = 1000f;
     }
 
     public void ResumeAfterCutscene()
     {
         inCutscene = false;
-//        _rigidbody.drag = lastDrag;
     }
 }
