@@ -31,18 +31,20 @@ public class PortalManager : MonoBehaviour
     Vector3 portPos1; // These are in world coords
     Vector3 portPos2;
 
+    private bool inCutscene;
     AudioEffects afx;
 
     // Use this for initialization
     void Start ()
     {
+        inCutscene = false;
         afx = GetComponent<AudioEffects>();
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
-        if (isOpen && Input.GetMouseButtonDown(1))
+        if (isOpen && (Input.GetMouseButtonDown(1) || inCutscene))
         {
             // Kill the portal
             isOpen = false;
@@ -57,7 +59,7 @@ public class PortalManager : MonoBehaviour
         }
 
         // If we press the right mouse button, save mouse location and portal creation
-        if (!isOpen && Input.GetMouseButtonDown(0))
+        if (!isOpen && Input.GetMouseButtonDown(0) && !inCutscene)
         {
             portalCam.enabled = true;
 
@@ -90,7 +92,7 @@ public class PortalManager : MonoBehaviour
         }
 
         // If we let go of the right mouse button, end selection
-        if (!isOpen && Input.GetMouseButtonUp(0))
+        if (!isOpen && ((Input.GetMouseButtonUp(0) && !inCutscene) || (isSelecting && inCutscene)))
         {
             // We're no longer selecting the portal
             isSelecting = false;
@@ -386,5 +388,11 @@ public class PortalManager : MonoBehaviour
             // Change portal position
             portalCam.transform.position = (portPos1 + portPos2) / 2 + offs.offset;
         }
+    }
+
+    // Stop player from activating portals during cutscene
+    public void SetCutscene(bool cutscene)
+    {
+        inCutscene = cutscene;
     }
 }

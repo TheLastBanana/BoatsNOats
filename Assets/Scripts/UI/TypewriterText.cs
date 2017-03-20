@@ -177,6 +177,8 @@ class Dialog
 }
 
 public class TypewriterText : MonoBehaviour {
+    public CutsceneManager cutsceneManager;
+
     Text text;
     private TextAsset dialogFile = null;
     List<Dialog> dialogs = new List<Dialog>();
@@ -379,9 +381,9 @@ public class TypewriterText : MonoBehaviour {
                 if (tag.start == i)
                     loadVoice(tag.voice);
 
-            //foreach (PanTag tag in pTags)
-            //    if (tag.start == i)
-            // Do a pan
+            foreach (PanTag tag in pTags)
+                if (tag.start == i)
+                    startPan(tag);
 
             // Play voice and set its delay
             if (voice != null)
@@ -468,6 +470,12 @@ public class TypewriterText : MonoBehaviour {
         Debug.Log("Starting dialog number " + dialogNum);
         StartCoroutine(AnimateText(dialogNum));
         started = true;
+    }
+
+    // Call to CutsceneManager to start a pan
+    private void startPan(PanTag tag)
+    {
+        cutsceneManager.StartPan(tag.objName, tag.delay);
     }
 
     // Check if the text is done animating

@@ -6,10 +6,17 @@ using UnityEngine.UI;
 public class CutsceneManager : MonoBehaviour {
 
     public GameObject sceneStart;
+    public GameObject sceneTransition;
 
-    private PlayerMovement pm;
+    public GameObject cameraManager;
+    private CameraSwitcher cameraSwitcher;
+    private CameraTracker cameraTracker;
+    private CameraPanner cameraPanner;
+    public GameObject portalManagerObj;
+    private PortalManager portalManager;
 
     public GameObject Gemma;
+    private PlayerMovement pm;
     public GameObject Al;
 
     // Gemma's text stuff
@@ -26,12 +33,22 @@ public class CutsceneManager : MonoBehaviour {
 
     private int currentText;
     private int numTexts;
+    private CameraPanInfo currentPan;
 
     private bool running;
     private bool startedText;
+    private bool endCutscene;
 
 	// Use this for initialization
 	void Start () {
+        cameraSwitcher = cameraManager.GetComponent<CameraSwitcher>();
+        cameraTracker = cameraManager.GetComponent<CameraTracker>();
+        cameraPanner = cameraManager.GetComponent<CameraPanner>();
+        cameraTracker.enabled = true;
+        cameraPanner.enabled = false;
+
+        portalManager = portalManagerObj.GetComponent<PortalManager>();
+
         pm = Gemma.GetComponent<PlayerMovement>();
 
         // Grab Gemma's text stuff
@@ -56,19 +73,18 @@ public class CutsceneManager : MonoBehaviour {
 
         currentText = 0;
         numTexts = 0;
+        currentPan = new CameraPanInfo(null, Gemma, 0f, 0f);
 
         running = false;
         startedText = false;
+        endCutscene = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
         // Check if we've gone through all of the texts
         if (currentText == numTexts)
-        {
-            running = false;
-            pm.ResumeAfterCutscene();
-        }
+            EndCutscene();
 
         // We're not in a cutscene
         if (!running)
@@ -96,12 +112,79 @@ public class CutsceneManager : MonoBehaviour {
     {
         // TODO: Set up properly to handle more than just Gemma talking
         // TODO: Utilize custom pan tag to handle panning
-        GemmaTT.setText(textFile);
+        if (GemmaTT != null)
+            GemmaTT.setText(textFile);
+        if (AlTT != null)
+            AlTT.setText(textFile);
 
         currentText = 0;
         numTexts = GemmaTT.numDialogsLoaded();
 
         running = true;
         pm.StopForCutscene();
+        cameraSwitcher.SetCutscene(true);
+        portalManager.SetCutscene(true);
+    }
+
+    private void EndCutscene()
+    {
+        running = false;
+        pm.ResumeAfterCutscene();
+        cameraSwitcher.SetCutscene(false);
+        cameraTracker.UpdateTarget(Gemma);
+        portalManager.SetCutscene(false);
+
+        if (endCutscene)
+            sceneTransition.GetComponent<SceneChanger>().LoadNextScene();
+    }
+
+    public void StartPan(string objName, float delay)
+    {
+        objName = objName.ToLower();
+        GameObject to = null;
+
+        // Valid pans
+        if (objName == "start")
+            to = sceneStart;
+        else if (objName == "end")
+            to = sceneTransition;
+        else if (objName == "gemma")
+            to = Gemma;
+
+        // Assume the old pan to target is where we're panning from
+        currentPan = new CameraPanInfo(currentPan.to, to, Time.time, delay);
+
+        cameraTracker.enabled = false;
+        cameraTracker.UpdateTarget(to);
+        cameraPanner.enabled = true;
+        cameraPanner.currentPan = currentPan;
+    }
+
+    public void EndPan()
+    {
+        cameraTracker.enabled = true;
+        cameraPanner.enabled = false;
+    }
+
+    // Called to signify the cutscene is the last in the level and we need to level change after
+    public void IsEndCutscene()
+    {
+        endCutscene = true;
+    }
+}
+
+public class CameraPanInfo
+{
+    public GameObject from;
+    public GameObject to;
+    public float startTime;
+    public float duration;
+
+    public CameraPanInfo(GameObject f, GameObject t, float s, float d)
+    {
+        from = f;
+        to = t;
+        startTime = s;
+        duration = d;
     }
 }

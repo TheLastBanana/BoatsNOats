@@ -4,36 +4,51 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace UnityStandardAssets._2D
+public class SceneChanger : MonoBehaviour
 {
-    public class SceneChanger : MonoBehaviour
+    public CutsceneManager cutsceneManager;
+    private CutsceneInfo cutsceneInfo;
+
+    private int currentScene;
+    private int nextScene;
+    private bool loadNextScene;
+
+    // Use this for initialization
+    void Start()
     {
-        private int currentScene;
-        private int nextScene;
+        cutsceneInfo = this.GetComponent<CutsceneInfo>();
 
-        // Use this for initialization
-        void Start()
-        {
-            // Make sure scenes are ordered properly in build settings
-            currentScene = SceneManager.GetActiveScene().buildIndex;
-            nextScene = currentScene + 1;
-        }
+        // Make sure scenes are ordered properly in build settings
+        currentScene = SceneManager.GetActiveScene().buildIndex;
+        nextScene = currentScene + 1;
+        loadNextScene = false;
+    }
 
-        // Update is called once per frame
-        void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                SceneManager.LoadScene(currentScene);
-            }
-        }
+    // Update is called once per frame
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+            SceneManager.LoadScene(currentScene);
 
-        private void OnTriggerEnter2D(Collider2D other)
+        if (loadNextScene)
+            SceneManager.LoadScene(nextScene);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Player")
         {
-            if (other.tag == "Player")
-            {
-                SceneManager.LoadScene(nextScene);
-            }
+            // No cutscene, end level
+            if (cutsceneInfo.textFile == null)
+                LoadNextScene();
+            // Tell the manager this is an end level cutscene
+            else
+                cutsceneManager.IsEndCutscene();
         }
+    }
+
+    public void LoadNextScene()
+    {
+        loadNextScene = true;
     }
 }
