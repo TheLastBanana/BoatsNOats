@@ -18,7 +18,7 @@ TagManager:
   - 
   - Circuitry
   - Character
-  - 
+  - Portal Effects
   - 
   - 
   - 
@@ -46,6 +46,9 @@ TagManager:
     locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Foreground
+    uniqueID: 1414951245
     locked: 0
   - name: Text Boxes
     uniqueID: 3687126281

@@ -1,8 +1,4 @@
-﻿// Upgrade NOTE: commented out 'float4x4 _Object2World', a built-in variable
-
-// Upgrade NOTE: commented out 'float4x4 _Object2World', a built-in variable
-
-Shader "Custom/Portal Effect"
+﻿Shader "Custom/Portal Effect"
 {
 	Properties
 	{
@@ -51,15 +47,17 @@ Shader "Custom/Portal Effect"
 
 			fixed4 frag (v2f i, UNITY_VPOS_TYPE screenPos : VPOS) : SV_Target
 			{
-                float2 timeOffset = float2(_Time.x * _Speed.x, _Time.x * _Speed.y);
+                float2 timeOffset = _Time.xx * _Speed.xy;
 
+                // Use color in displacement map as a displacement value
                 fixed4 dispColX = tex2D(_Displacement, screenPos.xy * _Wobbliness / 1000 + timeOffset.x);
                 fixed4 dispColY = tex2D(_Displacement, screenPos.xy * _Wobbliness / 1000 + timeOffset.y);
 
                 fixed2 disp = fixed2(
-                    dispColX.x * _Amplitude * _MainTex_TexelSize.y,
-                    dispColY.x * _Amplitude * _MainTex_TexelSize.x
-                );
+                    (dispColX.x - 0.5) * _Amplitude,
+                    (dispColY.x - 0.5) * _Amplitude
+                ) * _MainTex_TexelSize.xy;
+
 				fixed4 col = tex2D(_MainTex, i.uv + disp);
 
 				return col;

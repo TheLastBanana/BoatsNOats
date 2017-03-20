@@ -6,8 +6,8 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Portal
-  m_Shader: {fileID: 4800000, guid: c433febcb8edc1d45b3b6d2f69b589ef, type: 3}
+  m_Name: Sparkle
+  m_Shader: {fileID: 203, guid: 0000000000000000f000000000000000, type: 0}
   m_ShaderKeywords: _EMISSION
   m_LightmapFlags: 1
   m_CustomRenderQueue: -1
@@ -40,12 +40,6 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - first:
-        name: _Displacement
-      second:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - first:
         name: _EmissionMap
       second:
         m_Texture: {fileID: 0}
@@ -54,7 +48,7 @@ Material:
     - first:
         name: _MainTex
       second:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: c70ee821a784c7247b36cd0d720b4a7b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - first:
@@ -77,9 +71,6 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - first:
-        name: _Amplitude
-      second: 4
-    - first:
         name: _BumpScale
       second: 1
     - first:
@@ -99,6 +90,9 @@ Material:
       second: 0.5
     - first:
         name: _GlossyReflections
+      second: 1
+    - first:
+        name: _InvFade
       second: 1
     - first:
         name: _Metallic
@@ -125,9 +119,6 @@ Material:
         name: _UVSec
       second: 0
     - first:
-        name: _Wobbliness
-      second: 7
-    - first:
         name: _ZWrite
       second: 1
     m_Colors:
@@ -138,5 +129,5 @@ Material:
         name: _EmissionColor
       second: {r: 0, g: 0, b: 0, a: 1}
     - first:
-        name: _Speed
-      second: {r: 100, g: 90, b: 0, a: 0}
+        name: _TintColor
+      second: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
