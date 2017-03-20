@@ -54,8 +54,7 @@ public class Piston : MonoBehaviour
             Vector3 headPos = head.transform.localPosition;
             headPos.y += posDelta;
             head.transform.localPosition = headPos;
-
-            Debug.Log(headPos.y + " " + headMin + " " + (headPos.y - headMin) + " " + rodSize.y + " " + (headPos.y - headMin) / rodSize.y);
+            
             Vector3 rodScale = rod.transform.localScale;
             rodScale.y = (headPos.y - headMin) / rodSize.y;
             rod.transform.localScale = rodScale;
