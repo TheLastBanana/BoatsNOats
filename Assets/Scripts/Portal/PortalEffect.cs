@@ -48,27 +48,30 @@ public class PortalEffect : MonoBehaviour
                 system.Clear();
     }
 
-    // Enable emissions
+    // Enable emissions and border
     public void Enable()
     {
-        Clear();
-        var middleEmission = middle.emission;
-        middleEmission.enabled = true;
-
-        for (int i = 0; i < 4; ++i)
-            for (int j = 0; j < edgeBaseRates.Length; ++j)
-            emissions[i][j].enabled = true;
+        EnableDisable(true);
     }
 
-    // Disable emissions
+    // Disable emissions and border
     public void Disable()
     {
+        EnableDisable(false);
+    }
+
+    // Enable/disable the effect
+    void EnableDisable(bool enable)
+    {
+        Clear();
+        GetComponent<MeshRenderer>().enabled = enable;
+
         var middleEmission = middle.emission;
-        middleEmission.enabled = false;
+        middleEmission.enabled = enable;
 
         for (int i = 0; i < 4; ++i)
             for (int j = 0; j < edgeBaseRates.Length; ++j)
-                emissions[i][j].enabled = false;
+                emissions[i][j].enabled = enable;
     }
 
     // Set up the particle systems
