@@ -6,15 +6,15 @@ public class CameraTracker : MonoBehaviour {
 
     public GameObject player;
     public Camera mainCam, altCam;
-    private int xMin, xMax;
-    public int yMin, yMax; // These could be floats
+    private float xMin, xMax;
+    public float yMin, yMax; // These could be floats
     public WorldOffsets offs;
     public GameObject LeftBoundary;
     public GameObject RightBoundary;
 	// Use this for initialization
 	void Start () {
-        xMin = (int)LeftBoundary.transform.position.x;
-        xMax = (int)RightBoundary.transform.position.x;
+        xMin = LeftBoundary.transform.position.x;
+        xMax = RightBoundary.transform.position.x;
     }
 	
 	// Update is called once per frame
