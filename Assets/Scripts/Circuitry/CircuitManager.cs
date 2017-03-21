@@ -52,16 +52,34 @@ public class CircuitManager : MonoBehaviour
         var rt = circuitCamera.targetTexture;
         circuitCamera.Render();
 
+        var w = rt.width;
+        var h = rt.height;
+
         // Set it as the active texture
         var oldRT = RenderTexture.active;
         RenderTexture.active = rt;
 
         // Copy its pixels
-        var tex = new Texture2D(rt.width, rt.height, TextureFormat.RGB24, false);
-        tex.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0);
+        var tex = new Texture2D(w, h, TextureFormat.RGB24, false);
+        tex.ReadPixels(new Rect(0, 0, w, h), 0, 0);
 
         // Reset active RenderTexture
         RenderTexture.active = oldRT;
+
+        // Convert color pixel data into an int array corresponding to group IDs
+        var pixels = tex.GetPixels();
+        var groupIDs = new int[w * h];
+        for (int x = 0; x < w; ++x)
+        {
+            for (int y = 0; y < h; ++y)
+            {
+                var index = y * w + x;
+
+                // The threshold shader has already been applied, so if r is 0, this is black.
+                // Otherise, it's an area we'll want to flood fill later.
+                groupIDs[index] = pixels[index].r == 0 ? 0 : -1;
+            }
+        }
 
         // Now we want to group areas of the circuit. To do that, we flood fill white areas with a color,
         // increasing the R value by 1 each time we do a flood fill. The result is that each group of white
@@ -75,10 +93,10 @@ public class CircuitManager : MonoBehaviour
             var x = (int)texPos.Value.x;
             var y = (int)texPos.Value.y;
 
-            // If it's white, it's an unfilled circuit area
-            if (tex.GetPixel(x, y).r == 1.0f)
+            // If it's -1, it's an unfilled circuit area
+            if (groupIDs[y * w + x] == -1)
             {
-                tex.FloodFillArea(x, y, new Color(curId / 255.0f, 0, 0));
+                floodFillIntMap(groupIDs, w, h, x, y, curId);
                 ++curId;
             }
         }
@@ -103,8 +121,7 @@ public class CircuitManager : MonoBehaviour
                 if (texPos != null)
                 {
                     // Find the R value at this pixel and convert it to an integer to get the circuit ID
-                    var pixel = tex.GetPixel((int)texPos.Value.x, (int)texPos.Value.y);
-                    groupId = (int)(pixel.r * 255);
+                    groupId = groupIDs[(int) texPos.Value.y * w + (int) texPos.Value.x];
 
                     // Add to the group; otherwise, group will be 0 and the circuit can't be powered
                     if (groupId != 0)
@@ -185,5 +202,64 @@ public class CircuitManager : MonoBehaviour
         float vSize = bounds.extents.y;
 
         circuitCamera.orthographicSize = Mathf.Max(hSize, vSize);
+    }
+
+
+    // Flood fill stuff adapted from http://wiki.unity3d.com/index.php/TextureFloodFill
+    struct Point
+    {
+        public short x;
+        public short y;
+        public Point(short aX, short aY) { x = aX; y = aY; }
+        public Point(int aX, int aY) : this((short)aX, (short)aY) { }
+    }
+
+    static void floodFillIntMap(int[] array, int w, int h, int aX, int aY, int aFillNum)
+    {
+        int refNum = array[aX + aY * w];
+        Queue<Point> nodes = new Queue<Point>();
+        nodes.Enqueue(new Point(aX, aY));
+        while (nodes.Count > 0)
+        {
+            Point current = nodes.Dequeue();
+            for (int i = current.x; i < w; i++)
+            {
+                int N = array[i + current.y * w];
+                if (N != refNum || N == aFillNum)
+                    break;
+                array[i + current.y * w] = aFillNum;
+                if (current.y + 1 < h)
+                {
+                    N = array[i + current.y * w + w];
+                    if (N == refNum && N != aFillNum)
+                        nodes.Enqueue(new Point(i, current.y + 1));
+                }
+                if (current.y - 1 >= 0)
+                {
+                    N = array[i + current.y * w - w];
+                    if (N == refNum && N != aFillNum)
+                        nodes.Enqueue(new Point(i, current.y - 1));
+                }
+            }
+            for (int i = current.x - 1; i >= 0; i--)
+            {
+                int N = array[i + current.y * w];
+                if (N != refNum || N == aFillNum)
+                    break;
+                array[i + current.y * w] = aFillNum;
+                if (current.y + 1 < h)
+                {
+                    N = array[i + current.y * w + w];
+                    if (N == refNum && N != aFillNum)
+                        nodes.Enqueue(new Point(i, current.y + 1));
+                }
+                if (current.y - 1 >= 0)
+                {
+                    N = array[i + current.y * w - w];
+                    if (N == refNum && N != aFillNum)
+                        nodes.Enqueue(new Point(i, current.y - 1));
+                }
+            }
+        }
     }
 }
