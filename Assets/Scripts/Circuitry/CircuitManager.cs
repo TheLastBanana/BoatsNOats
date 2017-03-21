@@ -143,22 +143,37 @@ public class CircuitManager : MonoBehaviour
     // Get a circuit's pixel position in the rendered grid, or null if no position
     Vector2? GetCircuitPixelPosition(GameObject circuit)
     {
-        // Get one of the circuit graphics' center points to check
-        Transform checkChild = null;
-        for (int i = 0; i < circuit.transform.childCount; ++i)
-        {
-            var child = circuit.transform.GetChild(i);
-            if (child.gameObject.layer != circuitLayer) continue;
+        Bounds bounds;
 
-            // This child is on the circuit layer, so it should have been rendered in the circuit camera
-            checkChild = child;
-            break;
+        // If it's splittable, we already have total bounds calculated
+        var splittable = circuit.GetComponent<Splittable>();
+        if (splittable == null)
+        {
+            bounds = splittable.totalBounds;
+        }
+        else
+        {
+            // Otherwise, fall back to this (kind of crappy) way of getting a point on the circuit
+
+            // Get one of the circuit graphics' center points to check
+            Transform checkChild = null;
+            for (int i = 0; i < circuit.transform.childCount; ++i)
+            {
+                var child = circuit.transform.GetChild(i);
+                if (child.gameObject.layer != circuitLayer) continue;
+
+                // This child is on the circuit layer, so it should have been rendered in the circuit camera
+                checkChild = child;
+                break;
+            }
+
+            if (checkChild == null)
+                return null;
+
+            bounds = checkChild.GetComponent<Renderer>().bounds;
         }
 
-        if (checkChild == null)
-            return null;
-
-        var center = checkChild.GetComponent<Renderer>().bounds.center;
+        var center = bounds.center;
         var texPos = circuitCamera.WorldToScreenPoint(center);
 
         return texPos;
