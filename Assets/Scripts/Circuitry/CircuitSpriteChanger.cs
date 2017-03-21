@@ -18,8 +18,8 @@ public class CircuitSpriteChanger : MonoBehaviour
     {
         if (wasPowered == circuit.powered) return;
 
-        onSprite.SetActive(circuit.powered);
-        offSprite.SetActive(!circuit.powered);
+        if (onSprite != null) onSprite.SetActive(circuit.powered);
+        if (offSprite != null) offSprite.SetActive(!circuit.powered);
 
         wasPowered = circuit.powered;
     }
