@@ -63,16 +63,6 @@ public class CircuitManager : MonoBehaviour
         // Reset active RenderTexture
         RenderTexture.active = oldRT;
 
-        // Apply a threshold. Any non-black pixels become fully white.
-        var black = new Color(0f, 0f, 0f);
-        var white = new Color(1f, 1f, 1f);
-        var pixels = tex.GetPixels();
-        for (int i = 0; i < pixels.Length; ++i)
-        {
-            if (pixels[i] != black) pixels[i] = white;
-        }
-        tex.SetPixels(pixels);
-
         // Now we want to group areas of the circuit. To do that, we flood fill white areas with a color,
         // increasing the R value by 1 each time we do a flood fill. The result is that each group of white
         // pixels (i.e. a connected circuit) has an ID (its R value).
