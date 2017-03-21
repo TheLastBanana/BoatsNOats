@@ -65,18 +65,21 @@ public class CircuitManager : MonoBehaviour
 
         // Now we want to group areas of the circuit. To do that, we flood fill white areas with a color,
         // increasing the R value by 1 each time we do a flood fill. The result is that each group of white
-        // pixels (i.e. a connected circuit) has an ID (its R value).
+        // pixels (i.e. a connected circuit) has an ID (its R value). Flood fills start at circuit positions,
+        // because these are the only groups that can be powered.
         int curId = 1;
-        for (int x = 0; x < tex.width; ++x)
-        {
-            for (int y = 0; y < tex.height; ++y)
+        foreach (var circuit in FindObjectsOfType<Circuit>()) {
+            var texPos = GetCircuitPixelPosition(circuit.gameObject);
+            if (texPos == null) continue;
+
+            var x = (int)texPos.Value.x;
+            var y = (int)texPos.Value.y;
+
+            // If it's white, it's an unfilled circuit area
+            if (tex.GetPixel(x, y).r == 1.0f)
             {
-                // If it's white, it's an unfilled circuit area
-                if (tex.GetPixel(x, y).r == 1.0f)
-                {
-                    tex.FloodFillArea(x, y, new Color(curId / 255.0f, 0, 0));
-                    ++curId;
-                }
+                tex.FloodFillArea(x, y, new Color(curId / 255.0f, 0, 0));
+                ++curId;
             }
         }
 
@@ -93,27 +96,14 @@ public class CircuitManager : MonoBehaviour
             var circuits = FindObjectsOfType<Circuit>();
             foreach (var circuit in circuits)
             {
-                // Get one of the circuit graphics' center points to check
-                Transform checkChild = null;
-                for (int i = 0; i < circuit.transform.childCount; ++i)
-                {
-                    var child = circuit.transform.GetChild(i);
-                    if (child.gameObject.layer != circuitLayer) continue;
-
-                    // This child is on the circuit layer, so it should have been rendered in the circuit camera
-                    checkChild = child;
-                    break;
-                }
-
                 int groupId = 0;
+                var texPos = GetCircuitPixelPosition(circuit.gameObject);
 
-                // If no child is found, this circuit's group should be left as 0
-                if (checkChild != null)
+                // If no valid position, this circuit's group should be left as 0
+                if (texPos != null)
                 {
                     // Find the R value at this pixel and convert it to an integer to get the circuit ID
-                    var center = checkChild.GetComponent<Renderer>().bounds.center;
-                    var texPos = circuitCamera.WorldToScreenPoint(center);
-                    var pixel = tex.GetPixel((int)texPos.x, (int)texPos.y);
+                    var pixel = tex.GetPixel((int)texPos.Value.x, (int)texPos.Value.y);
                     groupId = (int)(pixel.r * 255);
 
                     // Add to the group; otherwise, group will be 0 and the circuit can't be powered
@@ -131,6 +121,30 @@ public class CircuitManager : MonoBehaviour
             for (int i = 0; i < numGroups; ++i)
                 RecalculatePower(i + 1);
         }
+    }
+
+    // Get a circuit's pixel position in the rendered grid, or null if no position
+    Vector2? GetCircuitPixelPosition(GameObject circuit)
+    {
+        // Get one of the circuit graphics' center points to check
+        Transform checkChild = null;
+        for (int i = 0; i < circuit.transform.childCount; ++i)
+        {
+            var child = circuit.transform.GetChild(i);
+            if (child.gameObject.layer != circuitLayer) continue;
+
+            // This child is on the circuit layer, so it should have been rendered in the circuit camera
+            checkChild = child;
+            break;
+        }
+
+        if (checkChild == null)
+            return null;
+
+        var center = checkChild.GetComponent<Renderer>().bounds.center;
+        var texPos = circuitCamera.WorldToScreenPoint(center);
+
+        return texPos;
     }
 
     // Change camera settings to include all circuitry
