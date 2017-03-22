@@ -9,6 +9,7 @@ public class CircuitSpriteChanger : MonoBehaviour
     void Awake()
     {
         circuit = GetComponent<Circuit>();
+        wasPowered = circuit.powered;
     }
 
     void Update()
