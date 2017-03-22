@@ -11,12 +11,10 @@
 	{
 		// No culling or depth
 		Cull Off ZWrite Off ZTest Always
+        Blend SrcAlpha OneMinusSrcAlpha
 
 		Pass
 		{
-            ZWrite Off
-            Blend SrcAlpha OneMinusSrcAlpha
-
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
