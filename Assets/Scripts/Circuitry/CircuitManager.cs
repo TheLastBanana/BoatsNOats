@@ -40,8 +40,8 @@ public class CircuitManager : MonoBehaviour
         }
 
         // Now tell the circuits whether they're powered
-        foreach (var circuit in group)
-            circuit.powered = powered;
+        for (int i = 0; i < group.Count; ++i)
+            group[i].powered = powered;
     }
 
     // Update circuit objects' connections
@@ -148,12 +148,11 @@ public class CircuitManager : MonoBehaviour
                     var powerSource = circuit.GetComponent<PowerSource>();
                     if (powerSource != null) powerSource.groupId = groupId;
                 }
-
-                for (int i = 0; i < numGroups; ++i)
-                    RecalculatePower(i + 1);
-
             }
         }
+        
+        for (int i = 0; i < groups.Count; ++i)
+            RecalculatePower(i + 1);
     }
 
     // Get a circuit's pixel position in the rendered grid, or null if no position
