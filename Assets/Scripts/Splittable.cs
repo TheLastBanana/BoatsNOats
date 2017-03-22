@@ -191,21 +191,38 @@ public class Splittable : MonoBehaviour
     // Returns 0 if intersected, -1 if entirely on left, 1 if entirely on right
     static private int SplitMesh(GameObject leftObj, GameObject rightObj, Matrix4x4 matrix)
     {
+        Matrix4x4 matInverse = matrix.inverse;
+
         Mesh rightMesh = rightObj.GetComponent<MeshFilter>().mesh;
         Mesh leftMesh = leftObj.GetComponent<MeshFilter>().mesh;
 
         List<Vector3> leftVerts = new List<Vector3>();
         List<Vector3> rightVerts = new List<Vector3>();
 
+        var meshVertices = leftMesh.vertices;
+        var meshTriangles = leftMesh.triangles;
+        var meshUVs = leftMesh.uv;
+
         // Transform points to be relative to cutting plane
-        foreach (Vector3 vert in leftMesh.vertices)
+        foreach (Vector3 vert in meshVertices)
         {
             Vector3 transformed = matrix.MultiplyPoint3x4(vert);
             leftVerts.Add(transformed);
             rightVerts.Add(transformed);
         }
 
-        List<Vector2> leftUV = new List<Vector2>(leftMesh.uv);
+        // Early exit if everything's on one side
+        int leftCount = 0;
+        foreach (var vert in leftVerts)
+            if (vert.x < 0) leftCount += 1;
+
+        // All on the right
+        if (leftCount == 0) return 1;
+
+        // All on the left
+        else if (leftCount == leftVerts.Count) return -1;
+
+         List<Vector2> leftUV = new List<Vector2>(leftMesh.uv);
         List<Vector2> rightUV = new List<Vector2>(rightMesh.uv);
 
         // Polygons on each side
@@ -217,14 +234,15 @@ public class Splittable : MonoBehaviour
         Dictionary<Edge, int> rightInters = new Dictionary<Edge, int>();
 
         // Sort triangles to sides
-        for (int i = 0; i < leftMesh.triangles.Length; i += 3)
+        var numMeshTris = meshTriangles.Length;
+        for (int i = 0; i < numMeshTris; i += 3)
         {
             List<int> left = new List<int>();
             List<int> right = new List<int>();
 
             for (int j = i; j < i + 3; ++j)
             {
-                int vi = leftMesh.triangles[j];
+                int vi = meshTriangles[j];
                 if (leftVerts[vi].x < 0) left.Add(vi);
                 else right.Add(vi);
             }
@@ -259,9 +277,9 @@ public class Splittable : MonoBehaviour
                 pointB = leftVerts[vertB];
                 pointC = leftVerts[vertC];
 
-                uvA = leftMesh.uv[vertA];
-                uvB = leftMesh.uv[vertB];
-                uvC = leftMesh.uv[vertC];
+                uvA = meshUVs[vertA];
+                uvB = meshUVs[vertB];
+                uvC = meshUVs[vertC];
 
                 int leftInterIdA, rightInterIdA, leftInterIdB, rightInterIdB;
 
@@ -323,12 +341,12 @@ public class Splittable : MonoBehaviour
         for (int i = 0; i < leftVerts.Count; ++i)
         {
             Vector4 point = new Vector4(leftVerts[i].x, leftVerts[i].y, leftVerts[i].z, 1);
-            leftVerts[i] = matrix.inverse * point;
+            leftVerts[i] = matInverse * point;
         }
         for (int i = 0; i < rightVerts.Count; ++i)
         {
             Vector4 point = new Vector4(rightVerts[i].x, rightVerts[i].y, rightVerts[i].z, 1);
-            rightVerts[i] = matrix.inverse * point;
+            rightVerts[i] = matInverse * point;
         }
 
         leftMesh.vertices = leftVerts.ToArray();
@@ -347,9 +365,7 @@ public class Splittable : MonoBehaviour
         leftMesh.RecalculateBounds();
         rightMesh.RecalculateBounds();
 
-        if (leftTris.Count == 0) return 1;
-        else if (rightTris.Count == 0) return -1;
-        else return 0; // Note this is also triggered if the mesh is empty
+        return 0; // Note this is also triggered if the mesh is empty
     }
 
     // Used within SplitMesh to find the intersection point between the plane and a mesh edge
@@ -386,11 +402,18 @@ public class Splittable : MonoBehaviour
         List<int> removed = new List<int>();
         HashSet<int> usedVertices = new HashSet<int>();
 
-        for (int i = 0; i < mesh.triangles.Length; ++i)
-            usedVertices.Add(mesh.triangles[i]);
+        var meshTriangles = mesh.triangles;
+        var meshVertices = mesh.vertices;
+        var meshUVs = mesh.uv;
+
+        var numMeshTris = meshTriangles.Length;
+        var numMeshVerts = meshVertices.Length;
+
+        for (int i = 0; i < numMeshTris; ++i)
+            usedVertices.Add(meshTriangles[i]);
 
         // Rebuild mesh list
-        for (int i = 0; i < mesh.vertexCount; ++i)
+        for (int i = 0; i < numMeshVerts; ++i)
         {
             // No triangle uses this index, so mark it to be removed
             if (!usedVertices.Contains(i))
@@ -399,14 +422,14 @@ public class Splittable : MonoBehaviour
                 continue;
             }
 
-            tempVerts.Add(mesh.vertices[i]);
-            tempUV.Add(mesh.uv[i]);
+            tempVerts.Add(meshVertices[i]);
+            tempUV.Add(meshUVs[i]);
         }
 
         // Reverse the list so we don't also have to decrement higher removed indices
         removed.Reverse();
 
-        int[] tempTriangles = mesh.triangles.Clone() as int[];
+        int[] tempTriangles = meshTriangles.Clone() as int[];
         foreach (int index in removed)
         {
             // Decrement any higher indices to reflect the vertex's removal
@@ -424,6 +447,8 @@ public class Splittable : MonoBehaviour
     // Split leftObj's PolygonCollider2d into two (leftObj and rightObj) along a plane defined by anchor and dir
     static private void SplitCollider(GameObject leftObj, GameObject rightObj, Matrix4x4 matrix)
     {
+        Matrix4x4 matInverse = matrix.inverse;
+
         PolygonCollider2D leftColl = leftObj.GetComponent<PolygonCollider2D>();
         PolygonCollider2D rightColl = rightObj.GetComponent<PolygonCollider2D>();
 
@@ -478,12 +503,12 @@ public class Splittable : MonoBehaviour
             for (int i = 0; i < leftPoints.Count; ++i)
             {
                 Vector4 point = new Vector4(leftPoints[i].x, leftPoints[i].y, 0, 1);
-                leftPoints[i] = matrix.inverse * point;
+                leftPoints[i] = matInverse * point;
             }
             for (int i = 0; i < rightPoints.Count; ++i)
             {
                 Vector4 point = new Vector4(rightPoints[i].x, rightPoints[i].y, 0, 1);
-                rightPoints[i] = matrix.inverse * point;
+                rightPoints[i] = matInverse * point;
             }
 
             if (leftPoints.Count == 0) Destroy(leftColl);
