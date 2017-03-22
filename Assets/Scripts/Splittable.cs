@@ -211,7 +211,18 @@ public class Splittable : MonoBehaviour
             rightVerts.Add(transformed);
         }
 
-        List<Vector2> leftUV = new List<Vector2>(leftMesh.uv);
+        // Early exit if everything's on one side
+        int leftCount = 0;
+        foreach (var vert in leftVerts)
+            if (vert.x < 0) leftCount += 1;
+
+        // All on the right
+        if (leftCount == 0) return 1;
+
+        // All on the left
+        else if (leftCount == leftVerts.Count) return -1;
+
+         List<Vector2> leftUV = new List<Vector2>(leftMesh.uv);
         List<Vector2> rightUV = new List<Vector2>(rightMesh.uv);
 
         // Polygons on each side
@@ -354,9 +365,7 @@ public class Splittable : MonoBehaviour
         leftMesh.RecalculateBounds();
         rightMesh.RecalculateBounds();
 
-        if (leftTris.Count == 0) return 1;
-        else if (rightTris.Count == 0) return -1;
-        else return 0; // Note this is also triggered if the mesh is empty
+        return 0; // Note this is also triggered if the mesh is empty
     }
 
     // Used within SplitMesh to find the intersection point between the plane and a mesh edge
