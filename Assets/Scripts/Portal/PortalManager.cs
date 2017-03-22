@@ -31,8 +31,8 @@ public class PortalManager : MonoBehaviour
     // Current portal selection info
     public float minimumPortalSize = 0.1f;
     bool isSelecting = false;
+    bool isTransferring = false;
     bool isOpen = false;
-    bool toUnfreeze = false;
     Vector3 portPos1; // These are in world coords
     Vector3 portPos2;
     Rect portalRect = new Rect();
@@ -63,7 +63,7 @@ public class PortalManager : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        if (isOpen && (Input.GetMouseButtonDown(1) || inCutscene))
+        if (isOpen && !isTransferring && (Input.GetMouseButtonDown(1) || inCutscene))
         {
             // Kill the portal
             isOpen = false;
@@ -76,7 +76,7 @@ public class PortalManager : MonoBehaviour
         }
 
         // If we press the right mouse button, save mouse location and portal creation
-        if (!isOpen && Input.GetMouseButtonDown(0) && !inCutscene)
+        if (!isOpen && !isTransferring && Input.GetMouseButtonDown(0) && !inCutscene)
         {
             portalCam.enabled = true;
             portalEffect.Enable();
@@ -153,29 +153,6 @@ public class PortalManager : MonoBehaviour
             StartCoroutine(portalTransfer(portalRect.min, portalRect.max, true));
         }
 
-        if (toUnfreeze) {
-            toUnfreeze = false;
-
-            // Portal is now open
-            isOpen = true;
-
-            portalEffect.particleIntensity = 0.2f;
-            portalCam.enabled = false;
-            portalCam.rect = new Rect();
-
-            // TODO open mike's portal object business
-
-            // Re-enable physics now that we're no longer building the portal
-            foreach (var physicsObject in FindObjectsOfType<Rigidbody2D>())
-                physicsObject.simulated = true;
-
-            afx.smoothStop(portalDragSound);
-            afx.smoothStop(altWorldAmbience);
-            timeStartSound.Play();
-
-            musicManager.volume = 1.0f;
-        }
-
         if (isSelecting)
         {
             // Get size of selection box
@@ -191,11 +168,34 @@ public class PortalManager : MonoBehaviour
         }
     }
 
+    // Unfreeze time after portal is opened
+    void unfreeze()
+    {
+        // Portal is now open
+        isOpen = true;
+
+        portalEffect.particleIntensity = 0.2f;
+        portalCam.enabled = false;
+        portalCam.rect = new Rect();
+
+        // Re-enable physics now that we're no longer building the portal
+        foreach (var physicsObject in FindObjectsOfType<Rigidbody2D>())
+            physicsObject.simulated = true;
+
+        afx.smoothStop(portalDragSound);
+        afx.smoothStop(altWorldAmbience);
+        timeStartSound.Play();
+
+        musicManager.volume = 1.0f;
+    }
+
     // Transfers between portals in the main and alternate world
     // Expects two vectors, one is top left, the other bottom right that
     // represent the portal corners.
     IEnumerator portalTransfer(Vector3 min, Vector3 max, bool unfreezeAfter)
     {
+        isTransferring = true;
+
         cutStartTime = Time.realtimeSinceStartup;
 
         // Make bounds to find objects to split in main world
@@ -231,7 +231,9 @@ public class PortalManager : MonoBehaviour
         if (mainCuts.Count > 0 || altCuts.Count > 0)
             objectCutSound.Play();
 
-        if (unfreezeAfter) toUnfreeze = true;
+        if (unfreezeAfter) unfreeze();
+
+        isTransferring = false;
     }
 
     // Cuts all splittables inside the bounds provided
@@ -431,7 +433,7 @@ public class PortalManager : MonoBehaviour
 
     void OnRenderObject()
     {
-        if (isSelecting)
+        if (isSelecting || isTransferring)
         {
             // Get camera resolution
             Vector2 camRes = new Vector2(mainCam.pixelWidth, mainCam.pixelHeight);
