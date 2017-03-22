@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dialog>
+  <text xml:space="preserve"><custom speed=".015"><custom voice="Al Neutral"/>That hit him in the head! Wow!</custom><custom pan="mid3" delay="1.5"/></text>
+  <text xml:space="preserve"><custom speed=".015"><custom voice="Al Neutral"/>Level transition!</custom></text>
+</dialog>
