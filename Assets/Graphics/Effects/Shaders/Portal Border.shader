@@ -3,6 +3,7 @@
 	Properties
 	{
 		_MainTex ("Texture", 2D) = "white" {}
+        _Color("Main Color", Color) = (1, 1, 1, 1)
         _Resolution ("Resolution", Float) = 1000
         _Speed ("Speed", Float) = 100
 	}
@@ -10,6 +11,7 @@
 	{
 		// No culling or depth
 		Cull Off ZWrite Off ZTest Always
+        Blend SrcAlpha OneMinusSrcAlpha
 
 		Pass
 		{
@@ -39,11 +41,13 @@
 			sampler2D _MainTex;
             float _Resolution;
             float _Speed;
+            float4 _Color;
 
 			fixed4 frag (v2f i, UNITY_VPOS_TYPE screenPos : VPOS) : SV_Target
 			{
                 float2 timeOffset = _Time.xx * _Speed;
 				fixed4 col = tex2D(_MainTex, screenPos.xy / _Resolution + timeOffset);
+                col *= _Color;
 
 				return col;
 			}

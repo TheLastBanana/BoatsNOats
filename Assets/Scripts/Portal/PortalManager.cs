@@ -28,11 +28,12 @@ public class PortalManager : MonoBehaviour
 
     // Effects
     public GameObject portalParticlePrefab;
+    public GameObject portalFlashPrefab;
 
     // Current portal selection info
     public float minimumPortalSize = 0.1f;
     bool isSelecting = false;
-    bool isOpen = false;
+    bool isTransferring = false;
     Vector3 portPos1; // These are in world coords
     Vector3 portPos2;
     Rect portalRect = new Rect();
@@ -43,10 +44,14 @@ public class PortalManager : MonoBehaviour
     Vector2 portalSpeed;
     Vector2 portalSizeSpeed;
     Rect movingPortalRect;
+    
+    // Cut coroutine time info
+    public float maxCutTime = 0.01f;
+    float cutStartTime = 0.0f;
 
-    private bool disabled;
     AudioEffects afx;
     PortalEffect portalEffect;
+    private bool disabled;
 
     // Use this for initialization
     void Start ()
@@ -59,24 +64,8 @@ public class PortalManager : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        if (isOpen && (Input.GetMouseButtonDown(1) || disabled))
-        {
-            // Kill the portal
-            isOpen = false;
-            portalEffect.portalShape = new Rect();
-            portalEffect.Disable();
-            // TODO close Mike's portal
-
-            // Transfer objects in the portal home
-            bool anyCuts = portalTransfer(portalRect.min, portalRect.max);
-
-            // Play cut noises if necessary
-            if (anyCuts)
-                objectCutSound.Play();
-        }
-
-        // If we press the left mouse button, save mouse location and portal creation
-        if (!isOpen && Input.GetMouseButtonDown(0) && !disabled)
+        // If we press the right mouse button, save mouse location and portal creation
+        if (!isTransferring && Input.GetMouseButtonDown(0) && !disabled)
         {
             portalCam.enabled = true;
             portalEffect.Enable();
@@ -140,40 +129,28 @@ public class PortalManager : MonoBehaviour
         );
         portalRect.center = movingPortalRect.center; // Need to re-set this in case size was changed
         portalEffect.portalShape = portalRect;
-
-        // If we let go of the left mouse button, end selection
-        if (!isOpen && ((Input.GetMouseButtonUp(0) && !disabled) || (isSelecting && disabled)))
+        
+        // If we let go of the right mouse button, end selection
+        if ((Input.GetMouseButtonUp(0) && !disabled) || (isSelecting && disabled))
         {
-            // We're no longer selecting the portal
-            isSelecting = false;
-            isOpen = true; // But it IS open
-
             // Stop portal from moving
             portalSpeed = new Vector2();
             portalSizeSpeed = new Vector2();
 
-            portalEffect.particleIntensity = 0.2f;
-            portalCam.enabled = false;
-            portalCam.rect = new Rect();
-            
+            // Disable portal effect
+            portalEffect.portalShape = new Rect();
+            portalEffect.Disable();
+
+            // We're no longer selecting the portal
+            isSelecting = false;
+
+            // Create the portal flash effect
+            var flash = Instantiate(portalFlashPrefab);
+            flash.transform.position = portalRect.center;
+            flash.GetComponent<PortalTransferEffect>().startScale = portalRect.size;
+
             // Do the portal transfer
-            bool anyCuts = portalTransfer(portalRect.min, portalRect.max);
-
-            // TODO open mike's portal object business
-
-            cutsceneManager.DisableGemma(false);
-
-            // Re-enable physics now that we're no longer building the portal
-            foreach (var physicsObject in FindObjectsOfType<Rigidbody2D>())
-                physicsObject.simulated = true;
-
-            afx.smoothStop(portalDragSound);
-            afx.smoothStop(altWorldAmbience);
-            timeStartSound.Play();
-            if (anyCuts)
-                objectCutSound.Play();
-
-            musicManager.volume = 1.0f;
+            StartCoroutine(portalTransfer(portalRect.min, portalRect.max, true));
         }
 
         if (isSelecting)
@@ -191,12 +168,35 @@ public class PortalManager : MonoBehaviour
         }
     }
 
+    // Unfreeze time after portal is opened
+    void unfreeze()
+    {
+        portalEffect.particleIntensity = 0.2f;
+        portalCam.enabled = false;
+        portalCam.rect = new Rect();
+        
+        cutsceneManager.DisableGemma(false);
+
+        // Re-enable physics now that we're no longer building the portal
+        foreach (var physicsObject in FindObjectsOfType<Rigidbody2D>())
+            physicsObject.simulated = true;
+
+        afx.smoothStop(portalDragSound);
+        afx.smoothStop(altWorldAmbience);
+        timeStartSound.Play();
+
+        musicManager.volume = 1.0f;
+    }
+
     // Transfers between portals in the main and alternate world
     // Expects two vectors, one is top left, the other bottom right that
     // represent the portal corners.
-    // Returns true if any objects were sent
-    bool portalTransfer(Vector3 min, Vector3 max)
+    IEnumerator portalTransfer(Vector3 min, Vector3 max, bool unfreezeAfter)
     {
+        isTransferring = true;
+
+        cutStartTime = Time.realtimeSinceStartup;
+
         // Make bounds to find objects to split in main world
         var mainBounds = new Bounds();
         mainBounds.SetMinMax(min, max);
@@ -208,8 +208,17 @@ public class PortalManager : MonoBehaviour
         // Cut objects in portal bounds
         // This is a potential performans hit because we iterate through
         // every splittable twice. Will it likely matter? No.
-        List<GameObject> mainCuts = cutInBounds(mainBounds);
-        List<GameObject> altCuts = cutInBounds(altBounds);
+        var mainCuts = new List<GameObject>();
+        var altCuts = new List<GameObject>();
+
+        // See https://forum.unity3d.com/threads/call-nested-coroutines-without-yielding.145570/#post-996475
+        var e = cutInBounds(mainBounds, mainCuts);
+        while (e.MoveNext())
+            yield return e.Current;
+
+        e = cutInBounds(altBounds, altCuts);
+        while (e.MoveNext())
+            yield return e.Current;
 
         // Send and receive objects
         moveBetweenWorlds(mainCuts, true); // True means send
@@ -217,38 +226,53 @@ public class PortalManager : MonoBehaviour
 
         circuitManager.RecalculateGroups();
 
-        // Return if we cut any objects
-        return mainCuts.Count > 0 || altCuts.Count > 0;
+        // If we cut any objects, play the cut sound
+        if (mainCuts.Count > 0 || altCuts.Count > 0)
+            objectCutSound.Play();
+
+        if (unfreezeAfter) unfreeze();
+
+        isTransferring = false;
     }
 
     // Cuts all splittables inside the bounds provided
-    // Returns a list of the objects that are inside the bounds post-split
-    List<GameObject> cutInBounds(Bounds bounds)
+    // Returns a list of the objects that are inside the bounds post-split in cuts
+    IEnumerator cutInBounds(Bounds bounds, List<GameObject> cuts)
     {
         Bounds expandedBounds = bounds;
         expandedBounds.Expand(0.01f); // Add some wiggle room for sending things between worlds
 
-        // List of cut objects inside portal
-        List<GameObject> cuts = new List<GameObject>();
-
         // Loop over splittables
         foreach (var selectableObject in FindObjectsOfType<Splittable>())
         {
+            // Need to check this in case the objects were deleted
+            if (selectableObject == null) continue;
+
             //If the object and the selection box bounds touch figure out where they do for cutting purposes
             if (bounds.Intersects(selectableObject.totalBounds))
             {
                 // Intersection means cut
-                cutObject(selectableObject, bounds);
-                
+                // See https://forum.unity3d.com/threads/call-nested-coroutines-without-yielding.145570/#post-996475
+                var e = cutObject(selectableObject, bounds);
+                while (e.MoveNext())
+                    yield return e.Current;
+
+                if (selectableObject == null) continue;
+
                 // The original object was cut, or the original object is fully contained in the portal
                 if (expandedBounds.Contains(selectableObject.totalBounds.min) && expandedBounds.Contains(selectableObject.totalBounds.max))
                 {
                     cuts.Add(selectableObject.gameObject);
                 }
             }
-        }
 
-        return cuts;
+            // Cut off iteration if we've exceeded the max time
+            if (Time.realtimeSinceStartup - cutStartTime > maxCutTime)
+            {
+                yield return null;
+                cutStartTime = Time.realtimeSinceStartup;
+            }
+        }
     }
 
     // Transfers objects between worlds.
@@ -295,7 +319,7 @@ public class PortalManager : MonoBehaviour
 
     }
     //Figure out the 4 corners of the bounds for both the selection box and the object and do AABB to figure out where they overlap
-    bool cutObject(Splittable selectableObject, Bounds selectbounds)
+    IEnumerator cutObject(Splittable selectableObject, Bounds selectbounds)
     {
 
         //Check which edge intersects the object or if the selection box is all around the object
@@ -325,12 +349,25 @@ public class PortalManager : MonoBehaviour
             verticalPieces[0] = selectableObject.SplitOnPlane(selectbotright, selecttopright - selectbotright);
         }
 
+        // Cut off iteration if we've exceeded the max time
+        if (Time.realtimeSinceStartup - cutStartTime > maxCutTime)
+        {
+            yield return null;
+            cutStartTime = Time.realtimeSinceStartup;
+        }
+
         if (selecttopleft.x < objtopright.x && selecttopleft.x > objtopleft.x)
         {
             //Left of selection is less than right of object
             checkIfRobot(selectableObject);
             verticalPieces[1] = selectableObject.SplitOnPlane(selecttopleft, selectbotleft - selecttopleft);
 
+        }
+        // Cut off iteration if we've exceeded the max time
+        if (Time.realtimeSinceStartup - cutStartTime > maxCutTime)
+        {
+            yield return null;
+            cutStartTime = Time.realtimeSinceStartup;
         }
 
         if (selectbotleft.y < objtopleft.y && selectbotleft.y > objbotleft.y)
@@ -340,11 +377,25 @@ public class PortalManager : MonoBehaviour
             horizontalPieces[0] = selectableObject.SplitOnPlane(selectbotleft, selectbotright - selectbotleft);
         }
 
+        // Cut off iteration if we've exceeded the max time
+        if (Time.realtimeSinceStartup - cutStartTime > maxCutTime)
+        {
+            yield return null;
+            cutStartTime = Time.realtimeSinceStartup;
+        }
+
         if (selecttopright.y > objbotleft.y && selecttopright.y < objtopleft.y)
         {
             //Top of selection is greater than bottom of Object
             checkIfRobot(selectableObject);
             horizontalPieces[1] = selectableObject.SplitOnPlane(selecttopright, selecttopleft - selecttopright);
+        }
+
+        // Cut off iteration if we've exceeded the max time
+        if (Time.realtimeSinceStartup - cutStartTime > maxCutTime)
+        {
+            yield return null;
+            cutStartTime = Time.realtimeSinceStartup;
         }
 
         // Merge parents if multiple cuts at different angles happened
@@ -377,14 +428,11 @@ public class PortalManager : MonoBehaviour
                 }
             }
         }
-
-        // If any are non-null, a cut was made
-        return horizontalPieces[0] != null || horizontalPieces[1] != null || verticalPieces[0] != null || verticalPieces[1] != null;
     }
 
     void OnRenderObject()
     {
-        if (isSelecting)
+        if (isSelecting || isTransferring)
         {
             // Get camera resolution
             Vector2 camRes = new Vector2(mainCam.pixelWidth, mainCam.pixelHeight);
