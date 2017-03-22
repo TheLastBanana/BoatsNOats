@@ -86,15 +86,6 @@ public class Splittable : MonoBehaviour
 
         GameObject rightParent = Instantiate(gameObject, transform.parent);
 
-        // Copy over physics info
-        Rigidbody2D leftPhys = GetComponent<Rigidbody2D>();
-        if (leftPhys != null)
-        {
-            Rigidbody2D rightPhys = rightParent.GetComponent<Rigidbody2D>();
-            rightPhys.velocity = leftPhys.velocity;
-            rightPhys.angularVelocity = leftPhys.angularVelocity;
-        }
-
         // Get children so we can remove them as we go
         int childCount = transform.childCount;
         List<Transform> leftChildren = new List<Transform>();
@@ -136,6 +127,23 @@ public class Splittable : MonoBehaviour
         }
 
         bool anySplits = false;
+        
+        // Copy over physics info
+        Rigidbody2D leftPhys = GetComponent<Rigidbody2D>();
+        Rigidbody2D rightPhys = rightParent.GetComponent<Rigidbody2D>();
+        if (leftPhys != null)
+        {
+            rightPhys.velocity = leftPhys.velocity;
+            rightPhys.angularVelocity = leftPhys.angularVelocity;
+
+            float leftArea = CalculateArea(transform);
+            float rightArea = CalculateArea(rightParent.transform);
+            float totalArea = leftArea + rightArea;
+
+            var totalMass = leftPhys.mass;
+            leftPhys.mass = totalMass * leftArea / totalArea;
+            rightPhys.mass = totalMass * rightArea / totalArea;
+        }
 
         // Clean up parents
         if (rightParent.transform.childCount == 0) Destroy(rightParent);
@@ -153,6 +161,36 @@ public class Splittable : MonoBehaviour
         gameObjectList.Add(gameObject);
         gameObjectList.Add(rightParent);
         return gameObjectList;
+    }
+
+    // Calculate the area of a splittable object
+    static private float CalculateArea(Transform obj)
+    {
+        float area = 0.0f;
+        for (var i = 0; i < obj.childCount; ++i)
+        {
+            var child = obj.GetChild(i);
+            var filter = child.GetComponent<MeshFilter>();
+
+            if (filter == null) continue;
+
+            var tris = filter.mesh.triangles;
+            var verts = filter.mesh.vertices;
+
+            // Add each triangle's area to the sum
+            for (int ti = 0; ti < verts.Length; ti += 3)
+            {
+                // http://answers.unity3d.com/answers/291985/view.html
+                var v1 = verts[tris[ti]];
+                var v2 = verts[tris[ti + 1]];
+                var v3 = verts[tris[ti + 2]];
+
+                var cross = Vector3.Cross(v1 - v2, v1 - v3);
+                area += Mathf.Abs(cross.z) * 0.5f;
+            }
+        }
+
+        return area;
     }
 
     // Convert the SpriteRenderer to a mesh
