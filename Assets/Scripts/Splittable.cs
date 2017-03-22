@@ -173,6 +173,9 @@ public class Splittable : MonoBehaviour
         mesh.triangles = Array.ConvertAll(sr.sprite.triangles, item => (int)item);
 
         // Remove sprite renderer
+        var sortingLayerID = sr.sortingLayerID;
+        var sortingLayerName = sr.sortingLayerName;
+        var sortingOrder = sr.sortingOrder;
         DestroyImmediate(sr);
 
         // Create mesh filter
@@ -183,6 +186,9 @@ public class Splittable : MonoBehaviour
         MeshRenderer mr = gameObject.AddComponent<MeshRenderer>();
         mr.material = mat;
         mr.material.mainTexture = tex;
+        mr.sortingLayerID = sortingLayerID;
+        mr.sortingLayerName = sortingLayerName;
+        mr.sortingOrder = sortingOrder;
 
         mesh.RecalculateBounds();
     }
