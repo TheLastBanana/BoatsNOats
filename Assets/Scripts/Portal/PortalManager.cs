@@ -24,6 +24,7 @@ public class PortalManager : MonoBehaviour
     public Camera portalCam;
     public WorldOffsets offs;
     public CircuitManager circuitManager;
+    public CutsceneManager cutsceneManager;
 
     // Effects
     public GameObject portalParticlePrefab;
@@ -43,14 +44,14 @@ public class PortalManager : MonoBehaviour
     Vector2 portalSizeSpeed;
     Rect movingPortalRect;
 
-    private bool inCutscene;
+    private bool disabled;
     AudioEffects afx;
     PortalEffect portalEffect;
 
     // Use this for initialization
     void Start ()
     {
-        inCutscene = false;
+        disabled = false;
         afx = GetComponent<AudioEffects>();
         portalEffect = Instantiate(portalParticlePrefab).GetComponent<PortalEffect>();
     }
@@ -58,7 +59,7 @@ public class PortalManager : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        if (isOpen && (Input.GetMouseButtonDown(1) || inCutscene))
+        if (isOpen && (Input.GetMouseButtonDown(1) || disabled))
         {
             // Kill the portal
             isOpen = false;
@@ -74,8 +75,8 @@ public class PortalManager : MonoBehaviour
                 objectCutSound.Play();
         }
 
-        // If we press the right mouse button, save mouse location and portal creation
-        if (!isOpen && Input.GetMouseButtonDown(0) && !inCutscene)
+        // If we press the left mouse button, save mouse location and portal creation
+        if (!isOpen && Input.GetMouseButtonDown(0) && !disabled)
         {
             portalCam.enabled = true;
             portalEffect.Enable();
@@ -90,6 +91,8 @@ public class PortalManager : MonoBehaviour
             altWorldAmbience.Play();
             afx.cancelEffects(portalDragSound);
             afx.cancelEffects(altWorldAmbience);
+
+            cutsceneManager.DisableGemma(true);
 
             // Disable physics
             foreach (var physicsObject in FindObjectsOfType<Rigidbody2D>())
@@ -138,8 +141,8 @@ public class PortalManager : MonoBehaviour
         portalRect.center = movingPortalRect.center; // Need to re-set this in case size was changed
         portalEffect.portalShape = portalRect;
 
-        // If we let go of the right mouse button, end selection
-        if (!isOpen && ((Input.GetMouseButtonUp(0) && !inCutscene) || (isSelecting && inCutscene)))
+        // If we let go of the left mouse button, end selection
+        if (!isOpen && ((Input.GetMouseButtonUp(0) && !disabled) || (isSelecting && disabled)))
         {
             // We're no longer selecting the portal
             isSelecting = false;
@@ -157,6 +160,8 @@ public class PortalManager : MonoBehaviour
             bool anyCuts = portalTransfer(portalRect.min, portalRect.max);
 
             // TODO open mike's portal object business
+
+            cutsceneManager.DisableGemma(false);
 
             // Re-enable physics now that we're no longer building the portal
             foreach (var physicsObject in FindObjectsOfType<Rigidbody2D>())
@@ -419,9 +424,9 @@ public class PortalManager : MonoBehaviour
         }
     }
 
-    // Stop player from activating portals during cutscene
-    public void SetCutscene(bool cutscene)
+    // Stop player from activating portals, used during cutscene and before Gemma gets artifact
+    public void DisablePortal(bool disable)
     {
-        inCutscene = cutscene;
+        disabled = disable;
     }
 }

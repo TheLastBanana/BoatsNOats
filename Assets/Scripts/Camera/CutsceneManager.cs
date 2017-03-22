@@ -7,13 +7,15 @@ public class CutsceneManager : MonoBehaviour {
 
     public GameObject sceneStart;
     public GameObject sceneTransition;
+    public GameObject sceneMid1;
+    public GameObject sceneMid2;
+    public GameObject sceneMid3;
 
     public GameObject cameraManager;
     private CameraSwitcher cameraSwitcher;
     private CameraTracker cameraTracker;
     private CameraPanner cameraPanner;
-    public GameObject portalManagerObj;
-    private PortalManager portalManager;
+    public PortalManager portalManager;
 
     public GameObject Gemma;
     private PlayerController playerController;
@@ -46,8 +48,6 @@ public class CutsceneManager : MonoBehaviour {
         cameraPanner = cameraManager.GetComponent<CameraPanner>();
         cameraTracker.enabled = true;
         cameraPanner.enabled = false;
-
-        portalManager = portalManagerObj.GetComponent<PortalManager>();
 
         playerController = Gemma.GetComponent<PlayerController>();
 
@@ -123,7 +123,7 @@ public class CutsceneManager : MonoBehaviour {
         running = true;
         playerController.StopForCutscene();
         cameraSwitcher.SetCutscene(true);
-        portalManager.SetCutscene(true);
+        portalManager.DisablePortal(true);
     }
 
     private void EndCutscene()
@@ -132,7 +132,7 @@ public class CutsceneManager : MonoBehaviour {
         playerController.ResumeAfterCutscene();
         cameraSwitcher.SetCutscene(false);
         cameraTracker.UpdateTarget(Gemma);
-        portalManager.SetCutscene(false);
+        portalManager.DisablePortal(false);
 
         if (endCutscene)
             sceneTransition.GetComponent<SceneChanger>().LoadNextScene();
@@ -150,6 +150,12 @@ public class CutsceneManager : MonoBehaviour {
             to = sceneTransition;
         else if (objName == "gemma")
             to = Gemma;
+        else if (objName == "mid1")
+            to = sceneMid1;
+        else if (objName == "mid2")
+            to = sceneMid2;
+        else if (objName == "mid3")
+            to = sceneMid3;
 
         // Assume the old pan to target is where we're panning from
         currentPan = new CameraPanInfo(currentPan.to, to, Time.time, delay);
@@ -170,6 +176,15 @@ public class CutsceneManager : MonoBehaviour {
     public void IsEndCutscene()
     {
         endCutscene = true;
+    }
+
+    // Freezes Gemma and player input until reenabled
+    public void DisableGemma(bool disable)
+    {
+        if (disable)
+            playerController.StopForPortal();
+        else
+            playerController.ResumeAfterPortal();
     }
 }
 

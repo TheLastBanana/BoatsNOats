@@ -22,11 +22,13 @@ public class PlayerController : MonoBehaviour
 	private RaycastHit2D _lastControllerColliderHit;
 	private Vector3 _velocity;
 
-    private bool inCutscene;
+    private bool inputDisabled;
+    private Vector2 storedVelocity;
+    private float storedGravity;
 
     void Start()
     {
-        inCutscene = false;
+        inputDisabled = false;
     }
 
     void Awake()
@@ -79,13 +81,13 @@ public class PlayerController : MonoBehaviour
             _animator.SetBool("Ground", true);
         }
 
-        if ( Input.GetKey( KeyCode.D ) && !inCutscene)
+        if ( Input.GetKey( KeyCode.D ) && !inputDisabled)
 		{
 			normalizedHorizontalSpeed = 1;
 			if( transform.localScale.x > 0f )
 				transform.localScale = new Vector3( -transform.localScale.x, transform.localScale.y, transform.localScale.z );
 		}
-		else if( Input.GetKey( KeyCode.A ) && !inCutscene)
+		else if( Input.GetKey( KeyCode.A ) && !inputDisabled)
 		{
 			normalizedHorizontalSpeed = -1;
 			if( transform.localScale.x < 0f )
@@ -98,7 +100,7 @@ public class PlayerController : MonoBehaviour
 
 
 		// we can only jump whilst grounded
-		if( _controller.isGrounded && (Input.GetKeyDown( KeyCode.Space ) || Input.GetKeyDown( KeyCode.W )) && !inCutscene)
+		if( _controller.isGrounded && (Input.GetKeyDown( KeyCode.Space ) || Input.GetKeyDown( KeyCode.W )) && !inputDisabled)
 		{
 			_velocity.y = Mathf.Sqrt( 2f * jumpHeight * -gravity );
             _sound.PlayJumpSound();
@@ -115,7 +117,7 @@ public class PlayerController : MonoBehaviour
 
 		// if holding down bump up our movement amount and turn off one way platform detection for a frame.
 		// this lets us jump down through one way platforms
-		if( _controller.isGrounded && Input.GetKey( KeyCode.S ) && !inCutscene)
+		if( _controller.isGrounded && Input.GetKey( KeyCode.S ) && !inputDisabled)
 		{
 			_velocity.y *= 3f;
 			_controller.ignoreOneWayPlatformsThisFrame = true;
@@ -130,13 +132,34 @@ public class PlayerController : MonoBehaviour
 
     public void StopForCutscene()
     {
-        inCutscene = true;
+        DisableInput(true);
         _animator.SetFloat("Speed", 0f);
         _rigidbody.velocity = Vector2.zero;
     }
 
     public void ResumeAfterCutscene()
     {
-        inCutscene = false;
+        DisableInput(false);
+    }
+
+    public void StopForPortal()
+    {
+        DisableInput(true);
+        storedVelocity = _rigidbody.velocity;
+        _rigidbody.velocity = Vector2.zero;
+        storedGravity = gravity;
+//        gravity = 0f;
+    }
+
+    public void ResumeAfterPortal()
+    {
+        DisableInput(false);
+        _rigidbody.velocity = storedVelocity;
+        gravity = storedGravity;
+    }
+
+    private void DisableInput(bool disable)
+    {
+        inputDisabled = disable;
     }
 }
