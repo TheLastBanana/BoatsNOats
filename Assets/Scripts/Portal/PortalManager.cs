@@ -32,7 +32,6 @@ public class PortalManager : MonoBehaviour
     public float minimumPortalSize = 0.1f;
     bool isSelecting = false;
     bool isTransferring = false;
-    bool isOpen = false;
     Vector3 portPos1; // These are in world coords
     Vector3 portPos2;
     Rect portalRect = new Rect();
@@ -63,20 +62,8 @@ public class PortalManager : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        if (isOpen && !isTransferring && (Input.GetMouseButtonDown(1) || inCutscene))
-        {
-            // Kill the portal
-            isOpen = false;
-            portalEffect.portalShape = new Rect();
-            portalEffect.Disable();
-            // TODO close Mike's portal
-
-            // Transfer objects in the portal home
-            StartCoroutine(portalTransfer(portalRect.min, portalRect.max, false));
-        }
-
         // If we press the right mouse button, save mouse location and portal creation
-        if (!isOpen && !isTransferring && Input.GetMouseButtonDown(0) && !inCutscene)
+        if (!isTransferring && Input.GetMouseButtonDown(0) && !inCutscene)
         {
             portalCam.enabled = true;
             portalEffect.Enable();
@@ -140,11 +127,15 @@ public class PortalManager : MonoBehaviour
         portalEffect.portalShape = portalRect;
 
         // If we let go of the right mouse button, end selection
-        if (!isOpen && ((Input.GetMouseButtonUp(0) && !inCutscene) || (isSelecting && inCutscene)))
+        if ((Input.GetMouseButtonUp(0) && !inCutscene) || (isSelecting && inCutscene))
         {
             // Stop portal from moving
             portalSpeed = new Vector2();
             portalSizeSpeed = new Vector2();
+
+            // Disable portal effect
+            portalEffect.portalShape = new Rect();
+            portalEffect.Disable();
 
             // We're no longer selecting the portal
             isSelecting = false;
@@ -171,9 +162,6 @@ public class PortalManager : MonoBehaviour
     // Unfreeze time after portal is opened
     void unfreeze()
     {
-        // Portal is now open
-        isOpen = true;
-
         portalEffect.particleIntensity = 0.2f;
         portalCam.enabled = false;
         portalCam.rect = new Rect();
