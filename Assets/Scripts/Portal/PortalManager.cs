@@ -27,6 +27,7 @@ public class PortalManager : MonoBehaviour
 
     // Effects
     public GameObject portalParticlePrefab;
+    public GameObject portalFlashPrefab;
 
     // Current portal selection info
     public float minimumPortalSize = 0.1f;
@@ -139,6 +140,11 @@ public class PortalManager : MonoBehaviour
 
             // We're no longer selecting the portal
             isSelecting = false;
+
+            // Create the portal flash effect
+            var flash = Instantiate(portalFlashPrefab);
+            flash.transform.position = portalRect.center;
+            flash.GetComponent<PortalTransferEffect>().startScale = portalRect.size;
 
             // Do the portal transfer
             StartCoroutine(portalTransfer(portalRect.min, portalRect.max, true));
