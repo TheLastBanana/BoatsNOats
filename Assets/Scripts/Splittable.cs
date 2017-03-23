@@ -146,16 +146,24 @@ public class Splittable : MonoBehaviour
         }
 
         // Clean up parents
-        if (rightParent.transform.childCount == 0) Destroy(rightParent);
+        if (rightParent.transform.childCount == 0)
+        {
+            Destroy(rightParent);
+            rightParent = null;
+        }
         else anySplits = true;
 
-        if (transform.childCount == 0) Destroy(gameObject);
+        if (transform.childCount == 0)
+        {
+            Destroy(gameObject);
+            rightParent = null;
+        }
         else anySplits = true;
 
         if (!anySplits) return null;
 
         _isSplit = true;
-        if (rightParent) rightParent.GetComponent<Splittable>()._isSplit = true;
+        if (rightParent != null) rightParent.GetComponent<Splittable>()._isSplit = true;
 
         List<GameObject> gameObjectList = new List<GameObject>();
         gameObjectList.Add(gameObject);

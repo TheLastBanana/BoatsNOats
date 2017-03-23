@@ -407,23 +407,30 @@ public class PortalManager : MonoBehaviour
             {
                 if (horizontalPieces[i] != null)
                 {
-                    if (mergedParent == null) mergedParent = horizontalPieces[i][1];
+                    if (mergedParent == null && horizontalPieces[i][1] != null) mergedParent = horizontalPieces[i][1];
                     else
                     {
                         // Merge into one parent and delete the other parent
                         GameObject sacrifice = horizontalPieces[i][1];
-                        transferChildren(sacrifice.transform, mergedParent.transform);
-                        Destroy(sacrifice);
+
+                        if (sacrifice != null)
+                        {
+                            transferChildren(sacrifice.transform, mergedParent.transform);
+                            Destroy(sacrifice);
+                        }
                     }
                 }
                 if (verticalPieces[i] != null)
                 {
-                    if (mergedParent == null) mergedParent = verticalPieces[i][1];
+                    if (mergedParent == null && verticalPieces[i][1] != null) mergedParent = verticalPieces[i][1];
                     else
                     {
                         GameObject sacrifice = verticalPieces[i][1];
-                        transferChildren(sacrifice.transform, mergedParent.transform);
-                        Destroy(sacrifice);
+                        if (sacrifice != null)
+                        {
+                            transferChildren(sacrifice.transform, mergedParent.transform);
+                            Destroy(sacrifice);
+                        }
                     }
                 }
             }
