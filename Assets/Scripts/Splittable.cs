@@ -68,6 +68,16 @@ public class Splittable : MonoBehaviour
         anchor = transform.InverseTransformPoint(anchor);
         dir = transform.InverseTransformDirection(dir);
 
+        // transform.InverseTransformDirection() is unaffected by scale, but we need to take it into account.
+        // If the x-axis is flipped, then what we call "left" of the direction is also flipped, but we have
+        // the same vertical direction, so negate the y direction to account for this. The opposite applies
+        // for the x-axis.
+        if (transform.localScale.x < 0)
+            dir.y = -dir.y;
+
+        if (transform.localScale.y < 0)
+            dir.x = -dir.x;
+
         // Matrix to transform vertices so they're relative to the plane
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
