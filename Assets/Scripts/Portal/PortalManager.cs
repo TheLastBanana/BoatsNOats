@@ -304,116 +304,65 @@ public class PortalManager : MonoBehaviour
     }
 
     //Figure out the 4 corners of the bounds for both the selection box and the object and do AABB to figure out where they overlap
-    IEnumerator cutObject(Splittable selectableObject, Bounds selectbounds)
+    IEnumerator cutObject(Splittable selectableObject, Bounds selectBounds)
     {
+        var objBounds = selectableObject.totalBounds;
+        var objMin = objBounds.min;
+        var objMax = objBounds.max;
+        var selectMin = selectBounds.min;
+        var selectMax = selectBounds.max;
 
-        //Check which edge intersects the object or if the selection box is all around the object
-        Vector2 selectbotleft = new Vector2(selectbounds.center.x - selectbounds.extents.x, selectbounds.center.y - selectbounds.extents.y);
-        Vector2 selecttopleft = new Vector2(selectbounds.center.x - selectbounds.extents.x, selectbounds.center.y + selectbounds.extents.y);
-        Vector2 selectbotright = new Vector2(selectbounds.center.x + selectbounds.extents.x, selectbounds.center.y - selectbounds.extents.y);
-        Vector2 selecttopright = new Vector2(selectbounds.center.x + selectbounds.extents.x, selectbounds.center.y + selectbounds.extents.y);
+        // Check which edges intersect the object. Note that for all the lines below, we wind around
+        // the portal in counter-clockwise order, so an object in the middle will be on the "left" of
+        // every line.
+        var cutLines = new List<Vector2[]>();
 
-        Bounds objbounds = selectableObject.totalBounds;
-        Vector2 objbotleft = new Vector2(objbounds.center.x - objbounds.extents.x, objbounds.center.y - objbounds.extents.y);
-        Vector2 objtopleft = new Vector2(objbounds.center.x - objbounds.extents.x, objbounds.center.y + objbounds.extents.y);
-        //Bottom right of object
-        //Vector2 objbotright = new Vector2(objbounds.center.x + objbounds.extents.x, objbounds.center.y - objbounds.extents.y);
-        Vector2 objtopright = new Vector2(objbounds.center.x + objbounds.extents.x, objbounds.center.y + objbounds.extents.y);
+        // Right side
+        if (selectMax.x > objMin.x && selectMax.x < objMax.x)
+            cutLines.Add(new Vector2[] { selectMax, Vector2.up });
 
-        List<List<GameObject>> verticalPieces = new List<List<GameObject>>();
-        verticalPieces.Add(null);
-        verticalPieces.Add(null);
-        List<List<GameObject>> horizontalPieces = new List<List<GameObject>>();
-        horizontalPieces.Add(null);
-        horizontalPieces.Add(null);
+        // Left side
+        if (selectMin.x > objMin.x && selectMin.x < objMax.x)
+            cutLines.Add(new Vector2[] { selectMin, Vector2.down });
 
-        if (selecttopright.x > objtopleft.x && selecttopright.x < objtopright.x)
+        // Top side
+        if (selectMax.y > objMin.y && selectMax.y < objMax.y)
+            cutLines.Add(new Vector2[] { selectMax, Vector2.left });
+
+        // Bottom side
+        if (selectMin.y > objMin.y && selectMin.y < objMax.y)
+            cutLines.Add(new Vector2[] { selectMin, Vector2.right });
+
+        // Iterate the list of lines, cutting along each of them.
+        var outer = new List<GameObject>();
+        foreach (var line in cutLines)
         {
-            //Right of selection is greater than left of object
-            verticalPieces[0] = selectableObject.SplitOnPlane(selectbotright, selecttopright - selectbotright);
-        }
+            var cuts = selectableObject.SplitOnPlane(line[0], line[1]);
 
-        // Cut off iteration if we've exceeded the max time
-        if (Time.realtimeSinceStartup - cutStartTime > maxCutTime)
-        {
-            yield return null;
-            cutStartTime = Time.realtimeSinceStartup;
-        }
+            // Object 1 is the "right" object (if it exists). This will be outside the portal
+            if (cuts[1] != null) outer.Add(cuts[1]);
 
-        if (selecttopleft.x < objtopright.x && selecttopleft.x > objtopleft.x)
-        {
-            //Left of selection is less than right of object
-            verticalPieces[1] = selectableObject.SplitOnPlane(selecttopleft, selectbotleft - selecttopleft);
+            // Object 0 should always be the original object
+            Debug.Assert(cuts[0] == selectableObject.gameObject);
 
-        }
-        // Cut off iteration if we've exceeded the max time
-        if (Time.realtimeSinceStartup - cutStartTime > maxCutTime)
-        {
-            yield return null;
-            cutStartTime = Time.realtimeSinceStartup;
-        }
-
-        if (selectbotleft.y < objtopleft.y && selectbotleft.y > objbotleft.y)
-        {
-            //Bottom of selection is less than top of Object
-            horizontalPieces[0] = selectableObject.SplitOnPlane(selectbotleft, selectbotright - selectbotleft);
-        }
-
-        // Cut off iteration if we've exceeded the max time
-        if (Time.realtimeSinceStartup - cutStartTime > maxCutTime)
-        {
-            yield return null;
-            cutStartTime = Time.realtimeSinceStartup;
-        }
-
-        if (selecttopright.y > objbotleft.y && selecttopright.y < objtopleft.y)
-        {
-            //Top of selection is greater than bottom of Object
-            horizontalPieces[1] = selectableObject.SplitOnPlane(selecttopright, selecttopleft - selecttopright);
-        }
-
-        // Cut off iteration if we've exceeded the max time
-        if (Time.realtimeSinceStartup - cutStartTime > maxCutTime)
-        {
-            yield return null;
-            cutStartTime = Time.realtimeSinceStartup;
-        }
-
-        // Merge parents if multiple cuts at different angles happened
-        // Index 0 of the pieces list is the "original" object. Index 1 is the created "Clone"
-        if ((horizontalPieces[0] != null || horizontalPieces[1] != null) && (verticalPieces[0] != null || verticalPieces[1] != null))
-        {
-            GameObject mergedParent = null;
-            for (int i = 0; i < 2; i++)
+            // Cut off iteration if we've exceeded the max time
+            if (Time.realtimeSinceStartup - cutStartTime > maxCutTime)
             {
-                if (horizontalPieces[i] != null)
-                {
-                    if (mergedParent == null && horizontalPieces[i][1] != null) mergedParent = horizontalPieces[i][1];
-                    else
-                    {
-                        // Merge into one parent and delete the other parent
-                        GameObject sacrifice = horizontalPieces[i][1];
+                yield return null;
+                cutStartTime = Time.realtimeSinceStartup;
+            }
+        }
 
-                        if (sacrifice != null)
-                        {
-                            transferChildren(sacrifice.transform, mergedParent.transform);
-                            Destroy(sacrifice);
-                        }
-                    }
-                }
-                if (verticalPieces[i] != null)
-                {
-                    if (mergedParent == null && verticalPieces[i][1] != null) mergedParent = verticalPieces[i][1];
-                    else
-                    {
-                        GameObject sacrifice = verticalPieces[i][1];
-                        if (sacrifice != null)
-                        {
-                            transferChildren(sacrifice.transform, mergedParent.transform);
-                            Destroy(sacrifice);
-                        }
-                    }
-                }
+        // Pieces along the outer edge should be merged into one
+        if (outer.Count > 1)
+        {
+            var mergeTarget = outer[0];
+
+            for (int i = 1; i < outer.Count; ++i)
+            {
+                var obj = outer[i];
+                transferChildren(obj.transform, mergeTarget.transform);
+                Destroy(obj);
             }
         }
     }
