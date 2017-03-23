@@ -24,11 +24,20 @@ public class RobotAI : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () {
-        if(rb.velocity.x == 0 || Mathf.Abs(rb.velocity.x) < 2)
+	void Update ()
+    {
+        // Break when this is split
+        var splittable = GetComponent<Splittable>();
+        if (splittable != null && splittable.isSplit)
+        {
+            Destroy(this);
+            return;
+        }
+
+        if (rb.velocity.x == 0 || Mathf.Abs(rb.velocity.x) < 2)
         {
             direction.x *= -1;            
-        }       
+        }
     }
 
     void FixedUpdate()

@@ -16,6 +16,8 @@ public class Piston : MonoBehaviour
     private float headMin;
     private float speed;
 
+    private List<Splittable> splittables;
+
     private void Awake()
     {
         // Get sprite sizes
@@ -28,11 +30,29 @@ public class Piston : MonoBehaviour
 
         // Speed is arbitrarily a fifth of the head size I guess
         speed = headSize.y / 5;
+
+        // Get all splittables associated with this
+        splittables = new List<Splittable>();
+
+        var splittable = GetComponent<Splittable>();
+        if (splittable != null) splittables.Add(splittable);
+
+        splittables.AddRange(transform.GetComponentsInChildren<Splittable>());
     }
 
     // Update is called once per frame
     void Update ()
     {
+        // Break when this is split
+        foreach (var splittable in splittables)
+        {
+            if (splittable.isSplit)
+            {
+                Destroy(this);
+                return;
+            }
+        }
+
         float posDelta = 0;
 
         //Reset box collider offset
