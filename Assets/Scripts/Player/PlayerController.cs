@@ -23,12 +23,14 @@ public class PlayerController : MonoBehaviour
 	private Vector3 _velocity;
 
     private bool inputDisabled;
+    private bool portalSelecting;
     private Vector2 storedVelocity;
     private float storedGravity;
 
     void Start()
     {
         inputDisabled = false;
+        portalSelecting = false;
     }
 
     void Awake()
@@ -75,6 +77,10 @@ public class PlayerController : MonoBehaviour
 	// the Update loop contains a very simple example of moving the character around and controlling the animation
 	void Update()
 	{
+        // Completely freeze Gemma when selecting with a portal
+        if (portalSelecting)
+            return;
+
 		if( _controller.isGrounded )
         {
             _velocity.y = 0;
@@ -132,34 +138,34 @@ public class PlayerController : MonoBehaviour
 
     public void StopForCutscene()
     {
-        DisableInput(true);
+        inputDisabled = true;
         _animator.SetFloat("Speed", 0f);
         _rigidbody.velocity = Vector2.zero;
     }
 
     public void ResumeAfterCutscene()
     {
-        DisableInput(false);
+        inputDisabled = false;
     }
 
     public void StopForPortal()
     {
-        DisableInput(true);
+        inputDisabled = true;
+        portalSelecting = true;
+
+        _animator.SetFloat("Speed", 0f);
         storedVelocity = _rigidbody.velocity;
         _rigidbody.velocity = Vector2.zero;
         storedGravity = gravity;
-//        gravity = 0f;
+        gravity = 0f;
     }
 
     public void ResumeAfterPortal()
     {
-        DisableInput(false);
+        inputDisabled = false;
+        portalSelecting = false;
+
         _rigidbody.velocity = storedVelocity;
         gravity = storedGravity;
-    }
-
-    private void DisableInput(bool disable)
-    {
-        inputDisabled = disable;
     }
 }

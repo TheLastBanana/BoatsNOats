@@ -37,7 +37,7 @@ public class CutsceneManager : MonoBehaviour {
     private int numTexts;
     private CameraPanInfo currentPan;
 
-    private bool running;
+    private bool runningCutscene;
     private bool startedText;
     private bool endCutscene;
 
@@ -71,11 +71,11 @@ public class CutsceneManager : MonoBehaviour {
             AlTextBubble.SetActive(false);
         }
 
-        currentText = 0;
+        currentText = -1;
         numTexts = 0;
         currentPan = new CameraPanInfo(null, Gemma, 0f, 0f);
 
-        running = false;
+        runningCutscene = false;
         startedText = false;
         endCutscene = false;
 	}
@@ -87,7 +87,7 @@ public class CutsceneManager : MonoBehaviour {
             EndCutscene();
 
         // We're not in a cutscene
-        if (!running)
+        if (!runningCutscene)
             return;
 
         // Start the next text if we're not currently doing one and the previous has been finished
@@ -111,7 +111,6 @@ public class CutsceneManager : MonoBehaviour {
     public void RunCutscene (TextAsset textFile)
     {
         // TODO: Set up properly to handle more than just Gemma talking
-        // TODO: Utilize custom pan tag to handle panning
         if (GemmaTT != null)
             GemmaTT.setText(textFile);
         if (AlTT != null)
@@ -120,7 +119,8 @@ public class CutsceneManager : MonoBehaviour {
         currentText = 0;
         numTexts = GemmaTT.numDialogsLoaded();
 
-        running = true;
+        // Disable player control
+        runningCutscene = true;
         playerController.StopForCutscene();
         cameraSwitcher.SetCutscene(true);
         portalManager.DisablePortal(true);
@@ -128,12 +128,19 @@ public class CutsceneManager : MonoBehaviour {
 
     private void EndCutscene()
     {
-        running = false;
+        // Reset info about the cutscene to a "no cutscene" state
+        currentText = -1;
+        numTexts = 0;
+        currentPan = new CameraPanInfo(null, Gemma, 0f, 0f);
+
+        // Resume player control
+        runningCutscene = false;
         playerController.ResumeAfterCutscene();
         cameraSwitcher.SetCutscene(false);
         cameraTracker.UpdateTarget(Gemma);
         portalManager.DisablePortal(false);
 
+        // If this was the last cutscene in a level do a scene transition now
         if (endCutscene)
             sceneTransition.GetComponent<SceneChanger>().LoadNextScene();
     }
@@ -160,6 +167,7 @@ public class CutsceneManager : MonoBehaviour {
         // Assume the old pan to target is where we're panning from
         currentPan = new CameraPanInfo(currentPan.to, to, Time.time, delay);
 
+        // Switch camera scripts
         cameraTracker.enabled = false;
         cameraTracker.UpdateTarget(to);
         cameraPanner.enabled = true;
@@ -168,6 +176,7 @@ public class CutsceneManager : MonoBehaviour {
 
     public void EndPan()
     {
+        // Switch camera scripts
         cameraTracker.enabled = true;
         cameraPanner.enabled = false;
     }

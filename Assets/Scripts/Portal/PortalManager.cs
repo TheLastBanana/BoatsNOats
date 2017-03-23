@@ -64,7 +64,7 @@ public class PortalManager : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        // If we press the right mouse button, save mouse location and portal creation
+        // If we press the left mouse button, save mouse location and portal creation
         if (!isTransferring && Input.GetMouseButtonDown(0) && !disabled)
         {
             portalCam.enabled = true;
@@ -130,7 +130,7 @@ public class PortalManager : MonoBehaviour
         portalRect.center = movingPortalRect.center; // Need to re-set this in case size was changed
         portalEffect.portalShape = portalRect;
         
-        // If we let go of the right mouse button, end selection
+        // If we let go of the left mouse button, end selection
         if ((Input.GetMouseButtonUp(0) && !disabled) || (isSelecting && disabled))
         {
             // Stop portal from moving
