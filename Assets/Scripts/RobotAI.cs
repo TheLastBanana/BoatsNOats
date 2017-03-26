@@ -12,6 +12,7 @@ public class RobotAI : MonoBehaviour {
     float width;
     float height;
     public float checkDist = 0.1f;
+    private bool grounded;
 
     // Use this for initialization
     void Start () {
@@ -21,6 +22,7 @@ public class RobotAI : MonoBehaviour {
         rt = transform.GetChild(0).GetComponent<Collider2D>().bounds.extents;
         width = rt.x;
         height = rt.y;
+        grounded = true;
     }
 	
 	// Update is called once per frame
@@ -36,31 +38,44 @@ public class RobotAI : MonoBehaviour {
 
         if (rb.velocity.x == 0 || Mathf.Abs(rb.velocity.x) < 2)
         {
-            direction.x *= -1;            
+            direction.x *= -1;
         }
     }
 
     void FixedUpdate()
-    {     
-        if (direction.x > 0)
+    {
+        //Use Circle Cast to make the detection less sensitive
+        //Check if its a box if it is ignore the cast against it
+        if (grounded)
         {
-            if (!Physics2D.Raycast((Vector2)transform.position + new Vector2(width + 0.01f, -height + checkDist / 2f), downdir, checkDist))
+            if (direction.x > 0)
             {
-                direction.x *= -1;
-            }
+                if (!Physics2D.CircleCast((Vector2)transform.position + new Vector2(width + 0.11f, -height + checkDist / 2f), 0.10f, downdir, checkDist))
+                {
+                    direction.x *= -1;
+                }
 
-            transform.localScale = new Vector3(-.55f, .55f, .55f);
+                transform.localScale = new Vector3(-.55f, .55f, .55f);
+            }
+            else
+            {
+                if (!Physics2D.CircleCast((Vector2)transform.position + new Vector2(-width - 0.11f, -height + checkDist / 2f), 0.10f, downdir, checkDist))
+                {
+                    direction.x *= -1;
+                }
+
+                transform.localScale = new Vector3(.55f, .55f, .55f);
+            }
+        }
+        if(!Physics2D.CircleCast((Vector2)transform.position + new Vector2(width + 0.11f, -height + checkDist / 2f), 0.10f, downdir, checkDist) && !Physics2D.CircleCast((Vector2)transform.position + new Vector2(-width - 0.11f, -height + checkDist / 2f), 0.10f, downdir, checkDist))
+        {
+            grounded = false;
         }
         else
         {
-            if (!Physics2D.Raycast((Vector2)transform.position + new Vector2(-width - 0.01f, -height + checkDist / 2f), downdir, checkDist))
-            {
-                direction.x *= -1;
-            }
-
-            transform.localScale = new Vector3(.55f, .55f, .55f);
+            grounded = true;
         }
-
+        if(grounded)
         rb.velocity = new Vector2(direction.x * speed, rb.velocity.y);
     }
 

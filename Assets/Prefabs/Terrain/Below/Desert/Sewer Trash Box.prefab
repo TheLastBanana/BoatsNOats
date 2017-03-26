@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4413832813469342}
   - component: {fileID: 212006487348219898}
   - component: {fileID: 60472441170066314}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: d_trash_box
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4911455188300070}
   - component: {fileID: 114506596867669632}
   - component: {fileID: 50685994296108112}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Sewer Trash Box
   m_TagString: Untagged
   m_Icon: {fileID: 0}
