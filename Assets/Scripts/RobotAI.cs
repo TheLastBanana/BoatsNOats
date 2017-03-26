@@ -44,6 +44,13 @@ public class RobotAI : MonoBehaviour {
 
     void FixedUpdate()
     {
+        // Break when this is split
+        var splittable = GetComponent<Splittable>();
+        if (splittable != null && splittable.isSplit)
+        {
+            return;
+        }
+
         //Use Circle Cast to make the detection less sensitive
         //Check if its a box if it is ignore the cast against it
         if (grounded)
