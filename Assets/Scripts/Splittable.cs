@@ -132,6 +132,13 @@ public class Splittable : MonoBehaviour
             Transform leftChild = leftChildren[i];
             Transform rightChild = rightChildren[i];
 
+            // This is specifically tagged to not copy
+            if (leftChild.tag == "No Copy on Split")
+            {
+                DestroyImmediate(rightChild.gameObject);
+                continue;
+            }
+
             // Whatever this child is, we don't care about it
             if (leftChild.GetComponent<MeshRenderer>() == null && leftChild.GetComponent<Collider>() == null)
                 continue;

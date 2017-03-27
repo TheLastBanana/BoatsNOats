@@ -9,6 +9,7 @@ TagManager:
   - SplitPhys
   - Powered On
   - Powered Off
+  - No Copy on Split
   layers:
   - Default
   - TransparentFX

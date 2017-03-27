@@ -39,6 +39,7 @@ GameObject:
   - component: {fileID: 114992428139561162}
   - component: {fileID: 50124092670750548}
   - component: {fileID: 114962106431466928}
+  - component: {fileID: 114356345328704268}
   m_Layer: 0
   m_Name: Robot (Splittable Physics)
   m_TagString: Robot
@@ -111,6 +112,20 @@ PolygonCollider2D:
       - {x: -1.28, y: -2.3}
       - {x: 1.28, y: -2.3}
       - {x: 1.28, y: 2.25}
+--- !u!114 &114356345328704268
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1547759535899734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6c612c30cb0d1a49a2962878870dcbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectPrefab: {fileID: 1700749481285534, guid: 88d4cdd1fcd3a2b46bb717ee873946f6,
+    type: 2}
+  newColor: {r: 0.7, g: 0.68, b: 0.66, a: 1}
 --- !u!114 &114962106431466928
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -365,6 +365,9 @@ public class PortalManager : MonoBehaviour
                 Destroy(obj);
             }
         }
+
+        if (outer.Count > 0) outer[0].SendMessage("OnSplitMergeFinished", null, SendMessageOptions.DontRequireReceiver);
+        selectableObject.SendMessage("OnSplitMergeFinished", null, SendMessageOptions.DontRequireReceiver);
     }
 
     void OnRenderObject()

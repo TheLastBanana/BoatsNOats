@@ -38,6 +38,7 @@ GameObject:
   - component: {fileID: 4596431013057228}
   - component: {fileID: 114674042576520574}
   - component: {fileID: 114284673219756034}
+  - component: {fileID: 114225267093619512}
   m_Layer: 0
   m_Name: Base
   m_TagString: Untagged
@@ -70,6 +71,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4377816492884910}
   - component: {fileID: 114772741694658250}
+  - component: {fileID: 114478998491260720}
   m_Layer: 0
   m_Name: Head
   m_TagString: Untagged
@@ -136,6 +138,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4547143032790168}
   - component: {fileID: 114846745723221898}
+  - component: {fileID: 114553717062857172}
   m_Layer: 0
   m_Name: Rod
   m_TagString: Untagged
@@ -296,6 +299,20 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 3.85, y: 0.37}
+--- !u!114 &114225267093619512
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1218016917995164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6c612c30cb0d1a49a2962878870dcbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectPrefab: {fileID: 1700749481285534, guid: 88d4cdd1fcd3a2b46bb717ee873946f6,
+    type: 2}
+  newColor: {r: 0.7, g: 0.68, b: 0.66, a: 1}
 --- !u!114 &114284673219756034
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -308,6 +325,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powered: 0
+--- !u!114 &114478998491260720
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1507019871487870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6c612c30cb0d1a49a2962878870dcbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectPrefab: {fileID: 1700749481285534, guid: 88d4cdd1fcd3a2b46bb717ee873946f6,
+    type: 2}
+  newColor: {r: 0.7, g: 0.68, b: 0.66, a: 1}
+--- !u!114 &114553717062857172
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1951039414221400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6c612c30cb0d1a49a2962878870dcbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectPrefab: {fileID: 1700749481285534, guid: 88d4cdd1fcd3a2b46bb717ee873946f6,
+    type: 2}
+  newColor: {r: 0.7, g: 0.68, b: 0.66, a: 1}
 --- !u!114 &114674042576520574
 MonoBehaviour:
   m_ObjectHideFlags: 1
