@@ -158,8 +158,6 @@ public class Splittable : MonoBehaviour
             // Split intersected, so split collider
             if (intersected) SplitCollider(leftChild.gameObject, rightChild.gameObject, matrix);
         }
-
-        bool anySplits = false;
         
         // Copy over physics info
         Rigidbody2D leftPhys = GetComponent<Rigidbody2D>();
@@ -184,16 +182,12 @@ public class Splittable : MonoBehaviour
             Destroy(rightParent);
             rightParent = null;
         }
-        else anySplits = true;
 
         if (transform.childCount == 0)
         {
             Destroy(gameObject);
             rightParent = null;
         }
-        else anySplits = true;
-
-        if (!anySplits) return null;
 
         _isSplit = true;
         if (rightParent != null) rightParent.GetComponent<Splittable>()._isSplit = true;
