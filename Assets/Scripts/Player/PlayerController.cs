@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
     private PlayerSound _sound;
 	private RaycastHit2D _lastControllerColliderHit;
 	private Vector3 _velocity;
+    private Transform canvasTransform;
 
     private bool inputDisabled;
     private bool portalSelecting;
@@ -29,6 +30,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        canvasTransform = GetComponentInChildren<Canvas>().transform;
         inputDisabled = false;
         portalSelecting = false;
     }
@@ -90,16 +92,16 @@ public class PlayerController : MonoBehaviour
         if ( Input.GetKey( KeyCode.D ) && !inputDisabled)
 		{
 			normalizedHorizontalSpeed = 1;
-			if( transform.localScale.x > 0f )
-				transform.localScale = new Vector3( -transform.localScale.x, transform.localScale.y, transform.localScale.z );
+            if (transform.localScale.x > 0f)
+                FlipGemma();
 		}
 		else if( Input.GetKey( KeyCode.A ) && !inputDisabled)
 		{
 			normalizedHorizontalSpeed = -1;
 			if( transform.localScale.x < 0f )
-				transform.localScale = new Vector3( -transform.localScale.x, transform.localScale.y, transform.localScale.z );
-		}
-		else
+                FlipGemma();
+        }
+        else
 		{
 			normalizedHorizontalSpeed = 0;
 		}
@@ -135,6 +137,21 @@ public class PlayerController : MonoBehaviour
 		// grab our current _velocity to use as a base for all calculations
 		_velocity = _controller.velocity;
 	}
+
+    private void FlipGemma()
+    {
+        // Get canvas' x position
+        float canvasX = canvasTransform.position.x;
+
+        // Flip Gemma
+        transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+
+        // Flip canvas back
+        canvasTransform.localScale = new Vector3(-canvasTransform.localScale.x, canvasTransform.localScale.y, canvasTransform.localScale.z);
+
+        // Reset canvas' x position
+        canvasTransform.position = new Vector3(canvasX, canvasTransform.position.y, canvasTransform.position.z);
+    }
 
     public void StopForCutscene()
     {
