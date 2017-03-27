@@ -283,7 +283,11 @@ public class PortalManager : MonoBehaviour
         // Send means positive offset, not send means receive (negative offset)
         Vector3 offset = send ? offs.offset : -offs.offset;
         foreach (GameObject obj in objs)
+        {
+            if (obj == null) continue;
+
             obj.transform.position += offset;
+        }
     }
 
     // Move a Transform's children to another Transform
