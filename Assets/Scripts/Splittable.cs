@@ -35,21 +35,40 @@ public class Splittable : MonoBehaviour
     {
         get
         {
-            if (transform.childCount == 0) return new Bounds();
+            // In case we can't find any relevant children
+            var defaultBounds = new Bounds(transform.position, new Vector3());
 
-            Bounds totalBounds = transform.GetChild(0).GetComponent<Renderer>().bounds;
+            if (transform.childCount == 0) return defaultBounds;
 
-            for (int i = 1; i < transform.childCount; ++i)
+            Bounds? total = null;
+            for (int i = 0; i < transform.childCount; ++i)
             {
-                Transform child = transform.GetChild(i).transform;
-                var childBounds = child.GetComponent<Renderer>().bounds;
+                var child = transform.GetChild(i);
 
-                totalBounds.Encapsulate(childBounds);
+                // Only count mesh renderers in the total bounds
+                var renderer = child.GetComponent<MeshRenderer>();
+                if (!renderer) continue;
+
+                // If we haven't set the total yet, just use this one
+                if (total == null)
+                    total = renderer.bounds;
+                // Otherwise, encapsulate the new bounds
+                else
+                {
+                    var newValue = total.Value;
+                    newValue.Encapsulate(renderer.bounds);
+
+                    total = newValue;
+                }
             }
 
-            totalBounds.center = new Vector3(totalBounds.center.x, totalBounds.center.y, 0);
-            totalBounds.extents = new Vector3(totalBounds.extents.x, totalBounds.extents.y, 0);
-            return totalBounds;
+            if (total == null) return defaultBounds;
+
+            // Set z to 0
+            var result = total.Value;
+            result.center = new Vector3(result.center.x, result.center.y, 0);
+            result.extents = new Vector3(result.extents.x, result.extents.y, 0);
+            return result;
         }
     }
 
