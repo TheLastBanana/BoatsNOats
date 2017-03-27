@@ -57,7 +57,7 @@ public class RobotAI : MonoBehaviour {
         {
             if (direction.x > 0)
             {
-                if (!Physics2D.CircleCast((Vector2)transform.position + new Vector2(width + 0.11f, -height + checkDist / 2f), 0.10f, downdir, checkDist))
+                if (!Physics2D.CircleCast((Vector2)transform.position + new Vector2(width + 0.11f, -height + checkDist / 2f), 0.10f, downdir, checkDist, 1 << LayerMask.NameToLayer("Default")))
                 {
                     direction.x *= -1;
                 }
@@ -66,7 +66,7 @@ public class RobotAI : MonoBehaviour {
             }
             else
             {
-                if (!Physics2D.CircleCast((Vector2)transform.position + new Vector2(-width - 0.11f, -height + checkDist / 2f), 0.10f, downdir, checkDist))
+                if (!Physics2D.CircleCast((Vector2)transform.position + new Vector2(-width - 0.11f, -height + checkDist / 2f), 0.10f, downdir, checkDist, 1 << LayerMask.NameToLayer("Default")))
                 {
                     direction.x *= -1;
                 }
