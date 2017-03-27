@@ -132,6 +132,10 @@ public class Splittable : MonoBehaviour
             Transform leftChild = leftChildren[i];
             Transform rightChild = rightChildren[i];
 
+            // Whatever this child is, we don't care about it
+            if (leftChild.GetComponent<MeshRenderer>() == null && leftChild.GetComponent<Collider>() == null)
+                continue;
+
             int splitResult = SplitMesh(leftChild.gameObject, rightChild.gameObject, matrix);
 
             bool intersected = true;
