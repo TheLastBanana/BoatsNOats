@@ -38,6 +38,7 @@ GameObject:
   - component: {fileID: 4911455188300070}
   - component: {fileID: 114506596867669632}
   - component: {fileID: 50685994296108112}
+  - component: {fileID: 114979253382130590}
   m_Layer: 14
   m_Name: Sewer Trash Box
   m_TagString: Untagged
@@ -122,6 +123,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f472aefd391fb94283509da64defa94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114979253382130590
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1472612971080834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccbad47cf40c4ea4384c0b45ef8e6ea9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  velocityThreshold: 6
+  effectPrefab: {fileID: 1547807237269846, guid: dfd1680591e1f9049b91fa7181d43f40,
+    type: 2}
 --- !u!212 &212006487348219898
 SpriteRenderer:
   m_ObjectHideFlags: 1
