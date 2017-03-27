@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
 	private CharacterController2D _controller;
 	private Animator _animator;
     private Rigidbody2D _rigidbody;
-    private PlayerSound _sound;
+    private PlayerEffects _sound;
 	private RaycastHit2D _lastControllerColliderHit;
 	private Vector3 _velocity;
     private Transform canvasTransform;
@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
 	{
-        _sound = GetComponent<PlayerSound>();
+        _sound = GetComponent<PlayerEffects>();
 		_animator = GetComponent<Animator>();
         _rigidbody = GetComponent<Rigidbody2D>();
 		_controller = GetComponent<CharacterController2D>();
@@ -111,7 +111,7 @@ public class PlayerController : MonoBehaviour
 		if( _controller.isGrounded && (Input.GetKeyDown( KeyCode.Space ) || Input.GetKeyDown( KeyCode.W )) && !inputDisabled)
 		{
 			_velocity.y = Mathf.Sqrt( 2f * jumpHeight * -gravity );
-            _sound.PlayJumpSound();
+            _sound.PlayJumpEffect();
             _animator.SetBool("Ground", false);
         }
 

@@ -105,7 +105,7 @@ public class PlayerMovement : MonoBehaviour
             m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce));
 
             // Play jump sound
-            GetComponent<PlayerSound>().PlayJumpSound();
+            GetComponent<PlayerEffects>().PlayJumpEffect();
         }
     }
 
