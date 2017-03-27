@@ -18,10 +18,7 @@ public class SplittableBreakEffect : MonoBehaviour
 
             var effect = Instantiate(effectPrefab, transform, false);
             effect.transform.position = totalBounds.center;
-
-            // Resize to fit the general shape of the object
-            var emitterShape = effect.GetComponent<ParticleSystem>().shape;
-            emitterShape.radius = Mathf.Min(totalBounds.extents.x, totalBounds.extents.y);
+            effect.transform.localScale = totalBounds.extents;
 
             // Apply new color
             var meshRenderers = GetComponentsInChildren<MeshRenderer>();
