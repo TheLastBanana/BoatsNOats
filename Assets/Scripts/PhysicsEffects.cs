@@ -1,19 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-[RequireComponent(typeof(Rigidbody2D))]
 public class PhysicsEffects : MonoBehaviour
 {
     public float velocityThreshold = 0.3f;
     public GameObject effectPrefab;
-
-    Rigidbody2D rb;
     Dictionary<Vector2, Vector2> collisionOffsets = new Dictionary<Vector2, Vector2>();
-
-    void Awake()
-    {
-        rb = GetComponent<Rigidbody2D>();
-	}
 	
 	void OnCollisionEnter2D(Collision2D collision)
     {
