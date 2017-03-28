@@ -143,7 +143,14 @@ public class Splittable : MonoBehaviour
             if (leftChild.GetComponent<MeshRenderer>() == null && leftChild.GetComponent<Collider>() == null)
                 continue;
 
-            int splitResult = SplitMesh(leftChild.gameObject, rightChild.gameObject, matrix);
+            // Take the object's local transform into account
+            var localMatrix = matrix * Matrix4x4.TRS(
+                leftChild.transform.localPosition,
+                leftChild.transform.localRotation,
+                leftChild.transform.localScale
+            );
+
+            int splitResult = SplitMesh(leftChild.gameObject, rightChild.gameObject, localMatrix);
 
             bool intersected = true;
             // On left; destroy right copy
@@ -163,7 +170,7 @@ public class Splittable : MonoBehaviour
             }
 
             // Split intersected, so split collider
-            if (intersected) SplitCollider(leftChild.gameObject, rightChild.gameObject, matrix);
+            if (intersected) SplitCollider(leftChild.gameObject, rightChild.gameObject, localMatrix);
         }
         
         // Copy over physics info
