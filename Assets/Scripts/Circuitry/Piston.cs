@@ -15,6 +15,7 @@ public class Piston : MonoBehaviour
     private Vector3 headSize;
     private float headMin;
     private float speed;
+    private bool movingUp;
 
     private List<Splittable> splittables;
 
@@ -53,6 +54,9 @@ public class Piston : MonoBehaviour
             }
         }
 
+        if (!bottom.GetComponent<Circuit>().powered || rod.transform.localScale.y >= maxHeight)
+            movingUp = false;
+
         float posDelta = 0;
 
         //Reset box collider offset
@@ -62,9 +66,8 @@ public class Piston : MonoBehaviour
         //if (Input.GetKey(KeyCode.RightBracket) && rod.transform.localScale.y < maxHeight)
         if (bottom.GetComponent<Circuit>().powered && rod.transform.localScale.y < maxHeight)
         {
+            movingUp = true;
             posDelta = speed;
-            //if head is going up account for character feet sinking by offsetting box collider
-            head.transform.GetChild(0).GetComponent<BoxCollider2D>().offset = new Vector2(0,2);
         }
         else if (!bottom.GetComponent<Circuit>().powered && head.transform.localPosition.y > headMin)
             posDelta = -speed;
@@ -80,4 +83,14 @@ public class Piston : MonoBehaviour
             rod.transform.localScale = rodScale;
         }
 	}
+
+    public bool IsMovingUp()
+    {
+        return movingUp;
+    }
+
+    public float GetSpeed()
+    {
+        return speed;
+    }
 }
