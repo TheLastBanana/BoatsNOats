@@ -18,7 +18,12 @@ public class SplittableBreakEffect : MonoBehaviour
 
             var effect = Instantiate(effectPrefab, transform, false);
             effect.transform.position = totalBounds.center;
-            effect.transform.localScale = totalBounds.extents;
+
+            var size = totalBounds.extents;
+            var localScale = splittable.transform.localScale;
+            size.x /= localScale.x;
+            size.y /= localScale.y;
+            effect.transform.localScale = size;
 
             // Apply new color
             var meshRenderers = GetComponentsInChildren<MeshRenderer>();
