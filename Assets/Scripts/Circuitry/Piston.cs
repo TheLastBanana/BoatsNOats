@@ -28,7 +28,7 @@ public class Piston : MonoBehaviour
 
         // Head minimum
         headMin = botSize.y / 2 + headSize.y / 2;
-
+        
         // Speed is arbitrarily a fifth of the head size I guess
         speed = headSize.y / 5;
 
@@ -54,20 +54,50 @@ public class Piston : MonoBehaviour
             }
         }
 
-        if (!bottom.GetComponent<Circuit>().powered || rod.transform.localScale.y >= maxHeight)
-            movingUp = false;
-
         float posDelta = 0;
 
         //Use base.GetComponent<Circuit>().powered to use the power from a circuit
         //if (Input.GetKey(KeyCode.RightBracket) && rod.transform.localScale.y < maxHeight)
-        if (bottom.GetComponent<Circuit>().powered && rod.transform.localScale.y < maxHeight)
+        if (bottom.GetComponent<Circuit>().powered)
         {
-            movingUp = true;
-            posDelta = speed;
+            float localPosY = head.transform.localPosition.y;
+
+            // Still got at least one more tick before we hit max
+            if (localPosY < maxHeight - speed)
+            {
+                movingUp = true;
+                posDelta = speed;
+            }
+            // We're within speed distance of max, so move that much
+            else if (localPosY < maxHeight)
+            {
+                movingUp = true;
+                posDelta = maxHeight - localPosY;
+            }
+            // Equal to (or greater than, do nothing, but say we're not moving up
+            else
+            {
+                movingUp = false;
+                posDelta = 0;
+            }
         }
-        else if (!bottom.GetComponent<Circuit>().powered && head.transform.localPosition.y > headMin)
-            posDelta = -speed;
+        else if (!bottom.GetComponent<Circuit>().powered)
+        {
+            // Unpowered, we're definitely not moving up
+            movingUp = false;
+
+            float localPosY = head.transform.localPosition.y;
+
+            // Still got at least one more tick before we hit min
+            if (localPosY > headMin + speed)
+                posDelta = -speed;
+
+            // We're within speed distance of min, so move that much
+            else if (localPosY > headMin)
+                posDelta = headMin- localPosY;
+
+            // No else, if we're less than or equal to then we don't do anything
+        }
 
         if (posDelta != 0)
         {
