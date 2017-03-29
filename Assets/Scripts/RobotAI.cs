@@ -62,8 +62,6 @@ public class RobotAI : MonoBehaviour {
         var leftOrigin = new Vector2(curEdges.xMin - groundCheckOffset, curEdges.yMin + checkDist / 2f);
         var rightOrigin = new Vector2(curEdges.xMax + groundCheckOffset, curEdges.yMin + checkDist / 2f);
 
-        print(leftOrigin);
-
         var leftCast = Physics2D.CircleCast(leftOrigin, circleCastRadius, downdir, checkDist, 1 << LayerMask.NameToLayer("Default"));
         var rightCast = Physics2D.CircleCast(rightOrigin, circleCastRadius, downdir, checkDist, 1 << LayerMask.NameToLayer("Default"));
 
