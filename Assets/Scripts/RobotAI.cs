@@ -5,13 +5,15 @@ using UnityEngine;
 public class RobotAI : MonoBehaviour {
 
     public float speed = 7.0f;
+    public float checkDist = 0.1f;
+    public float circleCastRadius = 0.1f;
+    public float groundCheckOffset = 0.11f;
     private Rigidbody2D rb;
     private Vector2 direction;
     Vector2 downdir;
-    Vector3 rt;
+    Rect edges;
     float width;
     float height;
-    public float checkDist = 0.1f;
     private bool grounded;
 
     // Use this for initialization
@@ -19,9 +21,11 @@ public class RobotAI : MonoBehaviour {
         rb = GetComponent<Rigidbody2D>();
         direction = Vector2.right;
         downdir = transform.TransformDirection(Vector2.down);
-        rt = transform.GetChild(0).GetComponent<Collider2D>().bounds.extents;
-        width = rt.x;
-        height = rt.y;
+
+        // Get collision rectangle relative to the transform
+        var bounds = transform.GetChild(0).GetComponent<Collider2D>().bounds;
+        edges = new Rect(bounds.min - transform.position, bounds.size);
+
         grounded = true;
     }
 	
@@ -51,39 +55,34 @@ public class RobotAI : MonoBehaviour {
             return;
         }
 
-        //Use Circle Cast to make the detection less sensitive
-        //Check if its a box if it is ignore the cast against it
+        // Current bounding box edges
+        var curEdges = new Rect(edges.min + (Vector2)transform.position, edges.size);
+
+        // Try casting a circle down on either side
+        var leftOrigin = new Vector2(curEdges.xMin - groundCheckOffset, curEdges.yMin + checkDist / 2f);
+        var rightOrigin = new Vector2(curEdges.xMax + groundCheckOffset, curEdges.yMin + checkDist / 2f);
+
+        print(leftOrigin);
+
+        var leftCast = Physics2D.CircleCast(leftOrigin, circleCastRadius, downdir, checkDist, 1 << LayerMask.NameToLayer("Default"));
+        var rightCast = Physics2D.CircleCast(rightOrigin, circleCastRadius, downdir, checkDist, 1 << LayerMask.NameToLayer("Default"));
+
+        // Use Circle Cast to make the detection less sensitive
         if (grounded)
         {
-            if (direction.x > 0)
+            // Cast the ray
+            // Ignore casts against any layer except Default
+            if ((direction.x > 0 && !rightCast) || (direction.x < 0 && !leftCast))
             {
-                if (!Physics2D.CircleCast((Vector2)transform.position + new Vector2(width + 0.11f, -height + checkDist / 2f), 0.10f, downdir, checkDist, 1 << LayerMask.NameToLayer("Default")))
-                {
-                    direction.x *= -1;
-                }
-
-                transform.localScale = new Vector3(-.55f, .55f, .55f);
-            }
-            else
-            {
-                if (!Physics2D.CircleCast((Vector2)transform.position + new Vector2(-width - 0.11f, -height + checkDist / 2f), 0.10f, downdir, checkDist, 1 << LayerMask.NameToLayer("Default")))
-                {
-                    direction.x *= -1;
-                }
-
-                transform.localScale = new Vector3(.55f, .55f, .55f);
+                direction.x *= -1;
             }
         }
-        if(!Physics2D.CircleCast((Vector2)transform.position + new Vector2(width + 0.11f, -height + checkDist / 2f), 0.10f, downdir, checkDist) && !Physics2D.CircleCast((Vector2)transform.position + new Vector2(-width - 0.11f, -height + checkDist / 2f), 0.10f, downdir, checkDist))
-        {
-            grounded = false;
-        }
-        else
-        {
-            grounded = true;
-        }
-        if(grounded)
-        rb.velocity = new Vector2(direction.x * speed, rb.velocity.y);
+
+        // Grounded if either side found ground
+        grounded = leftCast || rightCast;
+
+        if (grounded)
+            rb.velocity = new Vector2(direction.x * speed, rb.velocity.y);
     }
 
 }
