@@ -183,7 +183,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1547759535899734}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 11.06, y: 7.53, z: 0}
+  m_LocalPosition: {x: -4.1, y: 4, z: 0}
   m_LocalScale: {x: 0.2, y: 0.2, z: 1}
   m_Children:
   - {fileID: 4837722123529640}
@@ -389,7 +389,7 @@ MonoBehaviour:
   groundedVelocityThreshold: 0.01
   circleCastRadius: 0.1
   groundCheckOffset: 0.11
-  edgePauseTime: 0.5
+  edgePauseTime: 0.8
   bumpPauseTime: 1.2
   turnTime: 0.5
   bumpVelocity: {x: 1.5, y: 1.5}
