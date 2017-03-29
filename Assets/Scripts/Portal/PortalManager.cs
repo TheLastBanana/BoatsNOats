@@ -83,9 +83,12 @@ public class PortalManager : MonoBehaviour
 
             cutsceneManager.DisableGemma(true);
 
-            // Disable physics
+            // Disable physics and animation
             foreach (var physicsObject in FindObjectsOfType<Rigidbody2D>())
                 physicsObject.simulated = false;
+
+            foreach (var animator in FindObjectsOfType<Animator>())
+                animator.enabled = false;
         }
 
         // Here we update the secondary position of the portal while we're 
@@ -177,9 +180,12 @@ public class PortalManager : MonoBehaviour
         
         cutsceneManager.DisableGemma(false);
 
-        // Re-enable physics now that we're no longer building the portal
+        // Re-enable physics and animations now that we're no longer building the portal
         foreach (var physicsObject in FindObjectsOfType<Rigidbody2D>())
             physicsObject.simulated = true;
+
+        foreach (var animator in FindObjectsOfType<Animator>())
+            animator.enabled = true;
 
         afx.smoothStop(portalDragSound);
         afx.smoothStop(altWorldAmbience);
