@@ -59,9 +59,6 @@ public class Piston : MonoBehaviour
 
         float posDelta = 0;
 
-        //Reset box collider offset
-        head.transform.GetChild(0).GetComponent<BoxCollider2D>().offset = new Vector2(0, 0);
-
         //Use base.GetComponent<Circuit>().powered to use the power from a circuit
         //if (Input.GetKey(KeyCode.RightBracket) && rod.transform.localScale.y < maxHeight)
         if (bottom.GetComponent<Circuit>().powered && rod.transform.localScale.y < maxHeight)

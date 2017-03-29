@@ -17,7 +17,7 @@ public class PistonHead : MonoBehaviour {
         if (coll.gameObject.tag == "Player" && piston.IsMovingUp())
         {
             Transform t = coll.gameObject.transform;
-            t.position = new Vector3(t.position.x, t.position.y + piston.GetSpeed(), t.position.z);
+            t.position = new Vector3(t.position.x, t.position.y + 2*piston.GetSpeed(), t.position.z);
         }
     }
 }
