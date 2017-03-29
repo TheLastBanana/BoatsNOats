@@ -281,9 +281,8 @@ public class PortalManager : MonoBehaviour
 
                 if (selectableObject == null) continue;
 
-                // The original object was cut, or the original object is fully contained in the portal
-                //if (expandedBounds.Contains(selectableObject.totalBounds.min) && expandedBounds.Contains(selectableObject.totalBounds.max))
-                    cuts.Add(selectableObject.gameObject);
+                // The original object was cut, or the original object is fully contained in the portal    
+                cuts.Add(selectableObject.gameObject);
             }
 
             // Cut off iteration if we've exceeded the max time
