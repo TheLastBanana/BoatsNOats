@@ -355,10 +355,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   checkDist: 0.1
+  groundedVelocityThreshold: 0.01
   circleCastRadius: 0.1
   groundCheckOffset: 0.11
-  pauseTime: 0.9
+  edgePauseTime: 0.5
+  bumpPauseTime: 1.2
   turnTime: 0.5
+  bumpVelocity: {x: 1.5, y: 1.5}
 --- !u!114 &114992428139561162
 MonoBehaviour:
   m_ObjectHideFlags: 1

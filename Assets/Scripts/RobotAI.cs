@@ -5,10 +5,13 @@ public class RobotAI : MonoBehaviour {
 
     public float speed = 7.0f;
     public float checkDist = 0.1f;
+    public float groundedVelocityThreshold = 0.1f;
     public float circleCastRadius = 0.1f;
     public float groundCheckOffset = 0.11f;
-    public float pauseTime = 0.5f;
+    public float edgePauseTime = 0.5f;
+    public float bumpPauseTime = 0.7f;
     public float turnTime = 0.2f;
+    public Vector2 bumpVelocity = new Vector2(1.5f, 1.5f);
 
     Rigidbody2D rb;
     Animator animator;
@@ -85,19 +88,20 @@ public class RobotAI : MonoBehaviour {
         {
             if ((direction.x > 0 && !rightCast) || (direction.x < 0 && !leftCast))
             {
-                TurnAround();
+                TurnAround(edgePauseTime);
             }
 
             if (!wasPaused && Mathf.Abs(rb.velocity.x) < 2)
             {
-                TurnAround();
+                TurnAround(bumpPauseTime);
+                rb.velocity = new Vector2(-direction.x * bumpVelocity.x, bumpVelocity.y);
             }
         }
 
         // Grounded if either side found ground
         grounded = leftCast || rightCast;
 
-        if (grounded)
+        if (grounded && Mathf.Abs(rb.velocity.y) < groundedVelocityThreshold)
             if (paused)
                 rb.velocity = new Vector2(0, rb.velocity.y);
             else
@@ -106,16 +110,16 @@ public class RobotAI : MonoBehaviour {
         if (!paused) wasPaused = false;
     }
 
-    void TurnAround()
+    void TurnAround(float time)
     {
         wasPaused = paused = true;
 
-        StartCoroutine(TurnCoroutine());
+        StartCoroutine(TurnCoroutine(time));
     }
 
-    IEnumerator TurnCoroutine()
+    IEnumerator TurnCoroutine(float time)
     {
-        yield return new WaitForSeconds(pauseTime - turnTime);
+        yield return new WaitForSeconds(time - turnTime);
 
         direction.x *= -1;
 
