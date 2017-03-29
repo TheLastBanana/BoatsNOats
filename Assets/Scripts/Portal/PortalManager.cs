@@ -89,6 +89,9 @@ public class PortalManager : MonoBehaviour
 
             foreach (var animator in FindObjectsOfType<Animator>())
                 animator.enabled = false;
+
+            foreach (var button in FindObjectsOfType<Button>())
+                button.GetComponent<PolygonCollider2D>().enabled = false;
         }
 
         // Here we update the secondary position of the portal while we're 
@@ -187,6 +190,9 @@ public class PortalManager : MonoBehaviour
         foreach (var animator in FindObjectsOfType<Animator>())
             animator.enabled = true;
 
+        foreach (var button in FindObjectsOfType<Button>())
+            button.GetComponent<PolygonCollider2D>().enabled = true;
+
         afx.smoothStop(portalDragSound);
         afx.smoothStop(altWorldAmbience);
         timeStartSound.Play();
@@ -266,10 +272,8 @@ public class PortalManager : MonoBehaviour
                 if (selectableObject == null) continue;
 
                 // The original object was cut, or the original object is fully contained in the portal
-                if (expandedBounds.Contains(selectableObject.totalBounds.min) && expandedBounds.Contains(selectableObject.totalBounds.max))
-                {
+                //if (expandedBounds.Contains(selectableObject.totalBounds.min) && expandedBounds.Contains(selectableObject.totalBounds.max))
                     cuts.Add(selectableObject.gameObject);
-                }
             }
 
             // Cut off iteration if we've exceeded the max time
