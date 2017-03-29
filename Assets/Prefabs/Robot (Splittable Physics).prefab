@@ -394,6 +394,9 @@ MonoBehaviour:
   turnTime: 0.5
   bumpVelocity: {x: 1.5, y: 1.5}
   bumpEffect: {fileID: 198250905979402782}
+  rollEffects:
+  - {fileID: 198960508390439966}
+  - {fileID: 198041301556308580}
 --- !u!114 &114992428139561162
 MonoBehaviour:
   m_ObjectHideFlags: 1

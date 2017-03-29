@@ -13,6 +13,7 @@ public class RobotAI : MonoBehaviour {
     public float turnTime = 0.2f;
     public Vector2 bumpVelocity = new Vector2(1.5f, 1.5f);
     public ParticleSystem bumpEffect;
+    public ParticleSystem[] rollEffects;
 
     Rigidbody2D rb;
     Animator animator;
@@ -129,6 +130,16 @@ public class RobotAI : MonoBehaviour {
         if (!paused) wasPaused = false;
     }
 
+    void OnDisable()
+    {
+        DisableRollEffects();
+    }
+
+    void OnEnable()
+    {
+        EnableRollEffects();
+    }
+
     void TurnAround(float time)
     {
         wasPaused = paused = true;
@@ -136,8 +147,22 @@ public class RobotAI : MonoBehaviour {
         currentTurn = StartCoroutine(TurnCoroutine(time));
     }
 
+    void DisableRollEffects()
+    {
+        foreach (var effect in rollEffects)
+            effect.Stop();
+    }
+
+    void EnableRollEffects()
+    {
+        foreach (var effect in rollEffects)
+            effect.Play();
+    }
+
     IEnumerator TurnCoroutine(float time)
     {
+        DisableRollEffects();
+
         yield return WaitWhileEnabled(time - turnTime);
 
         direction.x *= -1;
@@ -145,6 +170,8 @@ public class RobotAI : MonoBehaviour {
         yield return WaitWhileEnabled(turnTime);
 
         paused = false;
+
+        EnableRollEffects();
     }
 
     // In contrast to WaitForSeconds, this pauses while the robot is disabled
