@@ -25,6 +25,7 @@ public class RobotAI : MonoBehaviour {
     bool paused = false;
     bool wasPaused = false;
     Vector3 bumpEffectPos;
+    Coroutine currentTurn = null;
 
     // Use this for initialization
     void Awake()
@@ -132,17 +133,28 @@ public class RobotAI : MonoBehaviour {
     {
         wasPaused = paused = true;
 
-        StartCoroutine(TurnCoroutine(time));
+        currentTurn = StartCoroutine(TurnCoroutine(time));
     }
 
     IEnumerator TurnCoroutine(float time)
     {
-        yield return new WaitForSeconds(time - turnTime);
+        yield return WaitWhileEnabled(time - turnTime);
 
         direction.x *= -1;
 
-        yield return new WaitForSeconds(turnTime);
+        yield return WaitWhileEnabled(turnTime);
 
         paused = false;
+    }
+
+    // In contrast to WaitForSeconds, this pauses while the robot is disabled
+    IEnumerator WaitWhileEnabled(float time)
+    {
+        float elapsed = 0f;
+        while (elapsed < time)
+        {
+            if (enabled) elapsed += Time.deltaTime;
+            yield return null;
+        }
     }
 }

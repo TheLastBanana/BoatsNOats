@@ -96,6 +96,9 @@ public class PortalManager : MonoBehaviour
             foreach (var piston in FindObjectsOfType<Piston>())
                 piston.enabled = false;
 
+            foreach (var robot in FindObjectsOfType<RobotAI>())
+                robot.enabled = false;
+
         }
 
         // Here we update the secondary position of the portal while we're 
@@ -194,9 +197,11 @@ public class PortalManager : MonoBehaviour
         foreach (var animator in FindObjectsOfType<Animator>())
             animator.enabled = true;
 
-
         foreach (var button in FindObjectsOfType<Button>())
             button.GetComponent<PolygonCollider2D>().enabled = true;
+
+        foreach (var robot in FindObjectsOfType<RobotAI>())
+            robot.enabled = true;
 
         // Enable pistons again
         foreach (var piston in FindObjectsOfType<Piston>())
