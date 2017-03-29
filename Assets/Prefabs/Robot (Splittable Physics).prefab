@@ -72,6 +72,7 @@ GameObject:
   - component: {fileID: 114962106431466928}
   - component: {fileID: 114356345328704268}
   - component: {fileID: 95255140322614788}
+  - component: {fileID: 114534245804539248}
   m_Layer: 0
   m_Name: Robot (Splittable Physics)
   m_TagString: Robot
@@ -131,7 +132,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1547759535899734}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.2, y: 4.43, z: 0}
+  m_LocalPosition: {x: 11.06, y: 7.53, z: 0}
   m_LocalScale: {x: 0.2, y: 0.2, z: 1}
   m_Children:
   - {fileID: 4837722123529640}
@@ -265,6 +266,20 @@ MonoBehaviour:
   effectPrefab: {fileID: 1700749481285534, guid: 88d4cdd1fcd3a2b46bb717ee873946f6,
     type: 2}
   newColor: {r: 0.7, g: 0.68, b: 0.66, a: 1}
+--- !u!114 &114534245804539248
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1547759535899734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccbad47cf40c4ea4384c0b45ef8e6ea9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  velocityThreshold: 6
+  effectPrefab: {fileID: 1547807237269846, guid: f42f7fdd82724cb488fcddd113233056,
+    type: 2}
 --- !u!114 &114962106431466928
 MonoBehaviour:
   m_ObjectHideFlags: 1
