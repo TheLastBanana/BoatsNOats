@@ -12,6 +12,7 @@ public class RobotAI : MonoBehaviour {
     public float bumpPauseTime = 0.7f;
     public float turnTime = 0.2f;
     public Vector2 bumpVelocity = new Vector2(1.5f, 1.5f);
+    public ParticleSystem bumpEffect;
 
     Rigidbody2D rb;
     Animator animator;
@@ -23,6 +24,7 @@ public class RobotAI : MonoBehaviour {
     bool grounded;
     bool paused = false;
     bool wasPaused = false;
+    Vector3 bumpEffectPos;
 
     // Use this for initialization
     void Awake()
@@ -43,6 +45,9 @@ public class RobotAI : MonoBehaviour {
         animator = GetComponent<Animator>();
 
         grounded = true;
+
+        if (bumpEffect)
+            bumpEffectPos = bumpEffect.transform.localPosition;
     }
 	
 	// Update is called once per frame
@@ -95,6 +100,19 @@ public class RobotAI : MonoBehaviour {
             {
                 TurnAround(bumpPauseTime);
                 rb.velocity = new Vector2(-direction.x * bumpVelocity.x, bumpVelocity.y);
+                if (bumpEffect)
+                {
+                    bumpEffect.Play();
+
+                    var newBumpPos = bumpEffectPos;
+                    newBumpPos.x *= direction.x;
+                    bumpEffect.transform.localPosition = newBumpPos;
+
+                    // Rotate bump effect to face the right way
+                    var bumpAngles = bumpEffect.transform.localEulerAngles;
+                    bumpAngles.y = -90 * direction.x;
+                    bumpEffect.transform.localEulerAngles = bumpAngles;
+                }
             }
         }
 
