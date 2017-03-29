@@ -58,7 +58,6 @@ class FormatTag : Tag
                 joinedParams[i] = pair.Key + "=" + pair.Value;
                 ++i;
             }
-            string ret = name + string.Join(" ", joinedParams);
             return name + string.Join(" ", joinedParams);
         }
     }
