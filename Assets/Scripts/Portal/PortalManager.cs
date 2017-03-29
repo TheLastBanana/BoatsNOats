@@ -89,6 +89,9 @@ public class PortalManager : MonoBehaviour
 
             foreach (var animator in FindObjectsOfType<Animator>())
                 animator.enabled = false;
+
+            foreach (var piston in FindObjectsOfType<Piston>())
+                piston.enabled = false;
         }
 
         // Here we update the secondary position of the portal while we're 
@@ -186,6 +189,10 @@ public class PortalManager : MonoBehaviour
 
         foreach (var animator in FindObjectsOfType<Animator>())
             animator.enabled = true;
+
+        // Enable pistons again
+        foreach (var piston in FindObjectsOfType<Piston>())
+            piston.enabled = true;
 
         afx.smoothStop(portalDragSound);
         afx.smoothStop(altWorldAmbience);
