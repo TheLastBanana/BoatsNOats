@@ -32,6 +32,20 @@ public class SceneChanger : MonoBehaviour
 
         if (loadNextScene)
             SceneManager.LoadScene(nextScene);
+
+        if (Input.GetKey("escape"))
+        {
+            if (UnityEditor.EditorApplication.isPlaying)
+            {
+                UnityEditor.EditorApplication.isPlaying = false;
+            }
+            else
+            {
+            }
+                
+  
+        }
+        
     }
 
     private void OnTriggerEnter2D(Collider2D other)
