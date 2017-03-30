@@ -172,6 +172,7 @@ public class Splittable : MonoBehaviour
             {
                 rightChild.parent = null;
                 Destroy(rightChild.gameObject);
+                rightChild = null;
             }
 
             // On right; destroy left copy
@@ -179,6 +180,7 @@ public class Splittable : MonoBehaviour
             {
                 leftChild.parent = null;
                 Destroy(leftChild.gameObject);
+                leftChild = null;
             }
         }
         
@@ -323,10 +325,19 @@ public class Splittable : MonoBehaviour
             if (vert.x < 0) leftCount += 1;
 
         // All on the right
-        if (leftCount == 0) return Side.Right;
-
+        if (leftCount == 0)
+        {
+            Destroy(leftFilter);
+            Destroy(leftObj.GetComponent<MeshRenderer>());
+            return Side.Right;
+        }
         // All on the left
-        else if (leftCount == leftVerts.Count) return Side.Left;
+        else if (leftCount == leftVerts.Count)
+        {
+            Destroy(rightFilter);
+            Destroy(rightObj.GetComponent<MeshRenderer>());
+            return Side.Left;
+        }
 
         List<Vector2> leftUV = new List<Vector2>(leftMesh.uv);
         List<Vector2> rightUV = new List<Vector2>(rightMesh.uv);
@@ -454,7 +465,7 @@ public class Splittable : MonoBehaviour
             Vector4 point = new Vector4(rightVerts[i].x, rightVerts[i].y, rightVerts[i].z, 1);
             rightVerts[i] = matInverse * point;
         }
-
+        
         leftMesh.vertices = leftVerts.ToArray();
         leftMesh.triangles = leftTris.ToArray();
         leftMesh.uv = leftUV.ToArray();

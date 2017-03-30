@@ -60,7 +60,13 @@ public class PhysicsEffects : MonoBehaviour
             if (splittable)
             {
                 var dir = pair.Key;
-                var totalBounds = splittable.totalBounds;
+
+                var colliders = GetComponentsInChildren<PolygonCollider2D>();
+                Bounds totalBounds = colliders[0].bounds;
+                for (int i = 1; i < colliders.Length; ++i)
+                {
+                    totalBounds.Encapsulate(colliders[i].bounds);
+                }
                 var totalExtents = totalBounds.extents;
 
                 // Get the size of the side tangent to the direction. We do this by multiplying the extents
@@ -73,6 +79,15 @@ public class PhysicsEffects : MonoBehaviour
 
                 var shape = particles.shape;
                 shape.radius = tangentExtents.magnitude;
+
+                // Same as tangentExtents, but parallel to the direction
+                var parallelExtents = new Vector2(
+                    totalExtents.x * dir.x,
+                    totalExtents.y * dir.y
+                );
+
+                // Move the offset to the object bounds
+                offset = offset.normalized * parallelExtents.magnitude;
 
                 effect.transform.position = totalBounds.center + (Vector3)offset;
             }

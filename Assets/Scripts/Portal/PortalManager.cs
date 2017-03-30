@@ -96,6 +96,9 @@ public class PortalManager : MonoBehaviour
             foreach (var piston in FindObjectsOfType<Piston>())
                 piston.enabled = false;
 
+            foreach (var robot in FindObjectsOfType<RobotAI>())
+                robot.enabled = false;
+
         }
 
         // Here we update the secondary position of the portal while we're 
@@ -194,9 +197,11 @@ public class PortalManager : MonoBehaviour
         foreach (var animator in FindObjectsOfType<Animator>())
             animator.enabled = true;
 
-
         foreach (var button in FindObjectsOfType<Button>())
             button.GetComponent<PolygonCollider2D>().enabled = true;
+
+        foreach (var robot in FindObjectsOfType<RobotAI>())
+            robot.enabled = true;
 
         // Enable pistons again
         foreach (var piston in FindObjectsOfType<Piston>())
@@ -281,9 +286,8 @@ public class PortalManager : MonoBehaviour
 
                 if (selectableObject == null) continue;
 
-                // The original object was cut, or the original object is fully contained in the portal
-                //if (expandedBounds.Contains(selectableObject.totalBounds.min) && expandedBounds.Contains(selectableObject.totalBounds.max))
-                    cuts.Add(selectableObject.gameObject);
+                // The original object was cut, or the original object is fully contained in the portal    
+                cuts.Add(selectableObject.gameObject);
             }
 
             // Cut off iteration if we've exceeded the max time

@@ -5,10 +5,15 @@ public class RobotAI : MonoBehaviour {
 
     public float speed = 7.0f;
     public float checkDist = 0.1f;
+    public float groundedVelocityThreshold = 0.1f;
     public float circleCastRadius = 0.1f;
     public float groundCheckOffset = 0.11f;
-    public float pauseTime = 0.5f;
+    public float edgePauseTime = 0.5f;
+    public float bumpPauseTime = 0.7f;
     public float turnTime = 0.2f;
+    public Vector2 bumpVelocity = new Vector2(1.5f, 1.5f);
+    public ParticleSystem bumpEffect;
+    public ParticleSystem[] rollEffects;
 
     Rigidbody2D rb;
     Animator animator;
@@ -20,6 +25,8 @@ public class RobotAI : MonoBehaviour {
     bool grounded;
     bool paused = false;
     bool wasPaused = false;
+    Vector3 bumpEffectPos;
+    Coroutine currentTurn = null;
 
     // Use this for initialization
     void Awake()
@@ -40,6 +47,9 @@ public class RobotAI : MonoBehaviour {
         animator = GetComponent<Animator>();
 
         grounded = true;
+
+        if (bumpEffect)
+            bumpEffectPos = bumpEffect.transform.localPosition;
     }
 	
 	// Update is called once per frame
@@ -85,19 +95,33 @@ public class RobotAI : MonoBehaviour {
         {
             if ((direction.x > 0 && !rightCast) || (direction.x < 0 && !leftCast))
             {
-                TurnAround();
+                TurnAround(edgePauseTime);
             }
 
             if (!wasPaused && Mathf.Abs(rb.velocity.x) < 2)
             {
-                TurnAround();
+                TurnAround(bumpPauseTime);
+                rb.velocity = new Vector2(-direction.x * bumpVelocity.x, bumpVelocity.y);
+                if (bumpEffect)
+                {
+                    bumpEffect.Play();
+
+                    var newBumpPos = bumpEffectPos;
+                    newBumpPos.x *= direction.x;
+                    bumpEffect.transform.localPosition = newBumpPos;
+
+                    // Rotate bump effect to face the right way
+                    var bumpAngles = bumpEffect.transform.localEulerAngles;
+                    bumpAngles.y = -90 * direction.x;
+                    bumpEffect.transform.localEulerAngles = bumpAngles;
+                }
             }
         }
 
         // Grounded if either side found ground
         grounded = leftCast || rightCast;
 
-        if (grounded)
+        if (grounded && Mathf.Abs(rb.velocity.y) < groundedVelocityThreshold)
             if (paused)
                 rb.velocity = new Vector2(0, rb.velocity.y);
             else
@@ -106,21 +130,58 @@ public class RobotAI : MonoBehaviour {
         if (!paused) wasPaused = false;
     }
 
-    void TurnAround()
+    void OnDisable()
+    {
+        DisableRollEffects();
+    }
+
+    void OnEnable()
+    {
+        EnableRollEffects();
+    }
+
+    void TurnAround(float time)
     {
         wasPaused = paused = true;
 
-        StartCoroutine(TurnCoroutine());
+        currentTurn = StartCoroutine(TurnCoroutine(time));
     }
 
-    IEnumerator TurnCoroutine()
+    void DisableRollEffects()
     {
-        yield return new WaitForSeconds(pauseTime - turnTime);
+        foreach (var effect in rollEffects)
+            effect.Stop();
+    }
+
+    void EnableRollEffects()
+    {
+        foreach (var effect in rollEffects)
+            effect.Play();
+    }
+
+    IEnumerator TurnCoroutine(float time)
+    {
+        DisableRollEffects();
+
+        yield return WaitWhileEnabled(time - turnTime);
 
         direction.x *= -1;
 
-        yield return new WaitForSeconds(turnTime);
+        yield return WaitWhileEnabled(turnTime);
 
         paused = false;
+
+        EnableRollEffects();
+    }
+
+    // In contrast to WaitForSeconds, this pauses while the robot is disabled
+    IEnumerator WaitWhileEnabled(float time)
+    {
+        float elapsed = 0f;
+        while (elapsed < time)
+        {
+            if (enabled) elapsed += Time.deltaTime;
+            yield return null;
+        }
     }
 }
