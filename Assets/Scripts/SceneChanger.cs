@@ -28,10 +28,10 @@ public class SceneChanger : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
-            SceneManager.LoadScene(currentScene);
+            DoLoadScene(currentScene, false);
 
         if (loadNextScene)
-            SceneManager.LoadScene(nextScene);
+            DoLoadScene(nextScene, true);
 
         if (Input.GetKey("escape"))
         {
@@ -54,15 +54,22 @@ public class SceneChanger : MonoBehaviour
         {
             // No cutscene, end level
             if (cutsceneInfo.textFile == null)
-                LoadNextScene();
+                SetLoadNextScene();
             // Tell the manager this is an end level cutscene
             else
                 cutsceneManager.IsEndCutscene();
         }
     }
 
-    public void LoadNextScene()
+    public void SetLoadNextScene()
     {
         loadNextScene = true;
+    }
+
+    // Do everything to load another scene
+    // TODO: Transition stuff goes here
+    private void DoLoadScene(int scene, bool transition)
+    {
+        SceneManager.LoadScene(scene);
     }
 }

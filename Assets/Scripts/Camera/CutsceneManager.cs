@@ -142,7 +142,7 @@ public class CutsceneManager : MonoBehaviour {
 
         // If this was the last cutscene in a level do a scene transition now
         if (endCutscene)
-            sceneTransition.GetComponent<SceneChanger>().LoadNextScene();
+            sceneTransition.GetComponent<SceneChanger>().SetLoadNextScene();
     }
 
     public void StartPan(string objName, float delay)

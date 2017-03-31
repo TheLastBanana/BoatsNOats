@@ -7,14 +7,22 @@ public class CutsceneInfo : MonoBehaviour {
 
     public CutsceneManager cutsceneManager;
     public TextAsset textFile = null;
+    private bool doneDialogue;
+
+    // Use this for initialization
+    void Start()
+    {
+        doneDialogue = false;
+    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Player" && textFile != null)
+        if (!doneDialogue && other.tag == "Player" && textFile != null)
         {
-            // Start the cutscene indicated (if there is one) in this object and deactivate this object
+            // Start the cutscene indicated
             cutsceneManager.RunCutscene(textFile);
-            this.gameObject.SetActive(false);
+            // Prevent cutscene from being started again, don't disable object though as this script might be on a SceneTransition object
+            doneDialogue = true;
         }
     }
 }
