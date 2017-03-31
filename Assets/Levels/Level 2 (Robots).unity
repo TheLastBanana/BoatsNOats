@@ -2261,6 +2261,11 @@ Prefab:
       propertyPath: maxHeight
       value: 3.5
       objectReference: {fileID: 0}
+    - target: {fileID: 114716850650599006, guid: f59a1736ced72204cb512ebf9810c5aa,
+        type: 2}
+      propertyPath: maxDisplacement
+      value: 1.75
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f59a1736ced72204cb512ebf9810c5aa, type: 2}
   m_IsPrefabParent: 0
