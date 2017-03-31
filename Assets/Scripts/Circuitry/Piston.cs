@@ -25,6 +25,15 @@ public class Piston : MonoBehaviour
 
     private List<Splittable> splittables;
 
+    // Collisions info
+    // Maximum distance between raycasts, there can be less but no more
+    private const bool debugRaycasts = false;
+    private const float maxDistBetweenCasts = 0.5f;
+    private const float planeEpsilon = 0.0001f;
+    private const float raycastLength = 0.1f;
+    private int collLayerMask;
+    private List<Vector2> raycastOrigins = new List<Vector2>();
+
     private void Awake()
     {
         // Get sprite sizes
@@ -48,10 +57,31 @@ public class Piston : MonoBehaviour
 
         // Don't allow sounds for a moment so we don't spam them on spawn
         StartCoroutine(Unmute());
+
+        // We want a maximum distance between, so calculate how many we need
+        int castCount = Mathf.CeilToInt(headSize.x / maxDistBetweenCasts);
+        float distBetween = headSize.x / castCount;
+
+        // We want the raycasts to originate from just above the plane of the
+        // piston, calculate and then add a small epsilon. We add the head's
+        // yPos later to account for the head moving
+        float yOrigin = headSize.y / 2 + planeEpsilon;
+
+        // We want the list of ray casts to begin from the left side and then
+        // end on the right
+        float xOrigin = head.transform.localPosition.x - headSize.x / 2;
+
+        // Create raycasts for Gemma detection
+        // Do one extra for the right edge
+        for (int i = 0; i < castCount + 1; ++i)
+            raycastOrigins.Add(new Vector2(xOrigin + i * distBetween, yOrigin));
+
+        collLayerMask = LayerMask.GetMask("Character");
+        Debug.Assert(collLayerMask != 0,  "Character layer mask wasn't valid: " + collLayerMask);
     }
 
-    // Update is called once per frame
-    void Update ()
+    // FixedUpdate is called once per physics frame
+    void FixedUpdate ()
     {
         // Break when this is split
         foreach (var splittable in splittables)
@@ -66,9 +96,8 @@ public class Piston : MonoBehaviour
         float posDelta = 0;
 
         bool powered = bottom.GetComponent<Circuit>().powered;
-
-        //Use base.GetComponent<Circuit>().powered to use the power from a circuit
-        //if (Input.GetKey(KeyCode.RightBracket) && rod.transform.localScale.y < maxHeight)
+        
+        // If it's powered we move up
         if (powered)
         {
             float localPosY = head.transform.localPosition.y;
@@ -87,11 +116,9 @@ public class Piston : MonoBehaviour
             }
             // Equal to (or greater than, do nothing, but say we're not moving up
             else
-            {
                 movingUp = false;
-                posDelta = 0;
-            }
         }
+        // If it's not powered we move down
         else if (!powered)
         {
             // Unpowered, we're definitely not moving up
@@ -140,17 +167,46 @@ public class Piston : MonoBehaviour
 
             wasMoving = false;
         }
+
+        // Have we already moved Gemma this frame?
+        bool moved = false;
+        
+        // Find out if we should move Gemma
+        foreach (Vector2 orig in raycastOrigins)
+        {
+            // Transform the local origin to world origin. Add the head's
+            // current local y position.
+            Vector3 origin = new Vector3(orig.x, orig.y + head.transform.localPosition.y);
+            origin = transform.TransformPoint(origin);
+
+            // The length of the raycast, only goes in y direction, since we're
+            // working in local coords
+            Vector3 length = new Vector3(0, raycastLength);
+
+            // Rotate length to make end point
+            Quaternion rot = transform.rotation;
+            length = rot * length;
+            Vector3 end = origin + length;
+
+            // Piston raycast debug
+            if (debugRaycasts)
+                Debug.DrawLine(origin, end, Color.magenta, 0, true);
+
+            // Do actual line casts
+            if (!moved && movingUp)
+            {
+                RaycastHit2D hit = Physics2D.Linecast(origin, end, layerMask: collLayerMask);
+                if (hit.transform != null) {
+                    // Make a speed vector to add to Gemma's transform
+                    Vector3 speedVec = new Vector3(0, speed, 0);
+                    Vector3 rotSpeed = rot * speedVec;
+
+                    hit.transform.position += rotSpeed;
+                    moved = true;
+                }
+            }
+        }
 	}
-
-    public bool IsMovingUp()
-    {
-        return movingUp;
-    }
-
-    public float GetSpeed()
-    {
-        return speed;
-    }
 
     public IEnumerator Unmute()
     {
