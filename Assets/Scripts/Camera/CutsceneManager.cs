@@ -99,7 +99,7 @@ public class CutsceneManager : MonoBehaviour {
         }
 
         // If the text has gone through, wait for the player to hit enter before finishing the text
-        if (startedText && !GemmaTT.isTextDone() && Input.GetKeyDown(KeyCode.Return))
+        if (startedText && !GemmaTT.isTextDone() && (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.E)))
         {
             startedText = false;
             GemmaTextBubble.SetActive(false);

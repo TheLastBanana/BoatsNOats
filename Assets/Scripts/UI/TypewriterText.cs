@@ -182,8 +182,17 @@ public class TypewriterText : MonoBehaviour {
     private TextAsset dialogFile = null;
     List<Dialog> dialogs = new List<Dialog>();
     bool started = false;
+    bool skipText = false;
 
     Voice voice;
+
+    void Update()
+    {
+        if (!started)
+            skipText = false;
+        else if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.E))
+            skipText = true;
+    }
 
     // Figure out how to parse a tag string and return an appropriate tag while adding it to the dialog
     private Tag addTag(ref Dialog dia, string tagString, int start, int end)
@@ -428,8 +437,9 @@ public class TypewriterText : MonoBehaviour {
             // Update the text
             text.text = line;
 
-            // Delay the correct amount before our next string
-            yield return new WaitForSeconds(activeSTags.Peek().speed);
+            // Delay the correct amount before our next string, if the user hasn't skipped
+            if (!skipText)
+                yield return new WaitForSeconds(activeSTags.Peek().speed);
         }
 
         if (voice != null)
