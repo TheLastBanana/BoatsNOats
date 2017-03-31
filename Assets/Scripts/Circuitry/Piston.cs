@@ -8,7 +8,7 @@ public class Piston : MonoBehaviour
     public GameObject head;
     public GameObject rod;
     public GameObject bottom;
-    public float maxHeight;
+    public float maxDisplacement;
 
     public AudioSource startSound;
     public AudioSource loopSound;
@@ -18,6 +18,7 @@ public class Piston : MonoBehaviour
     private Vector3 rodSize;
     private Vector3 headSize;
     private float headMin;
+    private float headMax;
     private float speed;
     private bool movingUp;
     private bool wasMoving = false;
@@ -41,8 +42,9 @@ public class Piston : MonoBehaviour
         rodSize = rod.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.bounds.size;
         headSize = head.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.bounds.size;
 
-        // Head minimum
+        // Head places
         headMin = botSize.y / 2 + headSize.y / 2;
+        headMax = headMin + maxDisplacement;
         
         // Speed is arbitrarily a fifth of the head size I guess
         speed = headSize.y / 5;
@@ -103,16 +105,16 @@ public class Piston : MonoBehaviour
             float localPosY = head.transform.localPosition.y;
 
             // Still got at least one more tick before we hit max
-            if (localPosY < maxHeight - speed)
+            if (localPosY < headMax - speed)
             {
                 movingUp = true;
                 posDelta = speed;
             }
             // We're within speed distance of max, so move that much
-            else if (localPosY < maxHeight)
+            else if (localPosY < headMax)
             {
                 movingUp = true;
-                posDelta = maxHeight - localPosY;
+                posDelta = headMax - localPosY;
             }
             // Equal to (or greater than, do nothing, but say we're not moving up
             else
