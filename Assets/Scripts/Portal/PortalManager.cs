@@ -81,24 +81,7 @@ public class PortalManager : MonoBehaviour
             afx.cancelEffects(portalDragSound);
             afx.cancelEffects(altWorldAmbience);
 
-            cutsceneManager.DisableGemma(true);
-
-            // Disable physics and animation
-            foreach (var physicsObject in FindObjectsOfType<Rigidbody2D>())
-                physicsObject.simulated = false;
-
-            foreach (var animator in FindObjectsOfType<Animator>())
-                animator.enabled = false;
-
-            foreach (var button in FindObjectsOfType<Button>())
-                button.GetComponent<PolygonCollider2D>().enabled = false;
-
-            foreach (var piston in FindObjectsOfType<Piston>())
-                piston.enabled = false;
-
-            foreach (var robot in FindObjectsOfType<RobotAI>())
-                robot.enabled = false;
-
+            freeze();
         }
 
         // Here we update the secondary position of the portal while we're 
@@ -179,6 +162,28 @@ public class PortalManager : MonoBehaviour
             altWorldAmbienceLPF.enabled = true;
             altWorldAmbienceLPF.cutoffFrequency = Mathf.Lerp(dragLpfLow, dragLpfHigh, sizeFactor);
         }
+    }
+
+    // Freeze time while portal is being dragged
+    void freeze()
+    {
+        cutsceneManager.DisableGemma(true);
+
+        // Disable physics and animation
+        foreach (var physicsObject in FindObjectsOfType<Rigidbody2D>())
+            physicsObject.simulated = false;
+
+        foreach (var animator in FindObjectsOfType<Animator>())
+            animator.enabled = false;
+
+        foreach (var button in FindObjectsOfType<Button>())
+            button.GetComponent<PolygonCollider2D>().enabled = false;
+
+        foreach (var piston in FindObjectsOfType<Piston>())
+            piston.enabled = false;
+
+        foreach (var robot in FindObjectsOfType<RobotAI>())
+            robot.enabled = false;
     }
 
     // Unfreeze time after portal is opened
