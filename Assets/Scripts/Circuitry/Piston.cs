@@ -10,12 +10,18 @@ public class Piston : MonoBehaviour
     public GameObject bottom;
     public float maxHeight;
 
+    public AudioSource startSound;
+    public AudioSource loopSound;
+    public AudioSource endSound;
+
     private Vector3 botSize;
     private Vector3 rodSize;
     private Vector3 headSize;
     private float headMin;
     private float speed;
     private bool movingUp;
+    private bool wasMoving = false;
+    private bool muted = true;
 
     private List<Splittable> splittables;
 
@@ -39,6 +45,9 @@ public class Piston : MonoBehaviour
         if (splittable != null) splittables.Add(splittable);
 
         splittables.AddRange(transform.GetComponentsInChildren<Splittable>());
+
+        // Don't allow sounds for a moment so we don't spam them on spawn
+        StartCoroutine(Unmute());
     }
 
     // Update is called once per frame
@@ -56,9 +65,11 @@ public class Piston : MonoBehaviour
 
         float posDelta = 0;
 
+        bool powered = bottom.GetComponent<Circuit>().powered;
+
         //Use base.GetComponent<Circuit>().powered to use the power from a circuit
         //if (Input.GetKey(KeyCode.RightBracket) && rod.transform.localScale.y < maxHeight)
-        if (bottom.GetComponent<Circuit>().powered)
+        if (powered)
         {
             float localPosY = head.transform.localPosition.y;
 
@@ -81,7 +92,7 @@ public class Piston : MonoBehaviour
                 posDelta = 0;
             }
         }
-        else if (!bottom.GetComponent<Circuit>().powered)
+        else if (!powered)
         {
             // Unpowered, we're definitely not moving up
             movingUp = false;
@@ -108,6 +119,26 @@ public class Piston : MonoBehaviour
             Vector3 rodScale = rod.transform.localScale;
             rodScale.y = (headPos.y - headMin) / rodSize.y;
             rod.transform.localScale = rodScale;
+
+            // Make movement sounds
+            if (!muted && !wasMoving)
+            {
+                startSound.Play();
+                loopSound.Play();
+            }
+
+            wasMoving = true;
+        }
+        else
+        {
+            // Stop movement sounds
+            if (!muted && wasMoving)
+            {
+                endSound.Play();
+                loopSound.Stop();
+            }
+
+            wasMoving = false;
         }
 	}
 
@@ -119,5 +150,11 @@ public class Piston : MonoBehaviour
     public float GetSpeed()
     {
         return speed;
+    }
+
+    public IEnumerator Unmute()
+    {
+        yield return new WaitForSeconds(0.1f);
+        muted = false;
     }
 }
