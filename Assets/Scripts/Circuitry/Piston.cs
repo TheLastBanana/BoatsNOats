@@ -9,6 +9,7 @@ public class Piston : MonoBehaviour
     public GameObject rod;
     public GameObject bottom;
     public float maxDisplacement;
+    public bool startExtended;
 
     public AudioSource startSound;
     public AudioSource loopSound;
@@ -78,8 +79,21 @@ public class Piston : MonoBehaviour
         for (int i = 0; i < castCount + 1; ++i)
             raycastOrigins.Add(new Vector2(xOrigin + i * distBetween, yOrigin));
 
+        // Get collision mask for character
         collLayerMask = LayerMask.GetMask("Character");
         Debug.Assert(collLayerMask != 0,  "Character layer mask wasn't valid: " + collLayerMask);
+
+        // Should we start extended
+        if (startExtended)
+        { 
+            Vector3 headPos = head.transform.localPosition;
+            headPos.y += maxDisplacement;
+            head.transform.localPosition = headPos;
+
+            Vector3 rodScale = rod.transform.localScale;
+            rodScale.y = (headPos.y - headMin) / rodSize.y;
+            rod.transform.localScale = rodScale;
+        }
     }
 
     // FixedUpdate is called once per physics frame
