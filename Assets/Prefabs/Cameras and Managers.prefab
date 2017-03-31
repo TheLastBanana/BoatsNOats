@@ -222,6 +222,22 @@ GameObject:
   - component: {fileID: 124682289506723866}
   m_Layer: 0
   m_Name: Alternate Camera
+  m_TagString: MainCamera
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1369507167486050
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4692549287946644}
+  - component: {fileID: 20819030439689414}
+  m_Layer: 0
+  m_Name: Front of Portal Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -570,7 +586,8 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 72.485596, y: 5.9499993, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 4692549287946644}
   m_Father: {fileID: 4208140298275026}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -757,6 +774,19 @@ Transform:
   m_Father: {fileID: 4731459790165294}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4692549287946644
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1369507167486050}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4117993554545570}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4731459790165294
 Transform:
   m_ObjectHideFlags: 1
@@ -938,7 +968,7 @@ Camera:
   m_GameObject: {fileID: 1543284928492214}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 2
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
@@ -972,7 +1002,7 @@ Camera:
   m_GameObject: {fileID: 1361433285267002}
   m_Enabled: 0
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 2
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
@@ -988,7 +1018,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967039
+    m_Bits: 4294965471
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -1006,7 +1036,7 @@ Camera:
   m_GameObject: {fileID: 1243738114671196}
   m_Enabled: 0
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 2
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
@@ -1059,6 +1089,40 @@ Camera:
     m_Bits: 256
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: f72a041b2df0830479dce34fd9d136dd, type: 2}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+  m_StereoMirrorMode: 0
+--- !u!20 &20819030439689414
+Camera:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1369507167486050}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 3
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 1
+  orthographic size: 8
+  m_Depth: 1
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 1568
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 0
@@ -1881,7 +1945,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d0e109ce0ca81b488bbaf18d37527b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 54, y: 0, z: 0}
+  offset: {x: 79, y: 0, z: 0}
 --- !u!114 &114579673784047766
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1920,10 +1984,12 @@ MonoBehaviour:
   dragPitchLow: 1
   dragPitchHigh: 2
   mainCam: {fileID: 20267623948367186}
+  altCam: {fileID: 20490272858795104}
   portalCam: {fileID: 20577989380547642}
   offs: {fileID: 114537670656804216}
   circuitManager: {fileID: 114602999871736272}
   cutsceneManager: {fileID: 114697566736478712}
+  cameraSwitcher: {fileID: 114359994334603174}
   portalParticlePrefab: {fileID: 1940903776598654, guid: 135be248ea11c454d999066952663673,
     type: 2}
   portalFlashPrefab: {fileID: 1588745804119268, guid: 5a3878f26abc6a040b024cff129d7ab3,
@@ -1979,6 +2045,7 @@ MonoBehaviour:
   controls: {fileID: 114232900420386978}
   Gemma: {fileID: 0}
   Al: {fileID: 0}
+  readyToEndPan: 0
 --- !u!114 &114717450731081886
 MonoBehaviour:
   m_ObjectHideFlags: 1

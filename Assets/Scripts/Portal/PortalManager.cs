@@ -21,10 +21,12 @@ public class PortalManager : MonoBehaviour
 
     // World info
     public Camera mainCam;
+    public Camera altCam;
     public Camera portalCam;
     public WorldOffsets offs;
     public CircuitManager circuitManager;
     public CutsceneManager cutsceneManager;
+    public CameraSwitcher cameraSwitcher;
 
     // Effects
     public GameObject portalParticlePrefab;
@@ -51,6 +53,7 @@ public class PortalManager : MonoBehaviour
 
     AudioEffects afx;
     PortalEffect portalEffect;
+    GameControls controls;
     private bool disabled;
 
     // Use this for initialization
@@ -124,6 +127,9 @@ public class PortalManager : MonoBehaviour
             Mathf.Max(Mathf.Abs(movingPortalRect.size.y), minimumPortalSize)
         );
         portalRect.center = movingPortalRect.center; // Need to re-set this in case size was changed
+
+        if (cameraSwitcher.switched) portalRect.center += (Vector2) offs.offset;
+
         portalEffect.portalShape = portalRect;
         
         // If we let go of the left mouse button, end selection
@@ -146,7 +152,9 @@ public class PortalManager : MonoBehaviour
             flash.GetComponent<PortalTransferEffect>().startScale = portalRect.size;
 
             // Do the portal transfer
-            StartCoroutine(portalTransfer(portalRect.min, portalRect.max, true));
+            var transferRect = new Rect(portalRect);
+            if (cameraSwitcher.switched) transferRect.center -= (Vector2) offs.offset;
+            StartCoroutine(portalTransfer(transferRect.min, transferRect.max, true));
         }
 
         if (isSelecting)
@@ -161,6 +169,54 @@ public class PortalManager : MonoBehaviour
             // Update low-pass filter on alternate world ambience
             altWorldAmbienceLPF.enabled = true;
             altWorldAmbienceLPF.cutoffFrequency = Mathf.Lerp(dragLpfLow, dragLpfHigh, sizeFactor);
+        }
+
+        if (isSelecting || isTransferring)
+        {
+            var currentCam = cameraSwitcher.switched ? altCam : mainCam;
+
+            // Get camera resolution
+            Vector2 camRes = new Vector2(currentCam.pixelWidth, currentCam.pixelHeight);
+
+            var portRectPos1 = new Vector3(portalRect.xMin, portalRect.yMin);
+            var portRectPos2 = new Vector3(portalRect.xMax, portalRect.yMax);
+
+            // Get the screen positions of the two points
+            Vector2 screenPos1 = currentCam.WorldToScreenPoint(portRectPos1);
+            Vector2 screenPos2 = currentCam.WorldToScreenPoint(portRectPos2);
+
+            // Convert to min and max points
+            Vector2 minPos = Vector2.Min(screenPos1, screenPos2);
+            Vector2 maxPos = Vector2.Max(screenPos1, screenPos2);
+
+            minPos.x /= camRes.x;
+            minPos.y /= camRes.y;
+            maxPos.x /= camRes.x;
+            maxPos.y /= camRes.y;
+
+            Rect newRect = new Rect(minPos, maxPos - minPos);
+
+            // Out of bounds, so don't try to move the camera here
+            if (newRect.xMax < 0 || newRect.xMin > 1 || newRect.yMax < 0 || newRect.yMin > 1
+                || newRect.width == 0 || newRect.height == 0)
+            {
+                return;
+            }
+
+            // Change portal size
+            portalCam.orthographicSize = Mathf.Abs(portalRect.height) / 2;
+            portalCam.rect = newRect;
+
+            // Change portal position
+            portalCam.transform.position = new Vector3(portalRect.center.x, portalRect.center.y, -10);
+            if (!cameraSwitcher.switched)
+            {
+                portalCam.transform.position += offs.offset;
+            }
+            else
+            {
+                portalCam.transform.position -= offs.offset;
+            }
         }
     }
 
@@ -404,48 +460,6 @@ public class PortalManager : MonoBehaviour
 
         if (selectableObject != null)
             selectableObject.SendMessage("OnSplitMergeFinished", null, SendMessageOptions.DontRequireReceiver);
-    }
-
-    void OnRenderObject()
-    {
-        if (isSelecting || isTransferring)
-        {
-            // Get camera resolution
-            Vector2 camRes = new Vector2(mainCam.pixelWidth, mainCam.pixelHeight);
-
-            var portRectPos1 = new Vector3(portalRect.xMin, portalRect.yMin);
-            var portRectPos2 = new Vector3(portalRect.xMax, portalRect.yMax);
-
-            // Get the screen positions of the two points
-            Vector2 screenPos1 = mainCam.WorldToScreenPoint(portRectPos1);
-            Vector2 screenPos2 = mainCam.WorldToScreenPoint(portRectPos2);
-
-            // Convert to min and max points
-            Vector2 minPos = Vector2.Min(screenPos1, screenPos2);
-            Vector2 maxPos = Vector2.Max(screenPos1, screenPos2);
-
-            minPos.x /= camRes.x;
-            minPos.y /= camRes.y;
-            maxPos.x /= camRes.x;
-            maxPos.y /= camRes.y;
-
-            Rect newRect = new Rect(minPos, maxPos - minPos);
-
-            if (newRect.xMax < 0 || newRect.xMin > 1 || newRect.yMax < 0 || newRect.yMin > 1
-                || newRect.width == 0 || newRect.height == 0)
-            {
-                return;
-            }
-
-            // Change portal size
-            portalCam.orthographicSize = Mathf.Abs(portalRect.height) / 2;
-            portalCam.rect = newRect;
-
-            // Change portal position
-            portalCam.transform.position =
-                new Vector3(portalRect.center.x, portalRect.center.y, - 10) + offs.offset;
-
-        }
     }
 
     // Stop player from activating portals, used during cutscene and before Gemma gets artifact
