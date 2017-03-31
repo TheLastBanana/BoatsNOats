@@ -20,7 +20,7 @@ public class GameControls : MonoBehaviour {
 
     public bool GemmaJump()
     {
-        return (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W));
+        return (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.W));
     }
 
     // For one way platforms, which are in the Player Controller, but aren't used in our game
@@ -40,12 +40,12 @@ public class GameControls : MonoBehaviour {
 
     public bool SkipDialogue()
     {
-        return (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.E));
+        return (Input.GetKey(KeyCode.Return) || Input.GetKey(KeyCode.E));
     }
 
     public bool RestartLevel()
     {
-        return Input.GetKeyDown(KeyCode.R);
+        return Input.GetKey(KeyCode.R);
     }
 
     public bool QuitGame()
