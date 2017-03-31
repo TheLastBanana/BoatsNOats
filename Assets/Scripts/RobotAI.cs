@@ -26,7 +26,6 @@ public class RobotAI : MonoBehaviour {
     bool paused = false;
     bool wasPaused = false;
     Vector3 bumpEffectPos;
-    Coroutine currentTurn = null;
 
     // Use this for initialization
     void Awake()
@@ -144,7 +143,7 @@ public class RobotAI : MonoBehaviour {
     {
         wasPaused = paused = true;
 
-        currentTurn = StartCoroutine(TurnCoroutine(time));
+        StartCoroutine(TurnCoroutine(time));
     }
 
     void DisableRollEffects()
