@@ -9,6 +9,7 @@ public class CameraSwitcher : MonoBehaviour
     public Camera cMain;
     public Camera cAlt;
     public Camera cChar;
+    public GameControls controls;
 
     bool switched;
     private bool inCutscene;
@@ -23,7 +24,7 @@ public class CameraSwitcher : MonoBehaviour
 
     // Update is called once per frame
     void Update () {
-		if (!switched && Input.GetKeyDown(KeyCode.Tab) && !inCutscene)
+		if (!switched && controls.CheckOtherWorld(true) && !inCutscene)
         {
             cMain.enabled = false;
             cChar.enabled = false;
@@ -33,7 +34,7 @@ public class CameraSwitcher : MonoBehaviour
             afx.cancelEffects(altWorldAmbience);
             altWorldAmbience.Play();
         }
-        else if ((switched && Input.GetKeyUp(KeyCode.Tab)) || (switched && inCutscene))
+        else if ((switched && controls.CheckOtherWorld(false)) || (switched && inCutscene))
         {
             cMain.enabled = true;
             cChar.enabled = true;

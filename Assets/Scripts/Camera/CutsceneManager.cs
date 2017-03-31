@@ -16,6 +16,7 @@ public class CutsceneManager : MonoBehaviour {
     private CameraTracker cameraTracker;
     private CameraPanner cameraPanner;
     public PortalManager portalManager;
+    public GameControls controls;
 
     public GameObject Gemma;
     private PlayerController playerController;
@@ -98,8 +99,8 @@ public class CutsceneManager : MonoBehaviour {
             GemmaTT.startText(currentText);
         }
 
-        // If the text has gone through, wait for the player to hit enter before finishing the text
-        if (startedText && !GemmaTT.isTextDone() && (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.E)))
+        // If the text has gone through, wait for the player to hit a skip key before finishing the text
+        if (startedText && !GemmaTT.isTextDone() && controls.SkipDialogue())
         {
             startedText = false;
             GemmaTextBubble.SetActive(false);

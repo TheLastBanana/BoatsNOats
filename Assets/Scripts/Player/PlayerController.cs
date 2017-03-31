@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
 	private RaycastHit2D _lastControllerColliderHit;
 	private Vector3 _velocity;
     private Transform canvasTransform;
+    public GameControls controls;
 
     private bool inputDisabled;
     private bool portalSelecting;
@@ -89,13 +90,13 @@ public class PlayerController : MonoBehaviour
             _animator.SetBool("Ground", true);
         }
 
-        if ( Input.GetKey( KeyCode.D ) && !inputDisabled)
+        if (controls.GemmaRight() && !inputDisabled)
 		{
 			normalizedHorizontalSpeed = 1;
             if (transform.localScale.x > 0f)
                 FlipGemma();
 		}
-		else if( Input.GetKey( KeyCode.A ) && !inputDisabled)
+		else if (controls.GemmaLeft() && !inputDisabled)
 		{
 			normalizedHorizontalSpeed = -1;
 			if( transform.localScale.x < 0f )
@@ -107,8 +108,8 @@ public class PlayerController : MonoBehaviour
 		}
 
 
-		// we can only jump whilst grounded
-		if( _controller.isGrounded && (Input.GetKeyDown( KeyCode.Space ) || Input.GetKeyDown( KeyCode.W )) && !inputDisabled)
+        // we can only jump whilst grounded
+        if (_controller.isGrounded && controls.GemmaJump() && !inputDisabled)
 		{
 			_velocity.y = Mathf.Sqrt( 2f * jumpHeight * -gravity );
             _sound.PlayJumpEffect();
@@ -125,7 +126,7 @@ public class PlayerController : MonoBehaviour
 
 		// if holding down bump up our movement amount and turn off one way platform detection for a frame.
 		// this lets us jump down through one way platforms
-		if( _controller.isGrounded && Input.GetKey( KeyCode.S ) && !inputDisabled)
+		if( _controller.isGrounded && controls.GemmaMoveDown() && !inputDisabled)
 		{
 			_velocity.y *= 3f;
 			_controller.ignoreOneWayPlatformsThisFrame = true;

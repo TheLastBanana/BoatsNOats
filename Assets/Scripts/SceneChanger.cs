@@ -8,6 +8,7 @@ public class SceneChanger : MonoBehaviour
 {
     public CutsceneManager cutsceneManager;
     private CutsceneInfo cutsceneInfo;
+    public GameControls controls;
 
     private int currentScene;
     private int nextScene;
@@ -27,13 +28,13 @@ public class SceneChanger : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (controls.RestartLevel())
             DoLoadScene(currentScene, false);
 
         if (loadNextScene)
             DoLoadScene(nextScene, true);
 
-        if (Input.GetKey("escape"))
+        if (controls.QuitGame())
         {
             if (UnityEditor.EditorApplication.isPlaying)
             {

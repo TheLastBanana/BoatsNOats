@@ -177,6 +177,7 @@ class Dialog
 
 public class TypewriterText : MonoBehaviour {
     public CutsceneManager cutsceneManager;
+    public GameControls controls;
 
     Text text;
     private TextAsset dialogFile = null;
@@ -190,7 +191,7 @@ public class TypewriterText : MonoBehaviour {
     {
         if (!started)
             skipText = false;
-        else if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.E))
+        else if (controls.SkipDialogue())
             skipText = true;
     }
 

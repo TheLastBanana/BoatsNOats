@@ -229,6 +229,16 @@ Prefab:
       propertyPath: cutsceneManager
       value: 
       objectReference: {fileID: 2139768627}
+    - target: {fileID: 114094537650083764, guid: c86eda601f8a9cc40b2f7577bccf4596,
+        type: 2}
+      propertyPath: controls
+      value: 
+      objectReference: {fileID: 1825762171}
+    - target: {fileID: 114348896398289756, guid: c86eda601f8a9cc40b2f7577bccf4596,
+        type: 2}
+      propertyPath: controls
+      value: 
+      objectReference: {fileID: 1825762171}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c86eda601f8a9cc40b2f7577bccf4596, type: 2}
   m_IsPrefabParent: 0
@@ -2351,6 +2361,12 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 06d7fe0b7b7ba4844835d6b3b4400e43, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &1825762171 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114232900420386978, guid: 06d7fe0b7b7ba4844835d6b3b4400e43,
+    type: 2}
+  m_PrefabInternal: {fileID: 1825762170}
+  m_Script: {fileID: 11500000, guid: ece82e20d4eba954d8b1572fcc51ffe4, type: 3}
 --- !u!1001 &1871598615
 Prefab:
   m_ObjectHideFlags: 0

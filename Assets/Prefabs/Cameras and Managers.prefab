@@ -442,6 +442,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1883434245971094
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4388336217526142}
+  - component: {fileID: 114232900420386978}
+  m_Layer: 0
+  m_Name: GameControls
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1922251952000814
 GameObject:
   m_ObjectHideFlags: 1
@@ -604,8 +620,22 @@ Transform:
   - {fileID: 4833819193951284}
   - {fileID: 4554798081872868}
   - {fileID: 4436254974517000}
+  - {fileID: 4388336217526142}
   m_Father: {fileID: 4574163563861742}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4388336217526142
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1883434245971094}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4309580097185996}
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4436254974517000
 Transform:
@@ -1785,6 +1815,17 @@ MonoBehaviour:
   lpfChangeTime: 0.01
   baseVolume: 0.6
   muffleVolume: 0.6
+--- !u!114 &114232900420386978
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1883434245971094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ece82e20d4eba954d8b1572fcc51ffe4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114274874089878240
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1814,6 +1855,7 @@ MonoBehaviour:
   cMain: {fileID: 20267623948367186}
   cAlt: {fileID: 20490272858795104}
   cChar: {fileID: 20167617518070488}
+  controls: {fileID: 114232900420386978}
 --- !u!114 &114474600437796694
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1934,6 +1976,7 @@ MonoBehaviour:
   sceneMid3: {fileID: 1788449416716200}
   cameraManager: {fileID: 1065581217306714}
   portalManager: {fileID: 114580626449500856}
+  controls: {fileID: 114232900420386978}
   Gemma: {fileID: 0}
   Al: {fileID: 0}
 --- !u!114 &114717450731081886
@@ -1948,6 +1991,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cutsceneManager: {fileID: 114697566736478712}
+  controls: {fileID: 114232900420386978}
 --- !u!114 &114725031805864312
 MonoBehaviour:
   m_ObjectHideFlags: 1
