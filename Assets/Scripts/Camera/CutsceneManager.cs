@@ -36,14 +36,17 @@ public class CutsceneManager : MonoBehaviour {
 
     private int currentText;
     private int numTexts;
-    private CameraPanInfo currentPan;
+    private CameraPanInfo previousPan;
 
     private bool runningCutscene;
     private bool startedText;
-    private bool endCutscene;
+    Queue<CameraPanInfo> pans;
+    private bool startedPan;
+    public bool readyToEndPan;
+    private bool endCutscene; // Last cutscene in the level, will do scene transition after
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         cameraSwitcher = cameraManager.GetComponent<CameraSwitcher>();
         cameraTracker = cameraManager.GetComponent<CameraTracker>();
         cameraPanner = cameraManager.GetComponent<CameraPanner>();
@@ -74,10 +77,13 @@ public class CutsceneManager : MonoBehaviour {
 
         currentText = -1;
         numTexts = 0;
-        currentPan = new CameraPanInfo(null, Gemma, 0f, 0f);
+        previousPan = new CameraPanInfo(null, Gemma, 0f, 0f);
 
         runningCutscene = false;
         startedText = false;
+        pans = new Queue<CameraPanInfo>();
+        startedPan = false;
+        readyToEndPan = false;
         endCutscene = false;
 	}
 	
@@ -91,8 +97,12 @@ public class CutsceneManager : MonoBehaviour {
         if (!runningCutscene)
             return;
 
-        // Start the next text if we're not currently doing one and the previous has been finished
-        if (!GemmaTT.isTextDone() && !startedText)
+        // If we're not in a text or pan, waiting for player input at the end of a pan, and there is a pan to do
+        if (!startedText && !startedPan && !readyToEndPan && pans.Count > 0)
+            StartPan();
+
+        // Start the next text if we're not currently doing one, the previous has been finished, and we're not panning or waiting on a finished pan
+        if (!GemmaTT.isTextDone() && !startedText && !startedPan && !readyToEndPan)
         {
             startedText = true;
             GemmaTextBubble.SetActive(true);
@@ -102,11 +112,25 @@ public class CutsceneManager : MonoBehaviour {
         // If the text has gone through, wait for the player to hit a skip key before finishing the text
         if (startedText && !GemmaTT.isTextDone() && controls.SkipDialogue())
         {
+            controls.SkipDialogueSuccessful();
             startedText = false;
             GemmaTextBubble.SetActive(false);
             currentText += 1;
         }
 
+        // Let the player skip a pan
+        if (startedPan && controls.SkipDialogue())
+        {
+            controls.SkipDialogueSuccessful();
+            EndPan();
+        }
+
+        // Pan is finished, so wait for player input before moving on
+        if (readyToEndPan && controls.SkipDialogue())
+        {
+            controls.SkipDialogueSuccessful();
+            readyToEndPan = false;
+        }
     }
 
     public void RunCutscene (TextAsset textFile)
@@ -132,7 +156,8 @@ public class CutsceneManager : MonoBehaviour {
         // Reset info about the cutscene to a "no cutscene" state
         currentText = -1;
         numTexts = 0;
-        currentPan = new CameraPanInfo(null, Gemma, 0f, 0f);
+        previousPan = new CameraPanInfo(null, Gemma, 0f, 0f);
+        pans.Clear();
 
         // Resume player control
         runningCutscene = false;
@@ -146,7 +171,7 @@ public class CutsceneManager : MonoBehaviour {
             sceneTransition.GetComponent<SceneChanger>().SetLoadNextScene();
     }
 
-    public void StartPan(string objName, float delay)
+    public void QueuePan(string objName, float delay)
     {
         objName = objName.ToLower();
         GameObject to = null;
@@ -165,18 +190,29 @@ public class CutsceneManager : MonoBehaviour {
         else if (objName == "mid3")
             to = sceneMid3;
 
-        // Assume the old pan to target is where we're panning from
-        currentPan = new CameraPanInfo(currentPan.to, to, Time.time, delay);
+        // Assume the previous pan to target is where we're panning from
+        previousPan = new CameraPanInfo(previousPan.to, to, 0f, delay);
+        pans.Enqueue(previousPan);
+    }
+
+    private void StartPan()
+    {
+        startedPan = true;
+        CameraPanInfo nextPan = pans.Dequeue();
+        nextPan.startTime = Time.time;
 
         // Switch camera scripts
         cameraTracker.enabled = false;
-        cameraTracker.UpdateTarget(to);
+        cameraTracker.UpdateTarget(nextPan.to);
         cameraPanner.enabled = true;
-        cameraPanner.currentPan = currentPan;
+        cameraPanner.currentPan = nextPan;
     }
 
     public void EndPan()
     {
+        startedPan = false;
+        readyToEndPan = true;
+
         // Switch camera scripts
         cameraTracker.enabled = true;
         cameraPanner.enabled = false;

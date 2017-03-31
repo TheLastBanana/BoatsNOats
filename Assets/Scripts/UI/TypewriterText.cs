@@ -192,7 +192,10 @@ public class TypewriterText : MonoBehaviour {
         if (!started)
             skipText = false;
         else if (controls.SkipDialogue())
+        {
+            controls.SkipDialogueSuccessful();
             skipText = true;
+        }
     }
 
     // Figure out how to parse a tag string and return an appropriate tag while adding it to the dialog
@@ -485,7 +488,7 @@ public class TypewriterText : MonoBehaviour {
     // Call to CutsceneManager to start a pan
     private void startPan(PanTag tag)
     {
-        cutsceneManager.StartPan(tag.objName, tag.delay);
+        cutsceneManager.QueuePan(tag.objName, tag.delay);
     }
 
     // Check if the text is done animating
