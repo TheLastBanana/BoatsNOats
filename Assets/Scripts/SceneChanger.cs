@@ -36,13 +36,18 @@ public class SceneChanger : MonoBehaviour
 
         if (controls.QuitGame())
         {
-            if (UnityEditor.EditorApplication.isPlaying)
-            {
+            #if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;
-            }
-            else
-            {
-            }
+            #endif
+
+            #if UNITY_STANDALONE_OSX
+                Application.Quit();
+            #endif
+
+            #if UNITY_STANDALONE_WIN
+                Application.Quit();
+            #endif   
+            
                 
   
         }
