@@ -36,6 +36,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4436254974517000}
   - component: {fileID: 114697566736478712}
+  - component: {fileID: 114075216904178404}
   m_Layer: 0
   m_Name: CutsceneManager
   m_TagString: Untagged
@@ -1861,6 +1862,18 @@ Behaviour:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1543284928492214}
   m_Enabled: 1
+--- !u!114 &114075216904178404
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1025430578642472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b1e771e1c2550744b87cca2d8750a02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controls: {fileID: 114232900420386978}
 --- !u!114 &114214324677864962
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1945,7 +1958,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d0e109ce0ca81b488bbaf18d37527b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 79, y: 0, z: 0}
+  offset: {x: 54, y: 0, z: 0}
 --- !u!114 &114579673784047766
 MonoBehaviour:
   m_ObjectHideFlags: 1
