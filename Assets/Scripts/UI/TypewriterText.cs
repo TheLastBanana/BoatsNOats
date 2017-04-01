@@ -192,10 +192,7 @@ public class TypewriterText : MonoBehaviour {
         if (!started)
             skipText = false;
         else if (controls.SkipDialogue())
-        {
-            controls.SkipDialogueSuccessful();
             skipText = true;
-        }
     }
 
     // Figure out how to parse a tag string and return an appropriate tag while adding it to the dialog

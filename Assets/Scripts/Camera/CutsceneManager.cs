@@ -112,7 +112,6 @@ public class CutsceneManager : MonoBehaviour {
         // If the text has gone through, wait for the player to hit a skip key before finishing the text
         if (startedText && !GemmaTT.isTextDone() && controls.SkipDialogue())
         {
-            controls.SkipDialogueSuccessful();
             startedText = false;
             GemmaTextBubble.SetActive(false);
             currentText += 1;
@@ -120,17 +119,11 @@ public class CutsceneManager : MonoBehaviour {
 
         // Let the player skip a pan
         if (startedPan && controls.SkipDialogue())
-        {
-            controls.SkipDialogueSuccessful();
             EndPan();
-        }
 
         // Pan is finished, so wait for player input before moving on
         if (readyToEndPan && controls.SkipDialogue())
-        {
-            controls.SkipDialogueSuccessful();
             readyToEndPan = false;
-        }
     }
 
     public void RunCutscene (TextAsset textFile)

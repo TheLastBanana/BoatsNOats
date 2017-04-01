@@ -9,7 +9,6 @@ using UnityEngine;
 public class GameControls : MonoBehaviour {
 
     private float skipDialogueLast = 0f;
-    private bool skipDialogueReady = false;
 
     public bool GemmaLeft()
     {
@@ -41,23 +40,18 @@ public class GameControls : MonoBehaviour {
             return Input.GetKeyUp(key);
     }
 
-    // Must call GameControls.SkipDialogueSuccessful() after a press from this has been handled
     public bool SkipDialogue()
     {
-        // We don't want multiple presses from one physical press
+        // We don't want multiple presses from one physical press, this is also why GetKeyDown is used instead of GetKey
         if (Time.time - skipDialogueLast > 0.1f)
         {
             if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.E))
-                skipDialogueReady = true;
+            {
+                skipDialogueLast = Time.time;
+                return true;
+            }
         }
-        return skipDialogueReady;
-    }
-
-    // Must be called after handling a press from GameControls.SkipDialogue()
-    public void SkipDialogueSuccessful()
-    {
-        skipDialogueLast = Time.time;
-        skipDialogueReady = false;
+        return false;
     }
 
     public bool RestartLevel()
