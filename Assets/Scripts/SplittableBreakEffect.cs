@@ -18,6 +18,9 @@ public class SplittableBreakEffect : MonoBehaviour
 
             var effect = Instantiate(effectPrefab, transform, false);
             effect.transform.position = totalBounds.center;
+            effect.transform.localRotation = transform.rotation;
+
+            Debug.Log(effect.transform.eulerAngles);
 
             var size = totalBounds.extents;
             var localScale = splittable.transform.localScale;
