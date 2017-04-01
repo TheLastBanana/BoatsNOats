@@ -17,24 +17,23 @@ public class CutsceneManager : MonoBehaviour {
     private CameraPanner cameraPanner;
     public PortalManager portalManager;
     public GameControls controls;
+    private TypewriterText typewriterText;
 
+    // Gemma
     public GameObject Gemma;
     private PlayerController playerController;
-    public GameObject Al;
-
-    // Gemma's text stuff
-    private Canvas GemmaCanvas;
     private GameObject GemmaTextBubble;
     private Text GemmaText;
-    private TypewriterText GemmaTT;
 
-    // Al's text stuff
-    private Canvas AlCanvas;
+    // Al
+    public GameObject Al;
     private GameObject AlTextBubble;
     private Text AlText;
-    private TypewriterText AlTT;
 
-    private int currentText;
+    private GameObject currentTextBubble;
+    private Text currentText;
+
+    private int numTextCurrent;
     private int numTexts;
     private CameraPanInfo previousPan;
 
@@ -52,30 +51,23 @@ public class CutsceneManager : MonoBehaviour {
         cameraPanner = cameraManager.GetComponent<CameraPanner>();
         cameraTracker.enabled = true;
         cameraPanner.enabled = false;
+        typewriterText = GetComponent<TypewriterText>();
 
+        // Grab Gemma's stuff
         playerController = Gemma.GetComponent<PlayerController>();
+        GemmaTextBubble = Gemma.GetComponentInChildren<Canvas>(true).transform.FindChild("GemmaTextBubble").gameObject;
+        GemmaText = GemmaTextBubble.GetComponentInChildren<Text>(true);
+        GemmaTextBubble.SetActive(false);
 
-        // Grab Gemma's text stuff
-        if (Gemma != null)
-        {
-            GemmaCanvas = Gemma.GetComponentInChildren<Canvas>(true);
-            GemmaTextBubble = GemmaCanvas.transform.FindChild("GemmaTextBubble").gameObject;
-            GemmaText = GemmaTextBubble.GetComponentInChildren<Text>(true);
-            GemmaTT = GemmaText.GetComponent<TypewriterText>();
-            GemmaTextBubble.SetActive(false);
-        }
-
-        // Grab Al's text stuff
+        // Grab Al's stuff
         if (Al != null)
         {
-            AlCanvas = Al.GetComponentInChildren<Canvas>(true);
-            AlTextBubble = AlCanvas.transform.FindChild("AlTextBubble").gameObject;
+            AlTextBubble = Al.GetComponentInChildren<Canvas>(true).transform.FindChild("AlTextBubble").gameObject;
             AlText = AlTextBubble.GetComponentInChildren<Text>(true);
-            AlTT = AlText.GetComponent<TypewriterText>();
             AlTextBubble.SetActive(false);
         }
 
-        currentText = -1;
+        numTextCurrent = -1;
         numTexts = 0;
         previousPan = new CameraPanInfo(null, Gemma, 0f, 0f);
 
@@ -85,12 +77,12 @@ public class CutsceneManager : MonoBehaviour {
         startedPan = false;
         readyToEndPan = false;
         endCutscene = false;
-	}
+    }
 	
 	// Update is called once per frame
 	void Update () {
         // Check if we've gone through all of the texts
-        if (currentText == numTexts)
+        if (numTextCurrent == numTexts)
             EndCutscene();
 
         // We're not in a cutscene
@@ -102,47 +94,36 @@ public class CutsceneManager : MonoBehaviour {
             StartPan();
 
         // Start the next text if we're not currently doing one, the previous has been finished, and we're not panning or waiting on a finished pan
-        if (!GemmaTT.isTextDone() && !startedText && !startedPan && !readyToEndPan)
+        if (!typewriterText.isTextDone() && !startedText && !startedPan && !readyToEndPan)
         {
+            DecideSpeaker();
             startedText = true;
-            GemmaTextBubble.SetActive(true);
-            GemmaTT.startText(currentText);
+            currentTextBubble.SetActive(true);
+            typewriterText.startText(numTextCurrent, currentText);
         }
 
         // If the text has gone through, wait for the player to hit a skip key before finishing the text
-        if (startedText && !GemmaTT.isTextDone() && controls.SkipDialogue())
+        if (startedText && !typewriterText.isTextDone() && controls.SkipDialogue())
         {
-            controls.SkipDialogueSuccessful();
             startedText = false;
-            GemmaTextBubble.SetActive(false);
-            currentText += 1;
+            currentTextBubble.SetActive(false);
+            numTextCurrent += 1;
         }
 
         // Let the player skip a pan
         if (startedPan && controls.SkipDialogue())
-        {
-            controls.SkipDialogueSuccessful();
             EndPan();
-        }
 
         // Pan is finished, so wait for player input before moving on
         if (readyToEndPan && controls.SkipDialogue())
-        {
-            controls.SkipDialogueSuccessful();
             readyToEndPan = false;
-        }
     }
 
-    public void RunCutscene (TextAsset textFile)
+    public void RunCutscene(TextAsset textFile)
     {
-        // TODO: Set up properly to handle more than just Gemma talking
-        if (GemmaTT != null)
-            GemmaTT.setText(textFile);
-        if (AlTT != null)
-            AlTT.setText(textFile);
-
-        currentText = 0;
-        numTexts = GemmaTT.numDialogsLoaded();
+        typewriterText.setTextFile(textFile);
+        numTextCurrent = 0;
+        numTexts = typewriterText.numDialogsLoaded();
 
         // Disable player control
         runningCutscene = true;
@@ -154,7 +135,7 @@ public class CutsceneManager : MonoBehaviour {
     private void EndCutscene()
     {
         // Reset info about the cutscene to a "no cutscene" state
-        currentText = -1;
+        numTextCurrent = -1;
         numTexts = 0;
         previousPan = new CameraPanInfo(null, Gemma, 0f, 0f);
         pans.Clear();
@@ -169,6 +150,13 @@ public class CutsceneManager : MonoBehaviour {
         // If this was the last cutscene in a level do a scene transition now
         if (endCutscene)
             sceneTransition.GetComponent<SceneChanger>().SetLoadNextScene();
+    }
+
+    // TODO: Properly determine speaker based on tag
+    private void DecideSpeaker()
+    {
+        currentTextBubble = GemmaTextBubble;
+        currentText = GemmaText;
     }
 
     public void QueuePan(string objName, float delay)

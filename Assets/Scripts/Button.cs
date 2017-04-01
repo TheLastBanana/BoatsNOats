@@ -5,6 +5,10 @@ using UnityEngine;
 public class Button : MonoBehaviour {
     public GameObject Source;
     private bool isOn;
+
+    public AudioSource onSound;
+    public AudioSource offSound;
+
     // Use this for initialization
     void Start() {
         isOn = false;
@@ -28,6 +32,7 @@ public class Button : MonoBehaviour {
         {
             transform.position = new Vector3(transform.position.x, transform.position.y - 0.2f, transform.position.z);
             Source.GetComponent<PowerSource>().isOn = true;
+            onSound.Play();
         }
         isOn = true;
     }
@@ -38,6 +43,7 @@ public class Button : MonoBehaviour {
         {
             transform.position = new Vector3(transform.position.x, transform.position.y + 0.2f, transform.position.z);
             Source.GetComponent<PowerSource>().isOn = false;
+            offSound.Play();
         }
         isOn = false;
     }

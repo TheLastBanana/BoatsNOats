@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4382438581803832}
   - component: {fileID: 212618368166645286}
-  - component: {fileID: 60847581548693874}
+  - component: {fileID: 60911897311805244}
   m_Layer: 0
   m_Name: Graphics
   m_TagString: Untagged
@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4046122447908382}
   - component: {fileID: 114383462217317510}
   m_Layer: 0
-  m_Name: Balcony Complete A
+  m_Name: Pillar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -71,7 +71,7 @@ Transform:
   m_Father: {fileID: 4046122447908382}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!60 &60847581548693874
+--- !u!60 &60911897311805244
 PolygonCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -85,10 +85,10 @@ PolygonCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Points:
     m_Paths:
-    - - {x: 3.192992, y: -0.92}
-      - {x: -3.5, y: -0.92}
-      - {x: -3.5, y: -1.21}
-      - {x: 3.4719918, y: -1.71}
+    - - {x: -0.325, y: 2.875}
+      - {x: -0.325, y: -3.065}
+      - {x: 0.325, y: -3.065}
+      - {x: 0.325, y: 3.065}
 --- !u!114 &114383462217317510
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -129,9 +129,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1414951245
+  m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 0c36b3728d1688849838c990da6d5299, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 62f239ca8e849c240ae784591d59d079, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

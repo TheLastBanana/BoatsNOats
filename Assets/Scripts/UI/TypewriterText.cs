@@ -176,10 +176,9 @@ class Dialog
 }
 
 public class TypewriterText : MonoBehaviour {
-    public CutsceneManager cutsceneManager;
+    private CutsceneManager cutsceneManager;
     public GameControls controls;
 
-    Text text;
     private TextAsset dialogFile = null;
     List<Dialog> dialogs = new List<Dialog>();
     bool started = false;
@@ -187,15 +186,17 @@ public class TypewriterText : MonoBehaviour {
 
     Voice voice;
 
+    void Start()
+    {
+        cutsceneManager = GetComponent<CutsceneManager>();
+    }
+
     void Update()
     {
         if (!started)
             skipText = false;
         else if (controls.SkipDialogue())
-        {
-            controls.SkipDialogueSuccessful();
             skipText = true;
-        }
     }
 
     // Figure out how to parse a tag string and return an appropriate tag while adding it to the dialog
@@ -361,11 +362,8 @@ public class TypewriterText : MonoBehaviour {
         }
     }
 	
-    IEnumerator AnimateText(int dialogNum)
+    IEnumerator AnimateText(int dialogNum, Text text)
     {
-        // Grab the text box, has to be done here due to the text bubble being activated and deactivated
-        text = GetComponent<Text>();
-
         string fullLine = dialogs[dialogNum].text; // The full text of this line
         List<FormatTag> fTags = dialogs[dialogNum].format; // The formatters for this line
         List<SpeedTag> sTags = dialogs[dialogNum].speeds;
@@ -462,7 +460,7 @@ public class TypewriterText : MonoBehaviour {
         if (voice != null)
             Destroy(voice.gameObject);
 
-        // Instantiate the new one fromt he resources folder
+        // Instantiate the new one from the resources folder
         Object prefab = Resources.Load("Voices/" + voiceName);
         GameObject newObj = Instantiate(prefab, transform) as GameObject;
 
@@ -471,17 +469,17 @@ public class TypewriterText : MonoBehaviour {
 
     // -------- Here lies the external interface
     // Set to xml text file
-    public void setText(TextAsset asset)
+    public void setTextFile(TextAsset asset)
     {
         dialogFile = asset;
         parseFile();
     }
 
     // Call to start animating the text
-    public void startText(int dialogNum)
+    public void startText(int dialogNum, Text text)
     {
         Debug.Log("Starting dialog number " + dialogNum);
-        StartCoroutine(AnimateText(dialogNum));
+        StartCoroutine(AnimateText(dialogNum, text));
         started = true;
     }
 

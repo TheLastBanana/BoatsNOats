@@ -268,7 +268,6 @@ GameObject:
   - component: {fileID: 224936284628540608}
   - component: {fileID: 222778184411509546}
   - component: {fileID: 114649883462147012}
-  - component: {fileID: 114094537650083764}
   m_Layer: 5
   m_Name: GemmaText
   m_TagString: Untagged
@@ -727,7 +726,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1359047794276204}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7, y: 12.42, z: 0}
+  m_LocalPosition: {x: -37.95, y: 3.76, z: 0}
   m_LocalScale: {x: -0.3, y: 0.3, z: 1}
   m_Children:
   - {fileID: 224559243116641608}
@@ -1998,19 +1997,6 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114094537650083764
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1361244714391576}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b1e771e1c2550744b87cca2d8750a02, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cutsceneManager: {fileID: 0}
-  controls: {fileID: 0}
 --- !u!114 &114348896398289756
 MonoBehaviour:
   m_ObjectHideFlags: 1
