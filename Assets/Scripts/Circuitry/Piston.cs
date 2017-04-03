@@ -10,6 +10,7 @@ public class Piston : MonoBehaviour
     public GameObject bottom;
     public float maxDisplacement;
     public bool startExtended;
+    public bool debugRaycasts;
 
     public AudioSource startSound;
     public AudioSource loopSound;
@@ -29,7 +30,6 @@ public class Piston : MonoBehaviour
 
     // Collisions info
     // Maximum distance between raycasts, there can be less but no more
-    private const bool debugRaycasts = false;
     private const float maxDistBetweenCasts = 0.5f;
     private const float planeEpsilon = 0.0001f;
     private const float raycastLength = 0.1f;
