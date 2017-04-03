@@ -22,8 +22,14 @@ public class SplittableBreakEffect : MonoBehaviour
 
             var size = totalBounds.extents;
             var localScale = splittable.transform.localScale;
-            size.x /= localScale.x;
-            size.y /= localScale.y;
+
+            // If local scales are 0, don't scale size
+            if (localScale.x != 0)
+                size.x /= localScale.x;
+            
+            if (localScale.y != 0)
+                size.y /= localScale.y;
+
             effect.transform.localScale = size;
 
             // Apply new color
@@ -38,3 +44,4 @@ public class SplittableBreakEffect : MonoBehaviour
         }
     }
 }
+
