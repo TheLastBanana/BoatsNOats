@@ -156,9 +156,28 @@ class MoveTag : Tag
     }
 }
 
+class SpeakerTag : Tag
+{
+    public int start { get; set; }
+    public int end { get { return start; } set { this.start = value; } }
+    public string name { get; set; }
+
+    public SpeakerTag(string name)
+    {
+        this.name = name;
+        start = 0;
+    }
+
+    public override string ToString()
+    {
+        return "SpeakerTag(" + name + ", " + start + ", " + end + ")";
+    }
+}
+
 class Dialog
 {
     public string text { get; set; }
+    public SpeakerTag speaker;
     public List<FormatTag> format { get; private set; }
     public List<SpeedTag> speeds { get; private set; }
     public List<VoiceTag> voices { get; private set; }
@@ -168,6 +187,7 @@ class Dialog
     public Dialog()
     {
         text = "";
+        speaker = null;
         format = new List<FormatTag>();
         speeds = new List<SpeedTag>();
         voices = new List<VoiceTag>();
@@ -290,13 +310,23 @@ public class TypewriterText : MonoBehaviour {
             }
             else if (split[1].StartsWith("move"))
             {
-                string[] moveSplit = tagString.Split('=');
+                string[] moveSplit = split[1].Split('=');
                 Debug.Assert(moveSplit.Length == 2, "Move split not 2");
                 string dest = moveSplit[1].Replace("\"", ""); // Values are quoted..
                 MoveTag mt = new MoveTag(dest, start);
                 dia.addMove(mt);
 
                 t = mt;
+            }
+            else if (split[1].StartsWith("speaker"))
+            {
+                string[] speakerSplit = split[1].Split('=');
+                Debug.Assert(speakerSplit.Length == 2, "Move split not 2");
+                string speaker = speakerSplit[1].Replace("\"", ""); // Values are quoted..
+                SpeakerTag st = new SpeakerTag(speaker);
+                dia.speaker = st;
+
+                t = st;
             }
             else
             {
@@ -401,6 +431,7 @@ public class TypewriterText : MonoBehaviour {
     IEnumerator AnimateText(int dialogNum, Text text)
     {
         string fullLine = dialogs[dialogNum].text; // The full text of this line
+        SpeakerTag speaker = dialogs[dialogNum].speaker;
         List<FormatTag> fTags = dialogs[dialogNum].format; // The formatters for this line
         List<SpeedTag> sTags = dialogs[dialogNum].speeds;
         List<VoiceTag> vTags = dialogs[dialogNum].voices;
@@ -410,6 +441,10 @@ public class TypewriterText : MonoBehaviour {
         // Keep track of what speed we're putting letters out at
         Stack<SpeedTag> activeSTags = new Stack<SpeedTag>();
         activeSTags.Push(new SpeedTag(.125f, 0, fullLine.Length)); // Default here
+
+        // Push initial speaker
+        Debug.Assert(speaker != null, "Dialog speaker was null");
+        setSpeaker(speaker);
 
         // Iterate once for each character in the full string
         for (int i = 0; i < fullLine.Length; ++i)
@@ -533,6 +568,11 @@ public class TypewriterText : MonoBehaviour {
     }
 
     private void moveAl(MoveTag tag)
+    {
+        // Do something
+    }
+
+    private void setSpeaker(SpeakerTag tag)
     {
         // Do something
     }
