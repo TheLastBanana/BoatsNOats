@@ -294,6 +294,9 @@ public class TypewriterText : MonoBehaviour {
                 Debug.Assert(moveSplit.Length == 2, "Move split not 2");
                 string dest = moveSplit[1].Replace("\"", ""); // Values are quoted..
                 MoveTag mt = new MoveTag(dest, start);
+                dia.addMove(mt);
+
+                t = mt;
             }
             else
             {
