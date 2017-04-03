@@ -428,8 +428,9 @@ public class TypewriterText : MonoBehaviour {
         }
     }
 	
-    IEnumerator AnimateText(int dialogNum, Text text)
+    IEnumerator AnimateText(int dialogNum)
     {
+        Text text;
         string fullLine = dialogs[dialogNum].text; // The full text of this line
         SpeakerTag speaker = dialogs[dialogNum].speaker;
         List<FormatTag> fTags = dialogs[dialogNum].format; // The formatters for this line
@@ -444,7 +445,7 @@ public class TypewriterText : MonoBehaviour {
 
         // Push initial speaker
         Debug.Assert(speaker != null, "Dialog speaker was null");
-        setSpeaker(speaker);
+        text = setSpeaker(speaker);
 
         // Iterate once for each character in the full string
         for (int i = 0; i < fullLine.Length; ++i)
@@ -554,10 +555,10 @@ public class TypewriterText : MonoBehaviour {
     }
 
     // Call to start animating the text
-    public void startText(int dialogNum, Text text)
+    public void startText(int dialogNum)
     {
         Debug.Log("Starting dialog number " + dialogNum);
-        StartCoroutine(AnimateText(dialogNum, text));
+        StartCoroutine(AnimateText(dialogNum));
         started = true;
     }
 
@@ -572,9 +573,9 @@ public class TypewriterText : MonoBehaviour {
         // Do something
     }
 
-    private void setSpeaker(SpeakerTag tag)
+    private Text setSpeaker(SpeakerTag tag)
     {
-        // Do something
+        return cutsceneManager.DecideSpeaker(tag.name);
     }
 
     // Check if the text is done animating

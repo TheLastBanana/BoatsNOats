@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dialog>
-  <text xml:space="preserve"><custom speed=".015"><custom voice="Al Neutral"/>That hit him in the head! Wow!</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom speed=".015"><custom voice="Al Neutral"/>That hit him in the head! Wow!</custom></text>
 </dialog>

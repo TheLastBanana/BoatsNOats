@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dialog>
-  <text xml:space="preserve"><custom speed=".015"><custom voice="Al Neutral"/>Use WAD to move. Left click and drag to create a portal. Hold Tab to view the other world. Hit R to restart the level if you get stuck. Hit Enter to cycle through dialogue.</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom speed=".015"><custom voice="Al Neutral"/>Use WAD to move. Left click and drag to create a portal. Hold Tab to view the other world. Hit R to restart the level if you get stuck. Hit Enter to cycle through dialogue.</custom></text>
 </dialog>

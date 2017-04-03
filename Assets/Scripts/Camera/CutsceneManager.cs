@@ -96,10 +96,8 @@ public class CutsceneManager : MonoBehaviour {
         // Start the next text if we're not currently doing one, the previous has been finished, and we're not panning or waiting on a finished pan
         if (!typewriterText.isTextDone() && !startedText && !startedPan && !readyToEndPan)
         {
-            DecideSpeaker();
             startedText = true;
-            currentTextBubble.SetActive(true);
-            typewriterText.startText(numTextCurrent, currentText);
+            typewriterText.startText(numTextCurrent);
         }
 
         // If the text has gone through, wait for the player to hit a skip key before finishing the text
@@ -153,30 +151,34 @@ public class CutsceneManager : MonoBehaviour {
     }
 
     // TODO: Properly determine speaker based on tag
-    private void DecideSpeaker()
+    public Text DecideSpeaker(string tag)
     {
-        currentTextBubble = GemmaTextBubble;
-        currentText = GemmaText;
+        tag = tag.ToLower();
+
+        if (tag == "gemma")
+        {
+            currentTextBubble = GemmaTextBubble;
+            currentText = GemmaText;
+        }
+        else if (tag == "al")
+        {
+            currentTextBubble = AlTextBubble;
+            currentText = AlText;
+        }
+        else
+        {
+            // If tag doesn't match we assume Gemma is speaking, she's the only thing guaranteed to be in every scene after all
+            currentTextBubble = GemmaTextBubble;
+            currentText = GemmaText;
+        }
+
+        currentTextBubble.SetActive(true);
+        return currentText;
     }
 
     public void QueuePan(string objName, float delay)
     {
-        objName = objName.ToLower();
-        GameObject to = null;
-
-        // Valid pans
-        if (objName == "start")
-            to = sceneStart;
-        else if (objName == "end")
-            to = sceneTransition;
-        else if (objName == "gemma")
-            to = Gemma;
-        else if (objName == "mid1")
-            to = sceneMid1;
-        else if (objName == "mid2")
-            to = sceneMid2;
-        else if (objName == "mid3")
-            to = sceneMid3;
+        GameObject to = getLocationFromTag(objName.ToLower());
 
         // Assume the previous pan to target is where we're panning from
         previousPan = new CameraPanInfo(previousPan.to, to, 0f, delay);
@@ -219,6 +221,25 @@ public class CutsceneManager : MonoBehaviour {
             playerController.StopForPortal();
         else
             playerController.ResumeAfterPortal();
+    }
+
+    // Get location to pan to or for Al to move to based on tag
+    private GameObject getLocationFromTag(string tag)
+    {
+        if (tag == "start")
+            return sceneStart;
+        else if (tag == "end")
+            return sceneTransition;
+        else if (tag == "gemma")
+            return Gemma;
+        else if (tag == "mid1")
+            return sceneMid1;
+        else if (tag == "mid2")
+            return sceneMid2;
+        else if (tag == "mid3")
+            return sceneMid3;
+        else
+            return null;
     }
 }
 
