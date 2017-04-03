@@ -137,6 +137,25 @@ class VoiceTag : Tag
     }
 }
 
+class MoveTag : Tag
+{
+    public int start { get; set; }
+    public int end { get { return start; } set { this.start = value; } }
+    public string dest { get; set; }
+
+    public MoveTag(string dest, int start)
+    {
+        this.dest = dest;
+        this.start = start;
+        this.end = end;
+    }
+
+    public override string ToString()
+    {
+        return "MoveTag(" + dest + ", " + start + ", " + end + ")";
+    }
+}
+
 class Dialog
 {
     public string text { get; set; }
@@ -144,6 +163,7 @@ class Dialog
     public List<SpeedTag> speeds { get; private set; }
     public List<VoiceTag> voices { get; private set; }
     public List<PanTag> pans { get; private set; }
+    public List<MoveTag> moves { get; private set; }
 
     public Dialog()
     {
@@ -152,6 +172,7 @@ class Dialog
         speeds = new List<SpeedTag>();
         voices = new List<VoiceTag>();
         pans = new List<PanTag>();
+        moves = new List<MoveTag>();
     }
 
     public void addTag(FormatTag tag)
@@ -172,6 +193,11 @@ class Dialog
     public void addPan(PanTag tag)
     {
         pans.Add(tag);
+    }
+
+    public void addMove(MoveTag tag)
+    {
+        moves.Add(tag);
     }
 }
 
@@ -261,6 +287,13 @@ public class TypewriterText : MonoBehaviour {
                 dia.addVoice(vt);
 
                 t = vt;
+            }
+            else if (split[1].StartsWith("move"))
+            {
+                string[] moveSplit = tagString.Split('=');
+                Debug.Assert(moveSplit.Length == 2, "Move split not 2");
+                string dest = moveSplit[1].Replace("\"", ""); // Values are quoted..
+                MoveTag mt = new MoveTag(dest, start);
             }
             else
             {
@@ -369,6 +402,7 @@ public class TypewriterText : MonoBehaviour {
         List<SpeedTag> sTags = dialogs[dialogNum].speeds;
         List<VoiceTag> vTags = dialogs[dialogNum].voices;
         List<PanTag> pTags = dialogs[dialogNum].pans;
+        List<MoveTag> mTags = dialogs[dialogNum].moves;
 
         // Keep track of what speed we're putting letters out at
         Stack<SpeedTag> activeSTags = new Stack<SpeedTag>();
@@ -391,9 +425,15 @@ public class TypewriterText : MonoBehaviour {
                 if (tag.start == i)
                     loadVoice(tag.voice);
 
+            // Pan camera in cutscene
             foreach (PanTag tag in pTags)
                 if (tag.start == i)
                     startPan(tag);
+
+            // Move Al somewhere
+            foreach (MoveTag tag in mTags)
+                if (tag.start == i)
+                    moveAl(tag);
 
             // Play voice and set its delay
             if (voice != null)
@@ -487,6 +527,11 @@ public class TypewriterText : MonoBehaviour {
     private void startPan(PanTag tag)
     {
         cutsceneManager.QueuePan(tag.objName, tag.delay);
+    }
+
+    private void moveAl(MoveTag tag)
+    {
+        // Do something
     }
 
     // Check if the text is done animating
