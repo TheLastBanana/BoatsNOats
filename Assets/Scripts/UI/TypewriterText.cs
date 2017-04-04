@@ -562,15 +562,16 @@ public class TypewriterText : MonoBehaviour {
         started = true;
     }
 
-    // Call to CutsceneManager to start a pan
+    // Call to CutsceneManager to do a pan
     private void startPan(PanTag tag)
     {
-        cutsceneManager.QueuePan(tag.objName, tag.delay);
+        cutsceneManager.QueuePan(tag.objName, tag.start, tag.delay);
     }
 
+    // Call to CutsceneManager to move Al
     private void moveAl(MoveTag tag)
     {
-        // Do something
+        cutsceneManager.QueueAl(tag.dest, tag.start);
     }
 
     private Text setSpeaker(SpeakerTag tag)

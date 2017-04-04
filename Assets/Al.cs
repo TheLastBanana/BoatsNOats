@@ -29,6 +29,11 @@ public class Al : MonoBehaviour
         currentFly = StartCoroutine(FlyCoroutine(target));
     }
 
+    public bool DoneFlying()
+    {
+        return (currentFly == null);
+    }
+
     IEnumerator FlyCoroutine(Vector3 target)
     {
         anim.SetBool("Flying", true);
