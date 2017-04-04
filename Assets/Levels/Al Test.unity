@@ -6218,12 +6218,12 @@ Prefab:
     - target: {fileID: 20267623948367186, guid: 06d7fe0b7b7ba4844835d6b3b4400e43,
         type: 2}
       propertyPath: orthographic size
-      value: 2
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 20167617518070488, guid: 06d7fe0b7b7ba4844835d6b3b4400e43,
         type: 2}
       propertyPath: orthographic size
-      value: 2
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 1065581217306714, guid: 06d7fe0b7b7ba4844835d6b3b4400e43, type: 2}
       propertyPath: m_IsActive
@@ -6405,6 +6405,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1875978196}
   - component: {fileID: 1875978197}
+  - component: {fileID: 1875978198}
   m_Layer: 0
   m_Name: Al
   m_TagString: Untagged
@@ -6443,6 +6444,18 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &1875978198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1875978195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e45c56b01c461a4199d59eaf7458ad5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flySpeed: 7.5
 --- !u!1 &1895986846
 GameObject:
   m_ObjectHideFlags: 0
