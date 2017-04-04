@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿// From http://wiki.unity3d.com/index.php?title=Mathfx
+using UnityEngine;
 
 public sealed class Mathfx
 {
