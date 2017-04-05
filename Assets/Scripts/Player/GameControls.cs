@@ -8,7 +8,15 @@ using UnityEngine;
  */
 public class GameControls : MonoBehaviour {
 
+    public PortalManager portalManager;
+    public bool DisablePortalThisLevel = false;
+
     private float skipDialogueLast = 0f;
+
+    void Start()
+    {
+        portalManager.DisablePortalForLevel(DisablePortalThisLevel);
+    }
 
     public bool GemmaLeft()
     {
@@ -33,6 +41,9 @@ public class GameControls : MonoBehaviour {
 
     public bool CheckOtherWorld(bool pressed)
     {
+        if (DisablePortalThisLevel)
+            return false;
+
         KeyCode key = KeyCode.Tab;
         if (pressed)
             return Input.GetKeyDown(key);

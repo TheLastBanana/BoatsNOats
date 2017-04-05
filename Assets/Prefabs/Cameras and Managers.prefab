@@ -1969,6 +1969,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ece82e20d4eba954d8b1572fcc51ffe4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  portalManager: {fileID: 114580626449500856}
+  DisablePortalThisLevel: 0
 --- !u!114 &114274874089878240
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2139,7 +2141,8 @@ MonoBehaviour:
   controls: {fileID: 114232900420386978}
   Gemma: {fileID: 0}
   Al: {fileID: 0}
-  readyToEndPan: 0
+  Loudspeaker1: {fileID: 0}
+  Loudspeaker2: {fileID: 0}
 --- !u!114 &114717450731081886
 MonoBehaviour:
   m_ObjectHideFlags: 1
