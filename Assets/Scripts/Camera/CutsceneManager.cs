@@ -41,7 +41,7 @@ public class CutsceneManager : MonoBehaviour {
     private bool runningCutscene;
     private bool startedText;
     Queue<CameraPanInfo> pans;
-    Queue<AlMoveInfo> AlMoves;
+    Queue<AlMoveInfo> moves;
     private bool startedPan;
     public bool readyToEndPan;
     private bool endCutscene; // Last cutscene in the level, will do scene transition after
@@ -77,7 +77,7 @@ public class CutsceneManager : MonoBehaviour {
         runningCutscene = false;
         startedText = false;
         pans = new Queue<CameraPanInfo>();
-        AlMoves = new Queue<AlMoveInfo>();
+        moves = new Queue<AlMoveInfo>();
         startedPan = false;
         readyToEndPan = false;
         endCutscene = false;
@@ -91,14 +91,14 @@ public class CutsceneManager : MonoBehaviour {
 
         if (!Busy())
         {
-            if (pans.Count > 0 && AlMoves.Count <= 0)
+            if (pans.Count > 0 && moves.Count <= 0)
                 StartPan();
-            else if (pans.Count <= 0 && AlMoves.Count > 0)
+            else if (pans.Count <= 0 && moves.Count > 0)
                 MoveAl();
-            else if (pans.Count > 0 && AlMoves.Count > 0)
+            else if (pans.Count > 0 && moves.Count > 0)
             {
                 CameraPanInfo pan = pans.Peek();
-                AlMoveInfo move = AlMoves.Peek();
+                AlMoveInfo move = moves.Peek();
 
                 // If there is both a pan and a move queued up, whichever was added first will go first
                 if (move.tagStart <= pan.tagStart)
@@ -134,7 +134,7 @@ public class CutsceneManager : MonoBehaviour {
             readyToEndPan = false;
 
         // Check if we've gone through everything
-        if (numTextCurrent == numTexts && pans.Count <= 0 && AlMoves.Count <= 0 && !Busy())
+        if (numTextCurrent == numTexts && pans.Count <= 0 && moves.Count <= 0 && !Busy())
             EndCutscene();
     }
 
@@ -167,7 +167,7 @@ public class CutsceneManager : MonoBehaviour {
         numTexts = 0;
         previousPan = new CameraPanInfo(0, null, Gemma, 0f, 0f);
         pans.Clear();
-        AlMoves.Clear();
+        moves.Clear();
 
         // Resume player control
         runningCutscene = false;
@@ -210,12 +210,12 @@ public class CutsceneManager : MonoBehaviour {
     {
         Debug.Assert(Al != null, "Al not assigned, can't do a move!");
         Vector3 target = getLocationFromTag(objName.ToLower()).GetComponent<Transform>().position;
-        AlMoves.Enqueue(new AlMoveInfo(tagStart, target));
+        moves.Enqueue(new AlMoveInfo(tagStart, target));
     }
 
     private void MoveAl()
     {
-        AlScript.FlyToPosition(AlMoves.Dequeue().target);
+        AlScript.FlyToPosition(moves.Dequeue().target);
     }
 
     public void QueuePan(string objName, int tagStart, float delay)
