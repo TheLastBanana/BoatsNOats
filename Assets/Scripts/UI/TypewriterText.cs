@@ -477,7 +477,7 @@ public class TypewriterText : MonoBehaviour {
                     moveAl(tag);
 
             // Play voice and set its delay if there's a speaker
-            if (voice != null && speaker != null)
+            if (voice != null && text != null)
             {
                 if (!voice.isPlaying)
                     voice.Play();
@@ -518,7 +518,7 @@ public class TypewriterText : MonoBehaviour {
             }
 
             // Update the text if we have a speaker
-            if (speaker != null)
+            if (text != null)
                 text.text = line;
 
             // Delay the correct amount before our next string, if the user hasn't skipped
