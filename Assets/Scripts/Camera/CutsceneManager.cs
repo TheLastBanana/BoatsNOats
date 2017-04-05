@@ -85,10 +85,6 @@ public class CutsceneManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        // Check if we've gone through all of the texts
-        if (numTextCurrent == numTexts)
-            EndCutscene();
-
         // We're not in a cutscene
         if (!runningCutscene)
             return;
@@ -120,10 +116,12 @@ public class CutsceneManager : MonoBehaviour {
         }
 
         // If the text has gone through, wait for the player to hit a skip key before finishing the text
-        if (startedText && !typewriterText.isTextDone() && controls.SkipDialogue())
+        // OR if there's no speaker then just auto skip
+        if (startedText && !typewriterText.isTextDone() && (controls.SkipDialogue() || !typewriterText.hasSpeaker(numTextCurrent)))
         {
             startedText = false;
-            currentTextBubble.SetActive(false);
+            if (currentTextBubble != null)
+                currentTextBubble.SetActive(false);
             numTextCurrent += 1;
         }
 
@@ -134,6 +132,10 @@ public class CutsceneManager : MonoBehaviour {
         // Pan is finished, so wait for player input before moving on
         if (readyToEndPan && controls.SkipDialogue())
             readyToEndPan = false;
+
+        // Check if we've gone through everything
+        if (numTextCurrent == numTexts && pans.Count <= 0 && AlMoves.Count <= 0 && !Busy())
+            EndCutscene();
     }
 
     private bool Busy()
@@ -195,12 +197,12 @@ public class CutsceneManager : MonoBehaviour {
         }
         else
         {
-            // If tag doesn't match we assume Gemma is speaking, she's the only thing guaranteed to be in every scene after all
-            currentTextBubble = GemmaTextBubble;
-            currentText = GemmaText;
+            currentTextBubble = null;
+            currentText = null;
         }
 
-        currentTextBubble.SetActive(true);
+        if (currentTextBubble != null)
+            currentTextBubble.SetActive(true);
         return currentText;
     }
 

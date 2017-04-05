@@ -444,8 +444,10 @@ public class TypewriterText : MonoBehaviour {
         activeSTags.Push(new SpeedTag(.125f, 0, fullLine.Length)); // Default here
 
         // Push initial speaker
-        Debug.Assert(speaker != null, "Dialog speaker was null");
-        text = setSpeaker(speaker);
+        if (speaker != null)
+            text = setSpeaker(speaker);
+        else
+            text = setSpeaker(new SpeakerTag(""));
 
         // Iterate once for each character in the full string
         for (int i = 0; i < fullLine.Length; ++i)
@@ -474,8 +476,8 @@ public class TypewriterText : MonoBehaviour {
                 if (tag.start == i)
                     moveAl(tag);
 
-            // Play voice and set its delay
-            if (voice != null)
+            // Play voice and set its delay if there's a speaker
+            if (voice != null && text != null)
             {
                 if (!voice.isPlaying)
                     voice.Play();
@@ -515,8 +517,9 @@ public class TypewriterText : MonoBehaviour {
                 line += "</" + tag.endTag + '>';
             }
 
-            // Update the text
-            text.text = line;
+            // Update the text if we have a speaker
+            if (text != null)
+                text.text = line;
 
             // Delay the correct amount before our next string, if the user hasn't skipped
             if (!skipText)
@@ -577,6 +580,11 @@ public class TypewriterText : MonoBehaviour {
     private Text setSpeaker(SpeakerTag tag)
     {
         return cutsceneManager.DecideSpeaker(tag.name);
+    }
+
+    public bool hasSpeaker(int dialogNum)
+    {
+        return (dialogs[dialogNum].speaker != null);
     }
 
     // Check if the text is done animating
