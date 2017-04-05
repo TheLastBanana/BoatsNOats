@@ -137,6 +137,7 @@ GameObject:
   - component: {fileID: 4068139482076594}
   - component: {fileID: 20577989380547642}
   - component: {fileID: 114474600437796694}
+  - component: {fileID: 114592836625261992}
   m_Layer: 0
   m_Name: Portal Camera
   m_TagString: Untagged
@@ -311,6 +312,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1577754480180962
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4802126663642274}
+  - component: {fileID: 20755086786426042}
+  m_Layer: 0
+  m_Name: Front of Portal Camera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1604490923021292
 GameObject:
   m_ObjectHideFlags: 0
@@ -335,8 +352,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4759478306386344}
   - component: {fileID: 20167617518070488}
+  - component: {fileID: 114967222287366916}
   m_Layer: 0
-  m_Name: Front of Portal Camera
+  m_Name: Ghost Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -795,7 +813,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1543284928492214}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 18.485598, y: 5.9499993, z: -10}
+  m_LocalPosition: {x: 20.13, y: 7.53, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4989196808640890}
@@ -806,6 +824,7 @@ Transform:
   - {fileID: 4479064032172152}
   - {fileID: 4738286141203948}
   - {fileID: 4154945519055238}
+  - {fileID: 4802126663642274}
   - {fileID: 4759478306386344}
   m_Father: {fileID: 4208140298275026}
   m_RootOrder: 0
@@ -843,11 +862,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1612378035767044}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4731459790165294}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4776077152072356
 Transform:
@@ -874,6 +893,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4731459790165294}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4802126663642274
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1577754480180962}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4731459790165294}
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4833819193951284
 Transform:
@@ -933,7 +965,7 @@ Camera:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1612378035767044}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_ClearFlags: 3
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
@@ -951,7 +983,7 @@ Camera:
   m_Depth: 1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1568
+    m_Bits: 512
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -1097,6 +1129,40 @@ Camera:
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
   m_StereoMirrorMode: 0
+--- !u!20 &20755086786426042
+Camera:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1577754480180962}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 3
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 1
+  orthographic size: 8
+  m_Depth: 1
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 1568
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+  m_StereoMirrorMode: 0
 --- !u!20 &20819030439689414
 Camera:
   m_ObjectHideFlags: 1
@@ -1121,7 +1187,7 @@ Camera:
   m_Depth: 1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1568
+    m_Bits: 1056
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -1931,7 +1997,8 @@ MonoBehaviour:
   musicManager: {fileID: 114214324677864962}
   cMain: {fileID: 20267623948367186}
   cAlt: {fileID: 20490272858795104}
-  cChar: {fileID: 20167617518070488}
+  cChar: {fileID: 20755086786426042}
+  cGhost: {fileID: 20167617518070488}
   controls: {fileID: 114232900420386978}
 --- !u!114 &114474600437796694
 MonoBehaviour:
@@ -1958,7 +2025,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d0e109ce0ca81b488bbaf18d37527b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 54, y: 0, z: 0}
+  offset: {x: 120, y: 0, z: 0}
 --- !u!114 &114579673784047766
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2011,6 +2078,20 @@ MonoBehaviour:
   portalAcceleration: 0.05
   portalDamping: 0.75
   maxCutTime: 0.01
+--- !u!114 &114592836625261992
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1243738114671196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bacee718136eecc4ab0193d448fad8d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectMaterial: {fileID: 2100000, guid: c2b2c30ec24dd924cbb32561da178352, type: 2}
+  displacement: {fileID: 0}
+  resolution: 256
 --- !u!114 &114602999871736272
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2165,6 +2246,18 @@ MonoBehaviour:
   offs: {fileID: 114537670656804216}
   LeftBoundary: {fileID: 0}
   RightBoundary: {fileID: 0}
+--- !u!114 &114967222287366916
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1612378035767044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fec89c50003f4bd49acfb59322c13ada, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  customShader: {fileID: 4800000, guid: 526b3d93a8b9b54488f664f88e996225, type: 3}
 --- !u!124 &124435191619924504
 Behaviour:
   m_ObjectHideFlags: 1

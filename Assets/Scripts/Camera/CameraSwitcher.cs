@@ -9,6 +9,7 @@ public class CameraSwitcher : MonoBehaviour
     public Camera cMain;
     public Camera cAlt;
     public Camera cChar;
+    public Camera cGhost;
     public GameControls controls;
 
     public bool switched
@@ -37,6 +38,7 @@ public class CameraSwitcher : MonoBehaviour
             cMain.enabled = false;
             cChar.enabled = false;
             cAlt.enabled = true;
+            cGhost.enabled = true;
             _switched = true;
 
             afx.cancelEffects(altWorldAmbience);
@@ -47,6 +49,8 @@ public class CameraSwitcher : MonoBehaviour
             cMain.enabled = true;
             cChar.enabled = true;
             cAlt.enabled = false;
+
+            cGhost.enabled = false;
             _switched = false;
 
             afx.smoothStop(altWorldAmbience);
