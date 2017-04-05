@@ -53,7 +53,7 @@ public class CutsceneManager : MonoBehaviour {
     Queue<CameraPanInfo> pans;
     Queue<AlMoveInfo> moves;
     private bool startedPan;
-    public bool readyToEndPan;
+    private bool readyToEndPan;
     private bool endCutscene; // Last cutscene in the level, will do scene transition after
 
     // Use this for initialization
