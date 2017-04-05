@@ -31,6 +31,16 @@ public class CutsceneManager : MonoBehaviour {
     private GameObject AlTextBubble;
     private Text AlText;
 
+    // Loudspeaker1
+    public GameObject Loudspeaker1;
+    private GameObject LS1TextBubble;
+    private Text LS1Text;
+
+    // Loudspeaker2
+    public GameObject Loudspeaker2;
+    private GameObject LS2TextBubble;
+    private Text LS2Text;
+
     private GameObject currentTextBubble;
     private Text currentText;
 
@@ -68,6 +78,20 @@ public class CutsceneManager : MonoBehaviour {
             AlTextBubble = Al.GetComponentInChildren<Canvas>(true).transform.FindChild("AlTextBubble").gameObject;
             AlText = AlTextBubble.GetComponentInChildren<Text>(true);
             AlTextBubble.SetActive(false);
+        }
+
+        if (Loudspeaker1 != null)
+        {
+            LS1TextBubble = Loudspeaker1.GetComponentInChildren<Canvas>(true).transform.FindChild("LS1TextBubble").gameObject;
+            LS1Text = LS1TextBubble.GetComponentInChildren<Text>(true);
+            LS1TextBubble.SetActive(false);
+        }
+
+        if (Loudspeaker2 != null)
+        {
+            LS2TextBubble = Loudspeaker2.GetComponentInChildren<Canvas>(true).transform.FindChild("LS2TextBubble").gameObject;
+            LS2Text = LS2TextBubble.GetComponentInChildren<Text>(true);
+            LS2TextBubble.SetActive(false);
         }
 
         numTextCurrent = -1;
@@ -195,6 +219,16 @@ public class CutsceneManager : MonoBehaviour {
             currentTextBubble = AlTextBubble;
             currentText = AlText;
         }
+        else if (tag == "loudspeaker1")
+        {
+            currentTextBubble = LS1TextBubble;
+            currentText = LS1Text;
+        }
+        else if (tag == "loudspeaker2")
+        {
+            currentTextBubble = LS2TextBubble;
+            currentText = LS2Text;
+        }
         else
         {
             currentTextBubble = null;
@@ -210,7 +244,8 @@ public class CutsceneManager : MonoBehaviour {
     {
         Debug.Assert(Al != null, "Al not assigned, can't do a move!");
         Vector3 target = getLocationFromTag(objName.ToLower()).GetComponent<Transform>().position;
-        moves.Enqueue(new AlMoveInfo(tagStart, target));
+        if (target != null)
+            moves.Enqueue(new AlMoveInfo(tagStart, target));
     }
 
     private void MoveAl()
@@ -276,6 +311,10 @@ public class CutsceneManager : MonoBehaviour {
             return Gemma;
         else if (tag == "al")
             return Al;
+        else if (tag == "loudspeaker1")
+            return Loudspeaker1;
+        else if (tag == "loudspeaker2")
+            return Loudspeaker2;
         else if (tag == "mid1")
             return sceneMid1;
         else if (tag == "mid2")
