@@ -201,6 +201,14 @@ public class Splittable : MonoBehaviour
             rightPhys.mass = totalMass * rightArea / totalArea;
         }
 
+        // Remove animations
+        Animator leftAnim = GetComponent<Animator>();
+        if (leftAnim)
+        {
+            Destroy(leftAnim);
+            Destroy(rightParent.GetComponent<Animator>());
+        }
+
         // Clean up parents
         if (rightParent.transform.childCount == 0)
         {

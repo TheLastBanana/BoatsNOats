@@ -54,19 +54,27 @@ public class PortalManager : MonoBehaviour
     AudioEffects afx;
     PortalEffect portalEffect;
     GameControls controls;
+
+    private bool disabledForLevel;
     private bool disabled;
 
     // Use this for initialization
     void Start ()
     {
-        disabled = false;
         afx = GetComponent<AudioEffects>();
         portalEffect = Instantiate(portalParticlePrefab).GetComponent<PortalEffect>();
+
+        disabledForLevel = false;
+        disabled = false;
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update ()
     {
+        // For when Gemma doesn't have the artifact
+        if (disabledForLevel)
+            return;
+
         // If we press the left mouse button, save mouse location and portal creation
         if (!isTransferring && Input.GetMouseButtonDown(0) && !disabled)
         {
@@ -462,7 +470,13 @@ public class PortalManager : MonoBehaviour
             selectableObject.SendMessage("OnSplitMergeFinished", null, SendMessageOptions.DontRequireReceiver);
     }
 
-    // Stop player from activating portals, used during cutscene and before Gemma gets artifact
+    // Stop player from activating portals, used before Gemma gets artifact
+    public void DisablePortalForLevel(bool disable)
+    {
+        disabledForLevel = disable;
+    }
+
+    // Stop player from activating portals, used during cutscene
     public void DisablePortal(bool disable)
     {
         disabled = disable;

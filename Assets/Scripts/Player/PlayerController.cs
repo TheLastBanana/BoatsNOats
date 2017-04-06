@@ -24,15 +24,15 @@ public class PlayerController : MonoBehaviour
     private Transform canvasTransform;
     public GameControls controls;
 
-    private bool inputDisabled;
+    public bool inputDisabled;
     private bool portalSelecting;
     private Vector2 storedVelocity;
     private float storedGravity;
 
+
     void Start()
     {
         canvasTransform = GetComponentInChildren<Canvas>().transform;
-        inputDisabled = false;
         portalSelecting = false;
     }
 

@@ -29,10 +29,10 @@ public class SceneChanger : MonoBehaviour
     void Update()
     {
         if (controls.RestartLevel())
-            DoLoadScene(currentScene, false);
+            DoLoadScene(currentScene);
 
         if (loadNextScene)
-            DoLoadScene(nextScene, true);
+            DoLoadScene(nextScene);
 
         if (controls.QuitGame())
         {
@@ -74,7 +74,7 @@ public class SceneChanger : MonoBehaviour
 
     // Do everything to load another scene
     // TODO: Transition stuff goes here
-    private void DoLoadScene(int scene, bool transition)
+    private void DoLoadScene(int scene)
     {
         SceneManager.LoadScene(scene);
     }

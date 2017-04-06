@@ -27,8 +27,19 @@ public class CutsceneManager : MonoBehaviour {
 
     // Al
     public GameObject Al;
+    private Al AlScript;
     private GameObject AlTextBubble;
     private Text AlText;
+
+    // Loudspeaker1
+    public GameObject Loudspeaker1;
+    private GameObject LS1TextBubble;
+    private Text LS1Text;
+
+    // Loudspeaker2
+    public GameObject Loudspeaker2;
+    private GameObject LS2TextBubble;
+    private Text LS2Text;
 
     private GameObject currentTextBubble;
     private Text currentText;
@@ -40,8 +51,9 @@ public class CutsceneManager : MonoBehaviour {
     private bool runningCutscene;
     private bool startedText;
     Queue<CameraPanInfo> pans;
+    Queue<AlMoveInfo> moves;
     private bool startedPan;
-    public bool readyToEndPan;
+    private bool readyToEndPan;
     private bool endCutscene; // Last cutscene in the level, will do scene transition after
 
     // Use this for initialization
@@ -62,18 +74,34 @@ public class CutsceneManager : MonoBehaviour {
         // Grab Al's stuff
         if (Al != null)
         {
+            AlScript = Al.GetComponent<Al>();
             AlTextBubble = Al.GetComponentInChildren<Canvas>(true).transform.FindChild("AlTextBubble").gameObject;
             AlText = AlTextBubble.GetComponentInChildren<Text>(true);
             AlTextBubble.SetActive(false);
         }
 
+        if (Loudspeaker1 != null)
+        {
+            LS1TextBubble = Loudspeaker1.GetComponentInChildren<Canvas>(true).transform.FindChild("LS1TextBubble").gameObject;
+            LS1Text = LS1TextBubble.GetComponentInChildren<Text>(true);
+            LS1TextBubble.SetActive(false);
+        }
+
+        if (Loudspeaker2 != null)
+        {
+            LS2TextBubble = Loudspeaker2.GetComponentInChildren<Canvas>(true).transform.FindChild("LS2TextBubble").gameObject;
+            LS2Text = LS2TextBubble.GetComponentInChildren<Text>(true);
+            LS2TextBubble.SetActive(false);
+        }
+
         numTextCurrent = -1;
         numTexts = 0;
-        previousPan = new CameraPanInfo(null, Gemma, 0f, 0f);
+        previousPan = new CameraPanInfo(0, null, Gemma, 0f, 0f);
 
         runningCutscene = false;
         startedText = false;
         pans = new Queue<CameraPanInfo>();
+        moves = new Queue<AlMoveInfo>();
         startedPan = false;
         readyToEndPan = false;
         endCutscene = false;
@@ -81,32 +109,43 @@ public class CutsceneManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        // Check if we've gone through all of the texts
-        if (numTextCurrent == numTexts)
-            EndCutscene();
-
         // We're not in a cutscene
         if (!runningCutscene)
             return;
 
-        // If we're not in a text or pan, waiting for player input at the end of a pan, and there is a pan to do
-        if (!startedText && !startedPan && !readyToEndPan && pans.Count > 0)
-            StartPan();
-
-        // Start the next text if we're not currently doing one, the previous has been finished, and we're not panning or waiting on a finished pan
-        if (!typewriterText.isTextDone() && !startedText && !startedPan && !readyToEndPan)
+        if (!Busy())
         {
-            DecideSpeaker();
+            if (pans.Count > 0 && moves.Count <= 0)
+                StartPan();
+            else if (pans.Count <= 0 && moves.Count > 0)
+                MoveAl();
+            else if (pans.Count > 0 && moves.Count > 0)
+            {
+                CameraPanInfo pan = pans.Peek();
+                AlMoveInfo move = moves.Peek();
+
+                // If there is both a pan and a move queued up, whichever was added first will go first
+                if (move.tagStart <= pan.tagStart)
+                    MoveAl();
+                else
+                    StartPan();
+            }
+        }
+
+        // Start the next text if we're not currently doing one and are otherwise not busy
+        if (!typewriterText.isTextDone() && !Busy())
+        {
             startedText = true;
-            currentTextBubble.SetActive(true);
-            typewriterText.startText(numTextCurrent, currentText);
+            typewriterText.startText(numTextCurrent);
         }
 
         // If the text has gone through, wait for the player to hit a skip key before finishing the text
-        if (startedText && !typewriterText.isTextDone() && controls.SkipDialogue())
+        // OR if there's no speaker then just auto skip
+        if (startedText && !typewriterText.isTextDone() && (controls.SkipDialogue() || !typewriterText.hasSpeaker(numTextCurrent)))
         {
             startedText = false;
-            currentTextBubble.SetActive(false);
+            if (currentTextBubble != null)
+                currentTextBubble.SetActive(false);
             numTextCurrent += 1;
         }
 
@@ -117,6 +156,19 @@ public class CutsceneManager : MonoBehaviour {
         // Pan is finished, so wait for player input before moving on
         if (readyToEndPan && controls.SkipDialogue())
             readyToEndPan = false;
+
+        // Check if we've gone through everything
+        if (numTextCurrent == numTexts && pans.Count <= 0 && moves.Count <= 0 && !Busy())
+            EndCutscene();
+    }
+
+    private bool Busy()
+    {
+        // Are we busy with either dialogue, doing a pan, waiting after a pan, or moving Al?
+        if (Al != null)
+            return (startedText || startedPan || readyToEndPan || !AlScript.DoneFlying());
+        else
+            return (startedText || startedPan || readyToEndPan);
     }
 
     public void RunCutscene(TextAsset textFile)
@@ -137,8 +189,9 @@ public class CutsceneManager : MonoBehaviour {
         // Reset info about the cutscene to a "no cutscene" state
         numTextCurrent = -1;
         numTexts = 0;
-        previousPan = new CameraPanInfo(null, Gemma, 0f, 0f);
+        previousPan = new CameraPanInfo(0, null, Gemma, 0f, 0f);
         pans.Clear();
+        moves.Clear();
 
         // Resume player control
         runningCutscene = false;
@@ -152,34 +205,60 @@ public class CutsceneManager : MonoBehaviour {
             sceneTransition.GetComponent<SceneChanger>().SetLoadNextScene();
     }
 
-    // TODO: Properly determine speaker based on tag
-    private void DecideSpeaker()
+    public Text DecideSpeaker(string tag)
     {
-        currentTextBubble = GemmaTextBubble;
-        currentText = GemmaText;
+        tag = tag.ToLower();
+
+        if (tag == "gemma")
+        {
+            currentTextBubble = GemmaTextBubble;
+            currentText = GemmaText;
+        }
+        else if (tag == "al")
+        {
+            currentTextBubble = AlTextBubble;
+            currentText = AlText;
+        }
+        else if (tag == "loudspeaker1")
+        {
+            currentTextBubble = LS1TextBubble;
+            currentText = LS1Text;
+        }
+        else if (tag == "loudspeaker2")
+        {
+            currentTextBubble = LS2TextBubble;
+            currentText = LS2Text;
+        }
+        else
+        {
+            currentTextBubble = null;
+            currentText = null;
+        }
+
+        if (currentTextBubble != null)
+            currentTextBubble.SetActive(true);
+        return currentText;
     }
 
-    public void QueuePan(string objName, float delay)
+    public void QueueAl(string objName, int tagStart)
     {
-        objName = objName.ToLower();
-        GameObject to = null;
+        Debug.Assert(Al != null, "Al not assigned, can't do a move!");
+        Vector3 target = getLocationFromTag(objName.ToLower()).GetComponent<Transform>().position;
+        if (target != null)
+            moves.Enqueue(new AlMoveInfo(tagStart, target));
+    }
 
-        // Valid pans
-        if (objName == "start")
-            to = sceneStart;
-        else if (objName == "end")
-            to = sceneTransition;
-        else if (objName == "gemma")
-            to = Gemma;
-        else if (objName == "mid1")
-            to = sceneMid1;
-        else if (objName == "mid2")
-            to = sceneMid2;
-        else if (objName == "mid3")
-            to = sceneMid3;
+    private void MoveAl()
+    {
+        AlScript.FlyToPosition(moves.Dequeue().target);
+    }
+
+    public void QueuePan(string objName, int tagStart, float delay)
+    {
+        GameObject to = getLocationFromTag(objName.ToLower());
 
         // Assume the previous pan to target is where we're panning from
-        previousPan = new CameraPanInfo(previousPan.to, to, 0f, delay);
+        previousPan = new CameraPanInfo(tagStart, previousPan.to, to, 0f, delay);
         pans.Enqueue(previousPan);
     }
 
@@ -220,20 +299,59 @@ public class CutsceneManager : MonoBehaviour {
         else
             playerController.ResumeAfterPortal();
     }
+
+    // Get location to pan to or for Al to move to based on tag
+    private GameObject getLocationFromTag(string tag)
+    {
+        if (tag == "start")
+            return sceneStart;
+        else if (tag == "end")
+            return sceneTransition;
+        else if (tag == "gemma")
+            return Gemma;
+        else if (tag == "al")
+            return Al;
+        else if (tag == "loudspeaker1")
+            return Loudspeaker1;
+        else if (tag == "loudspeaker2")
+            return Loudspeaker2;
+        else if (tag == "mid1")
+            return sceneMid1;
+        else if (tag == "mid2")
+            return sceneMid2;
+        else if (tag == "mid3")
+            return sceneMid3;
+        else
+            return null;
+    }
 }
 
 public class CameraPanInfo
 {
+    public int tagStart;
     public GameObject from;
     public GameObject to;
     public float startTime;
     public float duration;
 
-    public CameraPanInfo(GameObject f, GameObject t, float s, float d)
+    public CameraPanInfo(int ts, GameObject f, GameObject t, float st, float dt)
     {
+        tagStart = ts;
         from = f;
         to = t;
-        startTime = s;
-        duration = d;
+        startTime = st;
+        duration = dt;
+    }
+}
+
+public class AlMoveInfo
+{
+    public int tagStart;
+    public Vector3 target;
+
+    public AlMoveInfo(int ts, Vector3 t)
+    {
+        tagStart = ts;
+        target = t;
     }
 }

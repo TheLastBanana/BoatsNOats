@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dialog>
-  <text xml:space="preserve"><custom speed=".015"><custom voice="Al Neutral"/>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus venenatis est et risus pellentesque, sed pellentesque justo posuere. Curabitur pulvinar placerat dolor, a imperdiet elit molestie quis.</custom></text>
-  <text xml:space="preserve">
+  <text xml:space="preserve"><custom speaker="gemma"/><custom speed=".015"><custom voice="Al Neutral"/>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus venenatis est et risus pellentesque, sed pellentesque justo posuere. Curabitur pulvinar placerat dolor, a imperdiet elit molestie quis.</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/>
     Hey this is some <custom speed=".01"><b>teeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeext!</b></custom><custom pan="end" delay="5"/><custom speed="2"> hello </custom>
   </text>
   <text>
+    <custom speaker="gemma"/>
     This is some more text, what do?
   </text>
 </dialog>

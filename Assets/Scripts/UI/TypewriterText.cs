@@ -428,8 +428,9 @@ public class TypewriterText : MonoBehaviour {
         }
     }
 	
-    IEnumerator AnimateText(int dialogNum, Text text)
+    IEnumerator AnimateText(int dialogNum)
     {
+        Text text;
         string fullLine = dialogs[dialogNum].text; // The full text of this line
         SpeakerTag speaker = dialogs[dialogNum].speaker;
         List<FormatTag> fTags = dialogs[dialogNum].format; // The formatters for this line
@@ -443,8 +444,10 @@ public class TypewriterText : MonoBehaviour {
         activeSTags.Push(new SpeedTag(.125f, 0, fullLine.Length)); // Default here
 
         // Push initial speaker
-        Debug.Assert(speaker != null, "Dialog speaker was null");
-        setSpeaker(speaker);
+        if (speaker != null)
+            text = setSpeaker(speaker);
+        else
+            text = setSpeaker(new SpeakerTag(""));
 
         // Iterate once for each character in the full string
         for (int i = 0; i < fullLine.Length; ++i)
@@ -473,8 +476,8 @@ public class TypewriterText : MonoBehaviour {
                 if (tag.start == i)
                     moveAl(tag);
 
-            // Play voice and set its delay
-            if (voice != null)
+            // Play voice and set its delay if there's a speaker
+            if (voice != null && text != null)
             {
                 if (!voice.isPlaying)
                     voice.Play();
@@ -514,8 +517,9 @@ public class TypewriterText : MonoBehaviour {
                 line += "</" + tag.endTag + '>';
             }
 
-            // Update the text
-            text.text = line;
+            // Update the text if we have a speaker
+            if (text != null)
+                text.text = line;
 
             // Delay the correct amount before our next string, if the user hasn't skipped
             if (!skipText)
@@ -554,27 +558,33 @@ public class TypewriterText : MonoBehaviour {
     }
 
     // Call to start animating the text
-    public void startText(int dialogNum, Text text)
+    public void startText(int dialogNum)
     {
         Debug.Log("Starting dialog number " + dialogNum);
-        StartCoroutine(AnimateText(dialogNum, text));
+        StartCoroutine(AnimateText(dialogNum));
         started = true;
     }
 
-    // Call to CutsceneManager to start a pan
+    // Call to CutsceneManager to do a pan
     private void startPan(PanTag tag)
     {
-        cutsceneManager.QueuePan(tag.objName, tag.delay);
+        cutsceneManager.QueuePan(tag.objName, tag.start, tag.delay);
     }
 
+    // Call to CutsceneManager to move Al
     private void moveAl(MoveTag tag)
     {
-        // Do something
+        cutsceneManager.QueueAl(tag.dest, tag.start);
     }
 
-    private void setSpeaker(SpeakerTag tag)
+    private Text setSpeaker(SpeakerTag tag)
     {
-        // Do something
+        return cutsceneManager.DecideSpeaker(tag.name);
+    }
+
+    public bool hasSpeaker(int dialogNum)
+    {
+        return (dialogs[dialogNum].speaker != null);
     }
 
     // Check if the text is done animating
