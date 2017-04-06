@@ -15,7 +15,8 @@ public class GameControls : MonoBehaviour {
 
     void Start()
     {
-        portalManager.DisablePortalForLevel(DisablePortalThisLevel);
+        if (portalManager != null)
+            portalManager.DisablePortalForLevel(DisablePortalThisLevel);
     }
 
     public bool GemmaLeft()
