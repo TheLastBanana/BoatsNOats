@@ -58,7 +58,6 @@ public class RobotAI : MonoBehaviour {
         var splittable = GetComponent<Splittable>();
         if (splittable != null && splittable.isSplit)
         {
-            Destroy(animator);
             Destroy(this);
             return;
         }
