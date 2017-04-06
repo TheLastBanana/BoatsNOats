@@ -4376,14 +4376,14 @@ Prefab:
       propertyPath: m_SortingLayerID
       value: 1623670231
       objectReference: {fileID: 0}
-    - target: {fileID: 4382438581803832, guid: e80fe6c283eb35749ba9ace15004fe30, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: -0.13
-      objectReference: {fileID: 0}
     - target: {fileID: 212618368166645286, guid: e80fe6c283eb35749ba9ace15004fe30,
         type: 2}
       propertyPath: m_SortingOrder
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4382438581803832, guid: e80fe6c283eb35749ba9ace15004fe30, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e80fe6c283eb35749ba9ace15004fe30, type: 2}
@@ -9348,7 +9348,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4910905410852998, guid: 06d7fe0b7b7ba4844835d6b3b4400e43, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 51.57
+      value: 55.04
       objectReference: {fileID: 0}
     - target: {fileID: 4910905410852998, guid: 06d7fe0b7b7ba4844835d6b3b4400e43, type: 2}
       propertyPath: m_LocalPosition.y
