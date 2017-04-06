@@ -124,14 +124,6 @@ public class PlayerController : MonoBehaviour
 		// apply gravity before moving
 		_velocity.y += gravity * Time.deltaTime;
 
-		// if holding down bump up our movement amount and turn off one way platform detection for a frame.
-		// this lets us jump down through one way platforms
-		if( _controller.isGrounded && controls.GemmaMoveDown() && !inputDisabled)
-		{
-			_velocity.y *= 3f;
-			_controller.ignoreOneWayPlatformsThisFrame = true;
-		}
-
         _animator.SetFloat("Speed", Mathf.Abs(_velocity.x));
 		_controller.move( _velocity * Time.deltaTime );
 
