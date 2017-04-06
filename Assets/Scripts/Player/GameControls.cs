@@ -34,12 +34,6 @@ public class GameControls : MonoBehaviour {
         return (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.W));
     }
 
-    // For one way platforms, which are in the Player Controller, but aren't used in our game
-    public bool GemmaMoveDown()
-    {
-        return Input.GetKey(KeyCode.S);
-    }
-
     public bool CheckOtherWorld(bool pressed)
     {
         if (DisablePortalThisLevel)
