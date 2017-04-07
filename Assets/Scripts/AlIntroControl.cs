@@ -43,9 +43,10 @@ public class AlIntroControl : MonoBehaviour
     {
         yield return new WaitForSeconds(0.02f);
 
-        var scale = transform.localScale;
+        var rig = transform.FindChild("rig");
+        var scale = rig.localScale;
         scale.x = -scale.x;
-        transform.localScale = scale;
+        rig.localScale = scale;
     }
 
     void OnCollisionEnter2D(Collision2D collision)
