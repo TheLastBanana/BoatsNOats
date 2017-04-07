@@ -6,6 +6,9 @@ public class AlIntroControl : MonoBehaviour
     public ParticleSystem sparks;
     public ParticleSystem bonkEffect;
     public ParticleSystem landEffect;
+    public AudioSource thudSound;
+    public AudioSource zapSound;
+
     ParticleSystem.EmissionModule em;
 
     void Awake()
@@ -22,15 +25,18 @@ public class AlIntroControl : MonoBehaviour
     public void PlayLandEffect()
     {
         landEffect.Play();
+        thudSound.Play();
     }
 
     public void EnableSparks()
     {
+        zapSound.Play();
         em.enabled = true;
     }
 
     public void DisableSparks()
     {
+        zapSound.Stop();
         em.enabled = false;
     }
 
