@@ -243,9 +243,11 @@ public class CutsceneManager : MonoBehaviour {
     public void QueueAl(string objName, int tagStart)
     {
         Debug.Assert(Al != null, "Al not assigned, can't do a move!");
-        Vector3 target = getLocationFromTag(objName.ToLower()).GetComponent<Transform>().position;
+        GameObject target = getLocationFromTag(objName.ToLower());
         if (target != null)
-            moves.Enqueue(new AlMoveInfo(tagStart, target));
+        {
+            moves.Enqueue(new AlMoveInfo(tagStart, target.GetComponent<Transform>().position));
+        }
     }
 
     private void MoveAl()
