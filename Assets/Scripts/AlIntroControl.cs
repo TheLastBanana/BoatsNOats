@@ -13,18 +13,6 @@ public class AlIntroControl : MonoBehaviour
         em = sparks.emission;
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            PlayBonkAnimation();
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            GetComponent<Animator>().SetTrigger("Get Up");
-        }
-    }
-
     public void PlayBonkAnimation()
     {
         GetComponent<Animator>().SetTrigger("Bonk");
