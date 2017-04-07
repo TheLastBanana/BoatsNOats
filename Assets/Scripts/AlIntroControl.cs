@@ -44,4 +44,13 @@ public class AlIntroControl : MonoBehaviour
     {
         em.enabled = false;
     }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        PlayBonkAnimation();
+        GetComponent<CircleCollider2D>().enabled = false;
+
+        // Make the box fly away a bit
+        collision.gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(-3, 1.5f);
+    }
 }

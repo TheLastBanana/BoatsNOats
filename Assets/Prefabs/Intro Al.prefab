@@ -89,6 +89,7 @@ GameObject:
   - component: {fileID: 95777741363055388}
   - component: {fileID: 114956116339019524}
   - component: {fileID: 114541647262200972}
+  - component: {fileID: 58699368162078990}
   m_Layer: 0
   m_Name: Intro Al
   m_TagString: Untagged
@@ -378,8 +379,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1438276044364808}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.0687428, y: 0.54, z: 0}
-  m_LocalScale: {x: 0.25, y: 0.25, z: 1}
+  m_LocalPosition: {x: 67.346275, y: 9.907175, z: 0}
+  m_LocalScale: {x: -0.25, y: 0.25, z: 1}
   m_Children:
   - {fileID: 224553944237199132}
   - {fileID: 4344361496830638}
@@ -413,6 +414,20 @@ Transform:
   m_Father: {fileID: 4056115165030494}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 90, z: -90}
+--- !u!58 &58699368162078990
+CircleCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1438276044364808}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 3
 --- !u!95 &95777741363055388
 Animator:
   serializedVersion: 3
