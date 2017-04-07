@@ -3,6 +3,8 @@
 public class AlIntroControl : MonoBehaviour
 {
     public ParticleSystem sparks;
+    public ParticleSystem bonkEffect;
+    public ParticleSystem landEffect;
     ParticleSystem.EmissionModule em;
 
     void Awake()
@@ -14,12 +16,23 @@ public class AlIntroControl : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            GetComponent<Animator>().SetTrigger("Bonk");
+            PlayBonkAnimation();
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             GetComponent<Animator>().SetTrigger("Get Up");
         }
+    }
+
+    public void PlayBonkAnimation()
+    {
+        GetComponent<Animator>().SetTrigger("Bonk");
+        bonkEffect.Play();
+    }
+
+    public void PlayLandEffect()
+    {
+        landEffect.Play();
     }
 
     public void EnableSparks()

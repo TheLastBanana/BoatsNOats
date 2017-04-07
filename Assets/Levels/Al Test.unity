@@ -338,6 +338,26 @@ Prefab:
       propertyPath: m_Name
       value: Al
       objectReference: {fileID: 0}
+    - target: {fileID: 198506255849546830, guid: c9c8dad150533294bb29a14c4bebcdaa,
+        type: 2}
+      propertyPath: randomSeed
+      value: 5708083
+      objectReference: {fileID: 0}
+    - target: {fileID: 198506255849546830, guid: c9c8dad150533294bb29a14c4bebcdaa,
+        type: 2}
+      propertyPath: InitialModule.startSize.minCurve.m_Curve.Array.data[0].value
+      value: 0.5555555
+      objectReference: {fileID: 0}
+    - target: {fileID: 198506255849546830, guid: c9c8dad150533294bb29a14c4bebcdaa,
+        type: 2}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.18
+      objectReference: {fileID: 0}
+    - target: {fileID: 198506255849546830, guid: c9c8dad150533294bb29a14c4bebcdaa,
+        type: 2}
+      propertyPath: InitialModule.startSize.maxCurve.m_Curve.Array.data[0].value
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c9c8dad150533294bb29a14c4bebcdaa, type: 2}
   m_IsPrefabParent: 0
