@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class AlIntroControl : MonoBehaviour
 {
@@ -43,6 +44,20 @@ public class AlIntroControl : MonoBehaviour
     public void DisableSparks()
     {
         em.enabled = false;
+    }
+
+    public void DelayedFlip()
+    {
+        StartCoroutine(Flip());
+    }
+
+    IEnumerator Flip()
+    {
+        yield return new WaitForSeconds(0.02f);
+
+        var scale = transform.localScale;
+        scale.x = -scale.x;
+        transform.localScale = scale;
     }
 
     void OnCollisionEnter2D(Collision2D collision)
