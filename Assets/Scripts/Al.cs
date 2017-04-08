@@ -38,6 +38,8 @@ public class Al : MonoBehaviour
 
     IEnumerator FlyCoroutine(Vector3 target)
     {
+        var startScale = rig.localScale;
+
         anim.SetBool("Flying", true);
         Vector3 start = transform.position;
         float startTime = Time.time;
@@ -50,6 +52,9 @@ public class Al : MonoBehaviour
         var newScale = rigScale;
         if (target.x > start.x)
             newScale.x *= -1f;
+
+        // If this is flipped, compensate
+        newScale.x *= Mathf.Sign(transform.localScale.x);
 
         rig.localScale = newScale;
 
@@ -74,7 +79,7 @@ public class Al : MonoBehaviour
         }
 
         // Return to facing left
-        rig.localScale = rigScale;
+        rig.localScale = startScale;
         currentFly = null;
     }
 }
