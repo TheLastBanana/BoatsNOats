@@ -6,6 +6,9 @@ public class AlIntroControl : MonoBehaviour
     public ParticleSystem sparks;
     public ParticleSystem bonkEffect;
     public ParticleSystem landEffect;
+    public AudioSource thudSound;
+    public AudioSource zapSound;
+
     ParticleSystem.EmissionModule em;
 
     void Awake()
@@ -22,15 +25,18 @@ public class AlIntroControl : MonoBehaviour
     public void PlayLandEffect()
     {
         landEffect.Play();
+        thudSound.Play();
     }
 
     public void EnableSparks()
     {
+        zapSound.Play();
         em.enabled = true;
     }
 
     public void DisableSparks()
     {
+        zapSound.Stop();
         em.enabled = false;
     }
 
@@ -43,9 +49,10 @@ public class AlIntroControl : MonoBehaviour
     {
         yield return new WaitForSeconds(0.02f);
 
-        var scale = transform.localScale;
+        var rig = transform.FindChild("rig");
+        var scale = rig.localScale;
         scale.x = -scale.x;
-        transform.localScale = scale;
+        rig.localScale = scale;
     }
 
     void OnCollisionEnter2D(Collision2D collision)
