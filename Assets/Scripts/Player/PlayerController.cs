@@ -84,10 +84,9 @@ public class PlayerController : MonoBehaviour
         if (portalSelecting)
             return;
 
-		if( _controller.isGrounded )
+        if (_controller.isGrounded)
         {
             _velocity.y = 0;
-            _animator.SetBool("Ground", true);
         }
 
         if (controls.GemmaRight() && !inputDisabled)
@@ -113,7 +112,6 @@ public class PlayerController : MonoBehaviour
 		{
 			_velocity.y = Mathf.Sqrt( 2f * jumpHeight * -gravity );
             _sound.PlayJumpEffect();
-            _animator.SetBool("Ground", false);
         }
 
 
@@ -129,7 +127,9 @@ public class PlayerController : MonoBehaviour
 
 		// grab our current _velocity to use as a base for all calculations
 		_velocity = _controller.velocity;
-	}
+
+        _animator.SetBool("Ground", _controller.isGrounded);
+    }
 
     private void FlipGemma()
     {
