@@ -1,10 +1,10 @@
 fileFormatVersion: 2
 guid: a8ca3067d4bec4043b1fa7ca1e614803
-timeCreated: 1486426224
+timeCreated: 1490649216
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: body
+    21300000: c_body
     21300002: l_eye_back
     21300004: l_eye_pupil
     21300006: r_eye_white
@@ -25,6 +25,24 @@ TextureImporter:
     21300036: l_toe_2
     21300038: l_toe_3
     21300040: wing
+    21300042: l_eye_grn
+    21300044: r_eye_wht
+    21300046: l_eye_wht
+    21300048: c_beak_top
+    21300050: r_eye_grn
+    21300052: c_beak_bottom
+    21300054: l_leg_low
+    21300056: l_leg_up
+    21300058: c_bag
+    21300060: r_leg_up
+    21300062: r_leg_low
+    21300064: l_leg_foot
+    21300066: c_strap
+    21300068: r_leg_foot
+    21300070: c_wing
+    21300072: arti_handle
+    21300074: arti_case
+    21300076: arti_jewel
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -91,28 +109,28 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: body
+      name: c_body
       rect:
         serializedVersion: 2
-        x: 16
-        y: 526
-        width: 392
-        height: 339
+        x: 8
+        y: 263
+        width: 197
+        height: 170
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: l_eye_back
+      name: l_eye_grn
       rect:
         serializedVersion: 2
-        x: 440
-        y: 755
-        width: 106
-        height: 112
-      alignment: 9
-      pivot: {x: 0.42472205, y: 0.58549446}
+        x: 220
+        y: 377
+        width: 54
+        height: 57
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -120,25 +138,25 @@ TextureImporter:
       name: l_eye_pupil
       rect:
         serializedVersion: 2
-        x: 582
-        y: 852
-        width: 17
-        height: 16
+        x: 291
+        y: 426
+        width: 9
+        height: 8
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: r_eye_white
+      name: r_eye_wht
       rect:
         serializedVersion: 2
-        x: 692
-        y: 756
-        width: 196
-        height: 111
-      alignment: 9
-      pivot: {x: 0.5162849, y: 0.58626467}
+        x: 346
+        y: 378
+        width: 99
+        height: 56
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -146,103 +164,64 @@ TextureImporter:
       name: r_eye_pupil
       rect:
         serializedVersion: 2
-        x: 576
-        y: 770
-        width: 45
-        height: 44
+        x: 293
+        y: 385
+        width: 22
+        height: 22
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: r_eye_back
+      name: l_eye_wht
       rect:
         serializedVersion: 2
-        x: 440
-        y: 520
-        width: 118
-        height: 168
-      alignment: 9
-      pivot: {x: 0.5135247, y: 0.5854943}
+        x: 292
+        y: 328
+        width: 34
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: l_eye_white
+      name: c_beak_top
       rect:
         serializedVersion: 2
-        x: 584
-        y: 657
-        width: 66
-        height: 77
+        x: 348
+        y: 349
+        width: 78
+        height: 29
       alignment: 9
-      pivot: {x: 0.6209014, y: 0.4792742}
+      pivot: {x: 0.98447007, y: 0.4433457}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: beak
+      name: r_eye_grn
       rect:
         serializedVersion: 2
-        x: 692
-        y: 675
-        width: 161
-        height: 61
-      alignment: 9
-      pivot: {x: 0.95597017, y: 0.5}
+        x: 220
+        y: 260
+        width: 60
+        height: 84
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: r_leg_up
+      name: c_beak_bottom
       rect:
         serializedVersion: 2
-        x: 74
-        y: 306
-        width: 74
-        height: 173
-      alignment: 9
-      pivot: {x: 0.025544656, y: 0.96124125}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: r_leg_low
-      rect:
-        serializedVersion: 2
-        x: 226
-        y: 195
-        width: 70
-        height: 282
-      alignment: 9
-      pivot: {x: 0.65958947, y: 0.9300992}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: r_toe_1
-      rect:
-        serializedVersion: 2
-        x: 357
-        y: 457
-        width: 65
+        x: 347
+        y: 324
+        width: 81
         height: 14
       alignment: 9
-      pivot: {x: 0.9910452, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: l_leg_up
-      rect:
-        serializedVersion: 2
-        x: 610
-        y: 433
-        width: 78
-        height: 174
-      alignment: 9
-      pivot: {x: 0.029415816, y: 0.99527746}
+      pivot: {x: 0.98005015, y: 1.0085449}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -250,116 +229,155 @@ TextureImporter:
       name: l_leg_low
       rect:
         serializedVersion: 2
-        x: 749
-        y: 321
-        width: 82
-        height: 298
+        x: 17
+        y: 98
+        width: 42
+        height: 150
       alignment: 9
-      pivot: {x: 0.69462174, y: 0.9284283}
+      pivot: {x: 0.6955936, y: 0.9271767}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: r_toe_2
+      name: l_leg_up
       rect:
         serializedVersion: 2
-        x: 349
-        y: 375
-        width: 83
-        height: 31
+        x: 92
+        y: 157
+        width: 39
+        height: 87
       alignment: 9
-      pivot: {x: 0.9230082, y: 0.9633238}
+      pivot: {x: 0.06467829, y: 0.965828}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: r_toe_4
+      name: c_bag
       rect:
         serializedVersion: 2
-        x: 474
-        y: 399
+        x: 157
+        y: 100
+        width: 105
+        height: 142
+      alignment: 9
+      pivot: {x: 0.16618653, y: 0.17603081}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: r_leg_up
+      rect:
+        serializedVersion: 2
+        x: 329
+        y: 208
         width: 38
+        height: 88
+      alignment: 9
+      pivot: {x: 0.009985673, y: 0.9792047}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: r_leg_low
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 151
+        width: 36
+        height: 141
+      alignment: 9
+      pivot: {x: 0.62170243, y: 0.942791}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: l_leg_foot
+      rect:
+        serializedVersion: 2
+        x: 63
+        y: 103
+        width: 60
+        height: 16
+      alignment: 9
+      pivot: {x: 0.8012142, y: 0.46577072}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: c_strap
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 15
+        width: 38
+        height: 120
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: r_leg_foot
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 90
+        width: 52
+        height: 15
+      alignment: 9
+      pivot: {x: 0.7843628, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: c_wing
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 46
+        width: 61
+        height: 37
+      alignment: 9
+      pivot: {x: 0.015183902, y: 0.9292489}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: arti_handle
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 73
+        width: 34
         height: 13
       alignment: 9
-      pivot: {x: -0.003966482, y: 0.13171622}
+      pivot: {x: 0.49999976, y: 0.79489607}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: l_toe_1
+      name: arti_case
       rect:
         serializedVersion: 2
-        x: 579
-        y: 386
-        width: 66
-        height: 14
-      alignment: 9
-      pivot: {x: 0.98360467, y: 0.044030327}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: l_toe_4
-      rect:
-        serializedVersion: 2
-        x: 687
-        y: 364
+        x: 109
+        y: 11
         width: 38
-        height: 12
-      alignment: 9
-      pivot: {x: -0.04596429, y: 0.36700693}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: r_toe_3
-      rect:
-        serializedVersion: 2
-        x: 356
-        y: 303
-        width: 57
         height: 38
-      alignment: 9
-      pivot: {x: 1.0319648, y: 0.9619695}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: l_toe_2
+      name: arti_jewel
       rect:
         serializedVersion: 2
-        x: 577
-        y: 322
-        width: 86
-        height: 24
-      alignment: 9
-      pivot: {x: 1.0010369, y: 0.8989741}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: l_toe_3
-      rect:
-        serializedVersion: 2
-        x: 586
-        y: 259
-        width: 61
-        height: 34
-      alignment: 9
-      pivot: {x: 0.9970823, y: 1.0163188}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: wing
-      rect:
-        serializedVersion: 2
-        x: 352
-        y: 176
-        width: 121
-        height: 73
-      alignment: 9
-      pivot: {x: 0.011998957, y: 0.84978455}
+        x: 178
+        y: 15
+        width: 29
+        height: 27
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
