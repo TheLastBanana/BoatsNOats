@@ -8,6 +8,7 @@ public class Al : MonoBehaviour
     Coroutine currentFly;
     Transform rig;
     Vector3 rigScale;
+    public AudioSource flySound;
     public float flySpeed = 2.0f;
     public float flyAnimStopTime = 0.25f;
     
@@ -26,6 +27,7 @@ public class Al : MonoBehaviour
         if (currentFly != null)
             StopCoroutine(currentFly);
 
+        flySound.Play();
         currentFly = StartCoroutine(FlyCoroutine(target));
     }
 
