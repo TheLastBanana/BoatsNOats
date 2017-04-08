@@ -5904,6 +5904,11 @@ Prefab:
       propertyPath: cutsceneManager
       value: 
       objectReference: {fileID: 1046920532}
+    - target: {fileID: 95902133989999764, guid: c86eda601f8a9cc40b2f7577bccf4596,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c86eda601f8a9cc40b2f7577bccf4596, type: 2}
   m_IsPrefabParent: 0
