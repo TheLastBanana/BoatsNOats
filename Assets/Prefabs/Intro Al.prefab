@@ -819,6 +819,7 @@ MonoBehaviour:
   landEffect: {fileID: 198506255849546830}
   thudSound: {fileID: 82712834760666080}
   zapSound: {fileID: 82278453885284008}
+  flySound: {fileID: 82605306043984054}
 --- !u!114 &114777001614872244
 MonoBehaviour:
   m_ObjectHideFlags: 1

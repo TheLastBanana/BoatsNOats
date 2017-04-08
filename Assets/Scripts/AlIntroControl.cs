@@ -8,12 +8,26 @@ public class AlIntroControl : MonoBehaviour
     public ParticleSystem landEffect;
     public AudioSource thudSound;
     public AudioSource zapSound;
+    public AudioSource flySound;
 
     ParticleSystem.EmissionModule em;
 
     void Awake()
     {
         em = sparks.emission;
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            GetComponent<Animator>().SetTrigger("Get Up");
+        }
+    }
+
+    public void PlayFlySound()
+    {
+        flySound.Play();
     }
 
     public void PlayBonkAnimation()
