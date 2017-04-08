@@ -53,7 +53,6 @@ public class CutsceneManager : MonoBehaviour {
     Queue<CameraPanInfo> pans;
     Queue<AlMoveInfo> moves;
     private bool startedPan;
-    private bool readyToEndPan;
     private bool endCutscene; // Last cutscene in the level, will do scene transition after
 
     // Use this for initialization
@@ -103,12 +102,15 @@ public class CutsceneManager : MonoBehaviour {
         pans = new Queue<CameraPanInfo>();
         moves = new Queue<AlMoveInfo>();
         startedPan = false;
-        readyToEndPan = false;
         endCutscene = false;
     }
 	
 	// Update is called once per frame
 	void Update () {
+        // Check if we've gone through everything
+        if (numTextCurrent == numTexts && pans.Count <= 0 && moves.Count <= 0 && !Busy())
+            EndCutscene();
+
         // We're not in a cutscene
         if (!runningCutscene)
             return;
@@ -152,23 +154,15 @@ public class CutsceneManager : MonoBehaviour {
         // Let the player skip a pan
         if (startedPan && controls.SkipDialogue())
             EndPan();
-
-        // Pan is finished, so wait for player input before moving on
-        if (readyToEndPan && controls.SkipDialogue())
-            readyToEndPan = false;
-
-        // Check if we've gone through everything
-        if (numTextCurrent == numTexts && pans.Count <= 0 && moves.Count <= 0 && !Busy())
-            EndCutscene();
     }
 
     private bool Busy()
     {
         // Are we busy with either dialogue, doing a pan, waiting after a pan, or moving Al?
         if (Al != null)
-            return (startedText || startedPan || readyToEndPan || !AlScript.DoneFlying());
+            return (startedText || startedPan || !AlScript.DoneFlying());
         else
-            return (startedText || startedPan || readyToEndPan);
+            return (startedText || startedPan);
     }
 
     public void RunCutscene(TextAsset textFile)
@@ -193,16 +187,22 @@ public class CutsceneManager : MonoBehaviour {
         pans.Clear();
         moves.Clear();
 
-        // Resume player control
         runningCutscene = false;
-        playerController.ResumeAfterCutscene();
-        cameraSwitcher.SetCutscene(false);
-        cameraTracker.UpdateTarget(Gemma);
-        portalManager.DisablePortal(false);
+
+        // Resume player control
+        if (!endCutscene)
+        {
+            playerController.ResumeAfterCutscene();
+            cameraSwitcher.SetCutscene(false);
+            cameraTracker.UpdateTarget(Gemma);
+            portalManager.DisablePortal(false);
+        }
 
         // If this was the last cutscene in a level do a scene transition now
-        if (endCutscene)
+        else
+        {
             sceneTransition.GetComponent<SceneChanger>().SetLoadNextScene();
+        }
     }
 
     public Text DecideSpeaker(string tag)
@@ -280,7 +280,6 @@ public class CutsceneManager : MonoBehaviour {
     public void EndPan()
     {
         startedPan = false;
-        readyToEndPan = true;
 
         // Switch camera scripts
         cameraTracker.enabled = true;
