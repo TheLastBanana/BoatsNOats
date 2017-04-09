@@ -10,6 +10,8 @@ public class CutsceneManager : MonoBehaviour {
     public GameObject sceneMid1;
     public GameObject sceneMid2;
     public GameObject sceneMid3;
+    public GameObject sceneMid4;
+    public GameObject sceneMid5;
 
     public GameObject cameraManager;
     private CameraSwitcher cameraSwitcher;
@@ -67,23 +69,15 @@ public class CutsceneManager : MonoBehaviour {
 
         // Grab Al's stuff
         if (Al != null)
-        {
             AlScript = Al.GetComponent<Al>();
-            AlText = dialogueCanvas.transform.FindChild("AlText").gameObject.GetComponent<Text>();
-            AlText.gameObject.SetActive(false);
-        }
+        AlText = dialogueCanvas.transform.FindChild("AlText").gameObject.GetComponent<Text>();
+        AlText.gameObject.SetActive(false);
 
-        if (Loudspeaker1 != null)
-        {
-            LS1Text = dialogueCanvas.transform.FindChild("LS1Text").gameObject.GetComponent<Text>();
-            LS1Text.gameObject.SetActive(false);
-        }
-
-        if (Loudspeaker2 != null)
-        {
-            LS2Text = dialogueCanvas.transform.FindChild("LS2Text").gameObject.GetComponent<Text>();
-            LS2Text.gameObject.SetActive(false);
-        }
+        // Loudspeakers
+        LS1Text = dialogueCanvas.transform.FindChild("LS1Text").gameObject.GetComponent<Text>();
+        LS1Text.gameObject.SetActive(false);
+        LS2Text = dialogueCanvas.transform.FindChild("LS2Text").gameObject.GetComponent<Text>();
+        LS2Text.gameObject.SetActive(false);
 
         numTextCurrent = -1;
         numTexts = 0;
@@ -299,6 +293,10 @@ public class CutsceneManager : MonoBehaviour {
             return sceneMid2;
         else if (tag == "mid3")
             return sceneMid3;
+        else if (tag == "mid4")
+            return sceneMid4;
+        else if (tag == "mid5")
+            return sceneMid5;
         else
             return null;
     }

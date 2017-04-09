@@ -2478,16 +2478,6 @@ Prefab:
       propertyPath: textFile
       value: 
       objectReference: {fileID: 4900000, guid: c5f6bcde23956ff45ae7349a88fff15c, type: 3}
-    - target: {fileID: 114274874089878240, guid: 06d7fe0b7b7ba4844835d6b3b4400e43,
-        type: 2}
-      propertyPath: textFile
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 114725031805864312, guid: 06d7fe0b7b7ba4844835d6b3b4400e43,
-        type: 2}
-      propertyPath: textFile
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 4576313191364890, guid: 06d7fe0b7b7ba4844835d6b3b4400e43, type: 2}
       propertyPath: m_LocalPosition.x
       value: -6.44
@@ -2542,6 +2532,22 @@ Prefab:
         type: 2}
       propertyPath: DisablePortalThisLevel
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4892374127415864, guid: 06d7fe0b7b7ba4844835d6b3b4400e43, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 4892374127415864, guid: 06d7fe0b7b7ba4844835d6b3b4400e43, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 4132750126895302, guid: 06d7fe0b7b7ba4844835d6b3b4400e43, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 4132750126895302, guid: 06d7fe0b7b7ba4844835d6b3b4400e43, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 30
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 06d7fe0b7b7ba4844835d6b3b4400e43, type: 2}
