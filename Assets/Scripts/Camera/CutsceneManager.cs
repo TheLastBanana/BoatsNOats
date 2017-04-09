@@ -33,12 +33,12 @@ public class CutsceneManager : MonoBehaviour {
     private Text AlText;
 
     // Loudspeaker1
-    public GameObject Loudspeaker1;
-    private Text LS1Text;
+    public GameObject LoudspeakerWet;
+    private Text LSWetText;
 
     // Loudspeaker2
-    public GameObject Loudspeaker2;
-    private Text LS2Text;
+    public GameObject LoudspeakerDry;
+    private Text LSDryText;
 
     private Text currentText;
 
@@ -74,10 +74,10 @@ public class CutsceneManager : MonoBehaviour {
         AlText.gameObject.SetActive(false);
 
         // Loudspeakers
-        LS1Text = dialogueCanvas.transform.FindChild("LS1Text").gameObject.GetComponent<Text>();
-        LS1Text.gameObject.SetActive(false);
-        LS2Text = dialogueCanvas.transform.FindChild("LS2Text").gameObject.GetComponent<Text>();
-        LS2Text.gameObject.SetActive(false);
+        LSWetText = dialogueCanvas.transform.FindChild("LSWetText").gameObject.GetComponent<Text>();
+        LSWetText.gameObject.SetActive(false);
+        LSDryText = dialogueCanvas.transform.FindChild("LSDryText").gameObject.GetComponent<Text>();
+        LSDryText.gameObject.SetActive(false);
 
         numTextCurrent = -1;
         numTexts = 0;
@@ -199,10 +199,10 @@ public class CutsceneManager : MonoBehaviour {
             currentText = GemmaText;
         else if (tag == "al")
             currentText = AlText;
-        else if (tag == "loudspeaker1")
-            currentText = LS1Text;
-        else if (tag == "loudspeaker2")
-            currentText = LS2Text;
+        else if (tag == "loudspeakerwet")
+            currentText = LSWetText;
+        else if (tag == "loudspeakerdry")
+            currentText = LSDryText;
         else
             currentText = null;
 
@@ -283,10 +283,10 @@ public class CutsceneManager : MonoBehaviour {
             return Gemma;
         else if (tag == "al")
             return Al;
-        else if (tag == "loudspeaker1")
-            return Loudspeaker1;
-        else if (tag == "loudspeaker2")
-            return Loudspeaker2;
+        else if (tag == "loudspeakerwet")
+            return LoudspeakerWet;
+        else if (tag == "loudspeakerdry")
+            return LoudspeakerDry;
         else if (tag == "mid1")
             return sceneMid1;
         else if (tag == "mid2")

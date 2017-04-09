@@ -54,7 +54,7 @@ GameObject:
   - component: {fileID: 4338114958046146}
   - component: {fileID: 212476701884879722}
   m_Layer: 0
-  m_Name: LS2TextBubble
+  m_Name: LSDryTextBubble
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -139,7 +139,7 @@ GameObject:
   - component: {fileID: 222527242321044342}
   - component: {fileID: 114526107588945084}
   m_Layer: 5
-  m_Name: LS1Text
+  m_Name: LSWetText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -206,7 +206,7 @@ GameObject:
   - component: {fileID: 4909948899889586}
   - component: {fileID: 212028448508040628}
   m_Layer: 0
-  m_Name: LS1TextBubble
+  m_Name: LSWetTextBubble
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -638,7 +638,7 @@ GameObject:
   - component: {fileID: 222815019117495362}
   - component: {fileID: 114577383654349494}
   m_Layer: 5
-  m_Name: LS2Text
+  m_Name: LSDryText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2616,8 +2616,8 @@ MonoBehaviour:
   dialogueCanvas: {fileID: 223276061801502846}
   Gemma: {fileID: 0}
   Al: {fileID: 0}
-  Loudspeaker1: {fileID: 0}
-  Loudspeaker2: {fileID: 0}
+  LoudspeakerWet: {fileID: 0}
+  LoudspeakerDry: {fileID: 0}
 --- !u!114 &114717450731081886
 MonoBehaviour:
   m_ObjectHideFlags: 1
