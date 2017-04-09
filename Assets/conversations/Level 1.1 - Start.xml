@@ -10,6 +10,9 @@ Sights are on the intruder! Dolphins converge!
 Ahhh! Maybe this thing can help me get away from whatever a dolphin is.
 </custom></text>
   <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
-So I can create a portal by <b><i>Left Clicking</i></b> and dragging, and at any point I can hold <b><i>Tab</i></b> to view my world. If I really mess up I can hit <b><i>R</i></b> to redo things.
+So I can start a portal by <b><i>Left Clicking</i></b> and dragging, and then create it by letting go of <b><i>Left Click</i></b> or cancel it by <b><i>Right Clicking</i></b>.
+</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+At any point I can hold <b><i>Tab</i></b> to view my world. If I really mess up I can hit <b><i>R</i></b> to redo things.
 </custom></text>
 </dialog>
