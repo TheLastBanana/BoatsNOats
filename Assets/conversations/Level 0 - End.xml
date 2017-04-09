@@ -12,7 +12,7 @@ What’s that sound? That can’t be good.
   <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
 Ok now this ain’t right.
 </custom></text>
-  <text xml:space="preserve"><custom speaker="loudspeaker1"/><custom voice="Dolphin Loudspeaker"/><custom speed="0.015">
+  <text xml:space="preserve"><custom speaker="loudspeakerdry"/><custom voice="Dolphin Loudspeaker"/><custom speed="0.015">
 Intruder alert! Alarm has been tripped. Security dolphins converge on the intruder.
 </custom></text>
   <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">

@@ -25,9 +25,9 @@ I’m not a bird! I’m an AI!
 A what now?
 </custom></text>
   <text xml:space="preserve">
-<custom pan="loudspeaker1" delay="0.5"/>
+<custom pan="loudspeakerdry" delay="0.5"/>
 </text>
-  <text xml:space="preserve"><custom speaker="loudspeaker1"/><custom voice="Dolphin Loudspeaker"/><custom speed="0.015">
+  <text xml:space="preserve"><custom speaker="loudspeakerdry"/><custom voice="Dolphin Loudspeaker"/><custom speed="0.015">
 The feathered intruder is still at large and leaving behind piles of blue debris! All officers engage in pursuit of a long legged and hexagonal shaped criminal!
 </custom></text>
   <text xml:space="preserve">
