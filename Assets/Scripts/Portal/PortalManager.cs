@@ -89,6 +89,7 @@ public class PortalManager : MonoBehaviour
         if (isSelecting)
         {
             
+            if (SceneManager.GetActiveScene().name == "Intro Screen")
             {
                 portPos2 = new Vector3(-26.19f, 7.36f, 0);
             }
@@ -233,6 +234,7 @@ public class PortalManager : MonoBehaviour
         portalEffect.particleIntensity = 1f;
 
         isSelecting = true;
+        if(SceneManager.GetActiveScene().name == "Intro Screen")
         {
             portPos1 = new Vector3(-40, 4, 0);
         }
