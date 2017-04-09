@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class PortalManager : MonoBehaviour
 {
@@ -78,21 +80,7 @@ public class PortalManager : MonoBehaviour
         // If we press the left mouse button, save mouse location and portal creation
         if (!isTransferring && Input.GetMouseButtonDown(0) && !disabled)
         {
-            portalCam.enabled = true;
-            portalEffect.Enable();
-            portalEffect.particleIntensity = 1f;
-
-            isSelecting = true;
-            portPos1 = mainCam.ScreenToWorldPoint(Input.mousePosition);
-            movingPortalRect = new Rect(portPos1, new Vector2());
-
-            timeStopSound.Play();
-            portalDragSound.Play();
-            altWorldAmbience.Play();
-            afx.cancelEffects(portalDragSound);
-            afx.cancelEffects(altWorldAmbience);
-
-            freeze();
+            initiatePortal();
         }
 
         // Here we update the secondary position of the portal while we're 
@@ -100,11 +88,21 @@ public class PortalManager : MonoBehaviour
         // we can update the final mouse position
         if (isSelecting)
         {
-            Vector2 clampedMousePos = new Vector2(
+            
+            {
+                portPos2 = new Vector3(-26.19f, 7.36f, 0);
+            }
+            else
+            {
+                Vector2 clampedMousePos;
+                clampedMousePos = new Vector2(
                 Mathf.Clamp(Input.mousePosition.x, 0, mainCam.pixelWidth),
                 Mathf.Clamp(Input.mousePosition.y, 0, 2 * mainCam.pixelHeight)
-            );
-            portPos2 = mainCam.ScreenToWorldPoint(clampedMousePos);
+                );
+                portPos2 = mainCam.ScreenToWorldPoint(clampedMousePos);
+            }
+            
+            
 
             // The further the current portal rectangle is from the target, the
             // faster it accelerates towards it
@@ -226,6 +224,31 @@ public class PortalManager : MonoBehaviour
                 portalCam.transform.position -= offs.offset;
             }
         }
+    }
+
+    public void initiatePortal()
+    {
+        portalCam.enabled = true;
+        portalEffect.Enable();
+        portalEffect.particleIntensity = 1f;
+
+        isSelecting = true;
+        {
+            portPos1 = new Vector3(-40, 4, 0);
+        }
+        else
+        {
+            portPos1 = mainCam.ScreenToWorldPoint(Input.mousePosition);
+        }
+        movingPortalRect = new Rect(portPos1, new Vector2());
+
+        timeStopSound.Play();
+        portalDragSound.Play();
+        altWorldAmbience.Play();
+        afx.cancelEffects(portalDragSound);
+        afx.cancelEffects(altWorldAmbience);
+
+        freeze();
     }
 
     // Freeze time while portal is being dragged

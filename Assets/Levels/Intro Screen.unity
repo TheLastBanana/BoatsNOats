@@ -6121,6 +6121,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ece82e20d4eba954d8b1572fcc51ffe4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  portalManager: {fileID: 0}
+  DisablePortalThisLevel: 0
 --- !u!1 &426018783
 GameObject:
   m_ObjectHideFlags: 0
@@ -11525,6 +11527,34 @@ Canvas:
   m_SortingLayerID: -607841015
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!1 &504066603
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 504066604}
+  m_Layer: 0
+  m_Name: Testtarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &504066604
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 504066603}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 4, y: 5.814827, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &510927478
 GameObject:
   m_ObjectHideFlags: 0
@@ -15273,6 +15303,7 @@ MonoBehaviour:
   cMain: {fileID: 1740984369}
   cAlt: {fileID: 442679182}
   cChar: {fileID: 1613866180}
+  cGhost: {fileID: 0}
   controls: {fileID: 419212950}
 --- !u!114 &1139272353
 MonoBehaviour:
@@ -19175,7 +19206,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1740984364}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 7.485598, y: 5, z: -10}
+  m_LocalPosition: {x: 8.645569, y: 5, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1613866181}
@@ -19343,6 +19374,48 @@ Transform:
   - {fileID: 299785754}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1855632039
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1855632041}
+  - component: {fileID: 1855632040}
+  m_Layer: 0
+  m_Name: Intromaster
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1855632040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1855632039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 721925376df45204d9855e0b6bba64a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Gemma: {fileID: 831177390}
+  target: {fileID: 504066603}
+--- !u!4 &1855632041
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1855632039}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -9.485505, y: 5.814827, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1888876879
 GameObject:

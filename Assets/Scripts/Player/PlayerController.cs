@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
 	public float jumpHeight = 3.5f;
 
     [HideInInspector]
-	private float normalizedHorizontalSpeed = 0;
+	public float normalizedHorizontalSpeed = 0;
 
 	private CharacterController2D _controller;
 	private Animator _animator;
@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 storedVelocity;
     private float storedGravity;
 
+    private bool isWalking = false;
 
     void Start()
     {
@@ -102,7 +103,7 @@ public class PlayerController : MonoBehaviour
 			if( transform.localScale.x < 0f )
                 FlipGemma();
         }
-        else
+        else if(!isWalking)
 		{
 			normalizedHorizontalSpeed = 0;
 		}
@@ -129,8 +130,35 @@ public class PlayerController : MonoBehaviour
 
 		// grab our current _velocity to use as a base for all calculations
 		_velocity = _controller.velocity;
+
 	}
 
+    public void walkToPosition(Vector3 target)
+    {
+        isWalking = true;
+        Vector3 start = transform.position;
+ 
+
+        if (target.x > start.x)
+        {
+            Debug.Log("Right");
+            if (transform.localScale.x > 0f)
+                FlipGemma();
+            normalizedHorizontalSpeed = 1;
+        }
+        else
+        {
+            Debug.Log("Left");
+            if (transform.localScale.x < 0f)
+                FlipGemma();
+            normalizedHorizontalSpeed = -1;
+        }
+ 
+        //normalizedHorizontalSpeed = 0;
+
+
+
+    }
     private void FlipGemma()
     {
         // Get canvas' x position
