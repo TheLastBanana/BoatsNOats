@@ -21,7 +21,6 @@ public class PlayerController : MonoBehaviour
     private PlayerEffects _sound;
 	private RaycastHit2D _lastControllerColliderHit;
 	private Vector3 _velocity;
-    private Transform canvasTransform;
     public GameControls controls;
 
     public bool inputDisabled;
@@ -32,7 +31,6 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        canvasTransform = GetComponentInChildren<Canvas>().transform;
         portalSelecting = false;
     }
 
@@ -133,17 +131,7 @@ public class PlayerController : MonoBehaviour
 
     private void FlipGemma()
     {
-        // Get canvas' x position
-        float canvasX = canvasTransform.position.x;
-
-        // Flip Gemma
         transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
-
-        // Flip canvas back
-        canvasTransform.localScale = new Vector3(-canvasTransform.localScale.x, canvasTransform.localScale.y, canvasTransform.localScale.z);
-
-        // Reset canvas' x position
-        canvasTransform.position = new Vector3(canvasX, canvasTransform.position.y, canvasTransform.position.z);
     }
 
     public void StopForCutscene()
