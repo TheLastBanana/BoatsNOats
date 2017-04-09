@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dialog>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+The Artifact! That map I stole from the gulls was right!
+</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+This thing is supposed have some cool powers. I’ll use it to teach those gulls a lesson. I hope it shoots fireballs.
+</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+What’s that sound? That can’t be good.
+</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+Ok now this ain’t right.
+</custom></text>
+  <text xml:space="preserve"><custom speaker="loudspeaker1"/><custom voice="Dolphin Loudspeaker"/><custom speed="0.015">
+Intruder alert! Alarm has been tripped. Security dolphins converge on the intruder.
+</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+Security dol-whats? I better get out of here.
+</custom></text>
+</dialog>

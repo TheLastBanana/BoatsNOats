@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dialog>
-  <text xml:space="preserve"><custom speaker="gemma"/><custom speed=".015"><custom voice="Al Neutral"/>Use WAD to move. Left click and drag to create a portal. Hold Tab to view the other world. Hit R to restart the level if you get stuck. Hit Enter to cycle through dialogue.</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+How did this stupid artifact get me here? Why won’t it take me back home!
+</custom></text>
+  <text xml:space="preserve"><custom speaker="loudspeaker1"/><custom voice="Dolphin Loudspeaker"/><custom speed="0.015">
+Sights are on the intruder! Dolphins converge!
+</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+Ahhh! Maybe this thing can help me get away from whatever a dolphin is.
+</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+So I can start a portal by <b><i>Left Clicking</i></b> and dragging, and then create it by letting go of <b><i>Left Click</i></b> or cancel it by <b><i>Right Clicking</i></b>.
+</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+At any point I can hold <b><i>Tab</i></b> to view my world. If I really mess up I can hit <b><i>R</i></b> to redo things.
+</custom></text>
 </dialog>

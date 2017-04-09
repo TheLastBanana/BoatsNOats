@@ -10,6 +10,8 @@ public class CutsceneManager : MonoBehaviour {
     public GameObject sceneMid1;
     public GameObject sceneMid2;
     public GameObject sceneMid3;
+    public GameObject sceneMid4;
+    public GameObject sceneMid5;
 
     public GameObject cameraManager;
     private CameraSwitcher cameraSwitcher;
@@ -18,30 +20,26 @@ public class CutsceneManager : MonoBehaviour {
     public PortalManager portalManager;
     public GameControls controls;
     private TypewriterText typewriterText;
+    public Canvas dialogueCanvas;
 
     // Gemma
     public GameObject Gemma;
     private PlayerController playerController;
-    private GameObject GemmaTextBubble;
     private Text GemmaText;
 
     // Al
     public GameObject Al;
     private Al AlScript;
-    private GameObject AlTextBubble;
     private Text AlText;
 
     // Loudspeaker1
     public GameObject Loudspeaker1;
-    private GameObject LS1TextBubble;
     private Text LS1Text;
 
     // Loudspeaker2
     public GameObject Loudspeaker2;
-    private GameObject LS2TextBubble;
     private Text LS2Text;
 
-    private GameObject currentTextBubble;
     private Text currentText;
 
     private int numTextCurrent;
@@ -53,7 +51,6 @@ public class CutsceneManager : MonoBehaviour {
     Queue<CameraPanInfo> pans;
     Queue<AlMoveInfo> moves;
     private bool startedPan;
-    private bool readyToEndPan;
     private bool endCutscene; // Last cutscene in the level, will do scene transition after
 
     // Use this for initialization
@@ -67,32 +64,20 @@ public class CutsceneManager : MonoBehaviour {
 
         // Grab Gemma's stuff
         playerController = Gemma.GetComponent<PlayerController>();
-        GemmaTextBubble = Gemma.GetComponentInChildren<Canvas>(true).transform.FindChild("GemmaTextBubble").gameObject;
-        GemmaText = GemmaTextBubble.GetComponentInChildren<Text>(true);
-        GemmaTextBubble.SetActive(false);
+        GemmaText = dialogueCanvas.transform.FindChild("GemmaText").gameObject.GetComponent<Text>();
+        GemmaText.gameObject.SetActive(false);
 
         // Grab Al's stuff
         if (Al != null)
-        {
             AlScript = Al.GetComponent<Al>();
-            AlTextBubble = Al.GetComponentInChildren<Canvas>(true).transform.FindChild("AlTextBubble").gameObject;
-            AlText = AlTextBubble.GetComponentInChildren<Text>(true);
-            AlTextBubble.SetActive(false);
-        }
+        AlText = dialogueCanvas.transform.FindChild("AlText").gameObject.GetComponent<Text>();
+        AlText.gameObject.SetActive(false);
 
-        if (Loudspeaker1 != null)
-        {
-            LS1TextBubble = Loudspeaker1.GetComponentInChildren<Canvas>(true).transform.FindChild("LS1TextBubble").gameObject;
-            LS1Text = LS1TextBubble.GetComponentInChildren<Text>(true);
-            LS1TextBubble.SetActive(false);
-        }
-
-        if (Loudspeaker2 != null)
-        {
-            LS2TextBubble = Loudspeaker2.GetComponentInChildren<Canvas>(true).transform.FindChild("LS2TextBubble").gameObject;
-            LS2Text = LS2TextBubble.GetComponentInChildren<Text>(true);
-            LS2TextBubble.SetActive(false);
-        }
+        // Loudspeakers
+        LS1Text = dialogueCanvas.transform.FindChild("LS1Text").gameObject.GetComponent<Text>();
+        LS1Text.gameObject.SetActive(false);
+        LS2Text = dialogueCanvas.transform.FindChild("LS2Text").gameObject.GetComponent<Text>();
+        LS2Text.gameObject.SetActive(false);
 
         numTextCurrent = -1;
         numTexts = 0;
@@ -103,12 +88,15 @@ public class CutsceneManager : MonoBehaviour {
         pans = new Queue<CameraPanInfo>();
         moves = new Queue<AlMoveInfo>();
         startedPan = false;
-        readyToEndPan = false;
         endCutscene = false;
     }
 	
 	// Update is called once per frame
 	void Update () {
+        // Check if we've gone through everything
+        if (numTextCurrent == numTexts && pans.Count <= 0 && moves.Count <= 0 && !Busy())
+            EndCutscene();
+
         // We're not in a cutscene
         if (!runningCutscene)
             return;
@@ -144,31 +132,23 @@ public class CutsceneManager : MonoBehaviour {
         if (startedText && !typewriterText.isTextDone() && (controls.SkipDialogue() || !typewriterText.hasSpeaker(numTextCurrent)))
         {
             startedText = false;
-            if (currentTextBubble != null)
-                currentTextBubble.SetActive(false);
+            if (currentText != null)
+                currentText.gameObject.SetActive(false);
             numTextCurrent += 1;
         }
 
         // Let the player skip a pan
         if (startedPan && controls.SkipDialogue())
             EndPan();
-
-        // Pan is finished, so wait for player input before moving on
-        if (readyToEndPan && controls.SkipDialogue())
-            readyToEndPan = false;
-
-        // Check if we've gone through everything
-        if (numTextCurrent == numTexts && pans.Count <= 0 && moves.Count <= 0 && !Busy())
-            EndCutscene();
     }
 
     private bool Busy()
     {
         // Are we busy with either dialogue, doing a pan, waiting after a pan, or moving Al?
         if (Al != null)
-            return (startedText || startedPan || readyToEndPan || !AlScript.DoneFlying());
+            return (startedText || startedPan || !AlScript.DoneFlying());
         else
-            return (startedText || startedPan || readyToEndPan);
+            return (startedText || startedPan);
     }
 
     public void RunCutscene(TextAsset textFile)
@@ -193,16 +173,22 @@ public class CutsceneManager : MonoBehaviour {
         pans.Clear();
         moves.Clear();
 
-        // Resume player control
         runningCutscene = false;
-        playerController.ResumeAfterCutscene();
-        cameraSwitcher.SetCutscene(false);
-        cameraTracker.UpdateTarget(Gemma);
-        portalManager.DisablePortal(false);
+
+        // Resume player control
+        if (!endCutscene)
+        {
+            playerController.ResumeAfterCutscene();
+            cameraSwitcher.SetCutscene(false);
+            cameraTracker.UpdateTarget(Gemma);
+            portalManager.DisablePortal(false);
+        }
 
         // If this was the last cutscene in a level do a scene transition now
-        if (endCutscene)
+        else
+        {
             sceneTransition.GetComponent<SceneChanger>().SetLoadNextScene();
+        }
     }
 
     public Text DecideSpeaker(string tag)
@@ -210,33 +196,18 @@ public class CutsceneManager : MonoBehaviour {
         tag = tag.ToLower();
 
         if (tag == "gemma")
-        {
-            currentTextBubble = GemmaTextBubble;
             currentText = GemmaText;
-        }
         else if (tag == "al")
-        {
-            currentTextBubble = AlTextBubble;
             currentText = AlText;
-        }
         else if (tag == "loudspeaker1")
-        {
-            currentTextBubble = LS1TextBubble;
             currentText = LS1Text;
-        }
         else if (tag == "loudspeaker2")
-        {
-            currentTextBubble = LS2TextBubble;
             currentText = LS2Text;
-        }
         else
-        {
-            currentTextBubble = null;
             currentText = null;
-        }
 
-        if (currentTextBubble != null)
-            currentTextBubble.SetActive(true);
+        if (currentText != null)
+            currentText.gameObject.SetActive(true);
         return currentText;
     }
 
@@ -280,7 +251,6 @@ public class CutsceneManager : MonoBehaviour {
     public void EndPan()
     {
         startedPan = false;
-        readyToEndPan = true;
 
         // Switch camera scripts
         cameraTracker.enabled = true;
@@ -323,6 +293,10 @@ public class CutsceneManager : MonoBehaviour {
             return sceneMid2;
         else if (tag == "mid3")
             return sceneMid3;
+        else if (tag == "mid4")
+            return sceneMid4;
+        else if (tag == "mid5")
+            return sceneMid5;
         else
             return null;
     }

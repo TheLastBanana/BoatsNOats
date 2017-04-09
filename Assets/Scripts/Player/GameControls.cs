@@ -62,6 +62,9 @@ public class GameControls : MonoBehaviour {
 
     public bool RestartLevel()
     {
+        if (DisablePortalThisLevel)
+            return false;
+
         return Input.GetKey(KeyCode.R);
     }
 
