@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dialog>
+  <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
+So where are you from?
+</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+Somewhere totally different. I don’t even know where I am right now. I just grabbed this artifact then suddenly I was here!
+</custom></text>
+  <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
+Oooooo I’ve seen one of those before. The dolphins found a stone like yours a few years ago.
+</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+Wait they found one like it? Mine won’t take me back. Do you think if I touched the one the dolphins found it would send me back home?
+</custom></text>
+  <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
+I mean. I normally just file things so I don’t really know. But let’s try it anyway! I’ll take you to where they have it.
+</custom></text>
+</dialog>
