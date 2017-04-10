@@ -107,3 +107,5 @@ MonoBehaviour:
   waveThickness: 0.3
   changeRate: 0.75
   wavinessAreaThreshold: 3
+  defaultMaterial: {fileID: 2100000, guid: af934999fc063f449b501dc68f14c725, type: 2}
+  blockedMaterial: {fileID: 2100000, guid: e3e07653fe0a334448a14531697f2be0, type: 2}

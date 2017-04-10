@@ -12,6 +12,7 @@ public class PortalManager : MonoBehaviour
     public AudioSource portalDragSound;
     public AudioSource timeStartSound;
     public AudioSource objectCutSound;
+    public AudioSource blockedPortalSound;
     public AudioLowPassFilter altWorldAmbienceLPF;
     public MusicManager musicManager;
     public float portalMusicVolume = 0.3f;
@@ -25,6 +26,7 @@ public class PortalManager : MonoBehaviour
     public Camera mainCam;
     public Camera altCam;
     public Camera portalCam;
+    public Camera blockedPortalCam;
     public WorldOffsets offs;
     public CircuitManager circuitManager;
     public CutsceneManager cutsceneManager;
@@ -33,6 +35,7 @@ public class PortalManager : MonoBehaviour
     // Effects
     public GameObject portalParticlePrefab;
     public GameObject portalFlashPrefab;
+    public GameObject portalBlockedFlashPrefab;
 
     // Current portal selection info
     public float minimumPortalSize = 0.1f;
@@ -201,8 +204,14 @@ public class PortalManager : MonoBehaviour
             portalCam.orthographicSize = Mathf.Abs(portalRect.height) / 2;
             portalCam.rect = newRect;
 
+            blockedPortalCam.orthographicSize = portalCam.orthographicSize;
+            blockedPortalCam.rect = portalCam.rect;
+
             // Change portal position
             portalCam.transform.position = new Vector3(portalRect.center.x, portalRect.center.y, -10);
+            blockedPortalCam.transform.position = portalCam.transform.position;
+
+            // Blocked camera should always be in real world; portal camera should be opposite of real camera
             if (!cameraSwitcher.switched)
             {
                 portalCam.transform.position += offs.offset;
@@ -210,7 +219,10 @@ public class PortalManager : MonoBehaviour
             else
             {
                 portalCam.transform.position -= offs.offset;
+                blockedPortalCam.transform.position -= offs.offset;
             }
+
+            portalEffect.blocked = !checkPortalValid();
         }
     }
 
@@ -218,6 +230,7 @@ public class PortalManager : MonoBehaviour
     public void initiatePortal()
     {
         portalCam.enabled = true;
+        blockedPortalCam.enabled = true;
         portalEffect.Enable();
         portalEffect.particleIntensity = 1f;
 
@@ -257,15 +270,26 @@ public class PortalManager : MonoBehaviour
 
         if (!cancelled)
         {
+            var flashPrefab = portalFlashPrefab;
+
+            if (checkPortalValid())
+            {
+                // Do the portal transfer
+                var transferRect = new Rect(portalRect);
+                if (cameraSwitcher.switched) transferRect.center -= (Vector2)offs.offset;
+                StartCoroutine(portalTransfer(transferRect.min, transferRect.max, true));
+            }
+            else
+            {
+                flashPrefab = portalBlockedFlashPrefab;
+                blockedPortalSound.Play();
+                unfreeze();
+            }
+
             // Create the portal flash effect
-            var flash = Instantiate(portalFlashPrefab);
+            var flash = Instantiate(flashPrefab);
             flash.transform.position = portalRect.center;
             flash.GetComponent<PortalTransferEffect>().startScale = portalRect.size;
-
-            // Do the portal transfer
-            var transferRect = new Rect(portalRect);
-            if (cameraSwitcher.switched) transferRect.center -= (Vector2)offs.offset;
-            StartCoroutine(portalTransfer(transferRect.min, transferRect.max, true));
         }
 
         else
@@ -273,6 +297,38 @@ public class PortalManager : MonoBehaviour
             unfreeze();
         }
 
+    }
+
+    // Check if anything is blocking the portal
+    bool checkPortalValid()
+    {
+        var portalBounds = new Bounds(portalRect.center, portalRect.size);
+        if (cameraSwitcher.switched)
+        {
+            portalBounds.center -= offs.offset;
+        }
+
+        bool blocked = false;
+
+        foreach (var obj in FindObjectsOfType<GameObject>())
+        {
+            // Get any objects in the character layer
+            if (obj.layer == LayerMask.NameToLayer("Character"))
+            {
+                // Only mesh and sprite renderers (e.g. not particles) should block the portal
+                Renderer renderer = obj.GetComponent<MeshRenderer>();
+                if (!renderer) renderer = obj.GetComponent<SpriteRenderer>();
+                if (!renderer) continue;
+
+                // If it's in the portal bounds, the portal is blocked
+                if (portalBounds.Intersects(renderer.bounds))
+                {
+                    blocked = true;
+                }
+            }
+        }
+
+        return !blocked;
     }
 
     // Freeze time while portal is being dragged
@@ -302,6 +358,7 @@ public class PortalManager : MonoBehaviour
     {
         portalEffect.particleIntensity = 0.2f;
         portalCam.enabled = false;
+        blockedPortalCam.enabled = false;
         portalCam.rect = new Rect();
         
         cutsceneManager.DisableGemma(false);

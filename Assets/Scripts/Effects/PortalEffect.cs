@@ -14,6 +14,9 @@ public class PortalEffect : MonoBehaviour
     public float changeRate = 0.1f;
     public float wavinessAreaThreshold = 1.0f;
 
+    public Material defaultMaterial;
+    public Material blockedMaterial;
+
     ParticleSystem middle;
     float middleBaseRate;
 
@@ -27,6 +30,24 @@ public class PortalEffect : MonoBehaviour
 
     const int numBorderVerts = 20;
     const int numBorderTris = 16;
+
+    bool _blocked;
+    public bool blocked
+    {
+        get
+        {
+            return _blocked;
+        }
+
+        set
+        {
+            _blocked = value;
+
+            var renderer = GetComponent<MeshRenderer>();
+            if (_blocked) renderer.material = blockedMaterial;
+            else renderer.material = defaultMaterial;
+        }
+    }
 
     void Awake()
     {
