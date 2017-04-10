@@ -83,15 +83,15 @@
 
     static const fixed4 GHOST_COLOR = fixed4(1, 0.6, 0.3, 1);
     static const float PULSE_RATE = 60;
-    static const float PULSE_MIN = 0.2;
-    static const float PULSE_MAX = 0.3;
+    static const float PULSE_MIN = 0.3;
+    static const float PULSE_MAX = 0.2;
 
     fixed4 frag(v2f IN) : SV_Target
     {
         fixed4 texC = SampleSpriteTexture(IN.texcoord) * IN.color;
         float alpha = max(texC.r, max(texC.g, texC.b)) * lerp(PULSE_MIN, PULSE_MAX, (sin(_Time.r * PULSE_RATE) + 1) / 2);
 
-        fixed4 c = fixed4(GHOST_COLOR.r, GHOST_COLOR.g, GHOST_COLOR.b, GHOST_COLOR.a * alpha);
+        fixed4 c = fixed4(GHOST_COLOR.r, GHOST_COLOR.g, GHOST_COLOR.b, GHOST_COLOR.a * alpha * texC.a);
         c.rgb *= c.a;
         return c;
     }
