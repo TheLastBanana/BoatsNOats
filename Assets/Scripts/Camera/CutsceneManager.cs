@@ -137,9 +137,15 @@ public class CutsceneManager : MonoBehaviour {
             numTextCurrent += 1;
         }
 
-        // Let the player skip a pan
-        if (startedPan && controls.SkipDialogue())
-            EndPan();
+        if (controls.SkipDialogue())
+        {
+            // Let the player skip a pan
+            if (startedPan)
+                EndPan();
+
+            if (Al != null && !AlScript.DoneFlying())
+                AlScript.SkipFlying();
+         }
     }
 
     private bool Busy()
