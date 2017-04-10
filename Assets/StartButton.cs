@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class StartButton : MonoBehaviour {
 
+    public SceneChanger sceneChanger;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -13,9 +15,8 @@ public class StartButton : MonoBehaviour {
 	void Update () {
 		
 	}
-
-    void LoadNextLevel()
+    void OnMouseDown()
     {
-        Debug.Log("nexto lvl");
+        sceneChanger.SetLoadNextScene();
     }
 }
