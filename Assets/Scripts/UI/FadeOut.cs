@@ -53,7 +53,6 @@ public class FadeOut : MonoBehaviour
             // Reset
             if (curFrame == frameCount)
             {
-                boxRen.enabled = false;
                 wasAnimating = false;
                 animate = false;
             }
