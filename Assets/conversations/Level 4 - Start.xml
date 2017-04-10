@@ -30,4 +30,7 @@ I don’t want your gross sewer ice cream Al.
   <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
 More for me!
 </custom></text>
+  <text xml:space="preserve">
+<custom move="mid1"/>
+</text>
 </dialog>
