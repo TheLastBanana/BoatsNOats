@@ -9,6 +9,7 @@ public class Al : MonoBehaviour
     Transform rig;
     Vector3 rigScale;
     public AudioSource flySound;
+    Vector3 currentTarget;
     public float flySpeed = 2.0f;
     public float flyAnimStopTime = 0.25f;
     
@@ -28,7 +29,8 @@ public class Al : MonoBehaviour
             StopCoroutine(currentFly);
 
         flySound.Play();
-        currentFly = StartCoroutine(FlyCoroutine(target));
+        currentTarget = target;
+        currentFly = StartCoroutine(FlyCoroutine());
     }
 
     public bool DoneFlying()
@@ -36,7 +38,23 @@ public class Al : MonoBehaviour
         return (currentFly == null);
     }
 
-    IEnumerator FlyCoroutine(Vector3 target)
+    public void SkipFlying()
+    {
+        if (currentFly != null)
+        {
+            StopCoroutine(currentFly);
+            FinishFly();
+        }
+    }
+
+    void FinishFly()
+    {
+        transform.position = currentTarget;
+        rig.localScale = rigScale;
+        currentFly = null;
+    }
+
+    IEnumerator FlyCoroutine()
     {
         var startScale = rig.localScale;
 
@@ -46,11 +64,11 @@ public class Al : MonoBehaviour
         var delta = 0f;
 
         // Fly time is based on distance between positions
-        float flyTime = (target - start).magnitude / flySpeed;
+        float flyTime = (currentTarget - start).magnitude / flySpeed;
 
         // Flip to face movement
         var newScale = rigScale;
-        if (target.x > start.x)
+        if (currentTarget.x > start.x)
             newScale.x *= -1f;
 
         // If this is flipped, compensate
@@ -66,7 +84,7 @@ public class Al : MonoBehaviour
             var diff = Time.time - startTime;
 
             delta = diff / flyTime;
-            transform.position = Mathfx.Hermite(start, target, delta);
+            transform.position = Mathfx.Hermite(start, currentTarget, delta);
 
             // Almost at the end, so reset to idle animation
             if (!flippedBack && flyTime - diff < flyAnimStopTime)
@@ -79,7 +97,6 @@ public class Al : MonoBehaviour
         }
 
         // Return to facing left
-        rig.localScale = startScale;
-        currentFly = null;
+        FinishFly();
     }
 }

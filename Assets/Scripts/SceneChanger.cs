@@ -10,6 +10,9 @@ public class SceneChanger : MonoBehaviour
     private CutsceneInfo cutsceneInfo;
     public GameControls controls;
 
+    // Need the fader from the Main Camera
+    public FadeOut fader;
+
     private int currentScene;
     private int nextScene;
     private bool loadNextScene;
@@ -76,6 +79,19 @@ public class SceneChanger : MonoBehaviour
     // TODO: Transition stuff goes here
     private void DoLoadScene(int scene)
     {
+        // TODO: Disable animations, physics, pistons, the works
+        StartCoroutine(Transition(scene));
+    }
+
+
+    // Does a transition by animating the fade out, then loading the next scene
+    private IEnumerator Transition(int scene)
+    {
+        fader.StartFadeOut(cutsceneManager.Gemma.transform.position);
+
+        // Lambda wait while we are animating
+        yield return new WaitWhile(() => fader.isAnimating());
+
         SceneManager.LoadScene(scene);
     }
 }

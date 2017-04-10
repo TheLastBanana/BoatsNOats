@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class PortalManager : MonoBehaviour
 {
@@ -10,6 +12,7 @@ public class PortalManager : MonoBehaviour
     public AudioSource portalDragSound;
     public AudioSource timeStartSound;
     public AudioSource objectCutSound;
+    public AudioSource blockedPortalSound;
     public AudioLowPassFilter altWorldAmbienceLPF;
     public MusicManager musicManager;
     public float portalMusicVolume = 0.3f;
@@ -23,6 +26,7 @@ public class PortalManager : MonoBehaviour
     public Camera mainCam;
     public Camera altCam;
     public Camera portalCam;
+    public Camera blockedPortalCam;
     public WorldOffsets offs;
     public CircuitManager circuitManager;
     public CutsceneManager cutsceneManager;
@@ -31,6 +35,7 @@ public class PortalManager : MonoBehaviour
     // Effects
     public GameObject portalParticlePrefab;
     public GameObject portalFlashPrefab;
+    public GameObject portalBlockedFlashPrefab;
 
     // Current portal selection info
     public float minimumPortalSize = 0.1f;
@@ -46,7 +51,7 @@ public class PortalManager : MonoBehaviour
     Vector2 portalSpeed;
     Vector2 portalSizeSpeed;
     Rect movingPortalRect;
-    
+
     // Cut coroutine time info
     public float maxCutTime = 0.01f;
     float cutStartTime = 0.0f;
@@ -59,7 +64,7 @@ public class PortalManager : MonoBehaviour
     private bool disabled;
 
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         afx = GetComponent<AudioEffects>();
         portalEffect = Instantiate(portalParticlePrefab).GetComponent<PortalEffect>();
@@ -69,7 +74,7 @@ public class PortalManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update ()
+    void Update()
     {
         // For when Gemma doesn't have the artifact
         if (disabledForLevel)
@@ -78,21 +83,7 @@ public class PortalManager : MonoBehaviour
         // If we press the left mouse button, save mouse location and portal creation
         if (!isTransferring && Input.GetMouseButtonDown(0) && !disabled)
         {
-            portalCam.enabled = true;
-            portalEffect.Enable();
-            portalEffect.particleIntensity = 1f;
-
-            isSelecting = true;
-            portPos1 = mainCam.ScreenToWorldPoint(Input.mousePosition);
-            movingPortalRect = new Rect(portPos1, new Vector2());
-
-            timeStopSound.Play();
-            portalDragSound.Play();
-            altWorldAmbience.Play();
-            afx.cancelEffects(portalDragSound);
-            afx.cancelEffects(altWorldAmbience);
-
-            freeze();
+            initiatePortal();
         }
 
         // Here we update the secondary position of the portal while we're 
@@ -100,19 +91,30 @@ public class PortalManager : MonoBehaviour
         // we can update the final mouse position
         if (isSelecting)
         {
-            Vector2 clampedMousePos = new Vector2(
+            
+            if (SceneManager.GetActiveScene().name == "Intro Screen 1.1")
+            {
+                portPos2 = new Vector3(-7.63f, -1f, 0);
+            }
+            else
+            {
+                Vector2 clampedMousePos;
+                clampedMousePos = new Vector2(
                 Mathf.Clamp(Input.mousePosition.x, 0, mainCam.pixelWidth),
                 Mathf.Clamp(Input.mousePosition.y, 0, 2 * mainCam.pixelHeight)
-            );
-            portPos2 = mainCam.ScreenToWorldPoint(clampedMousePos);
+                );
+                portPos2 = mainCam.ScreenToWorldPoint(clampedMousePos);
+            }
+            
+            
 
             // The further the current portal rectangle is from the target, the
             // faster it accelerates towards it
             var oldCenter = movingPortalRect.center;
-            var targetCenter = (Vector2) (portPos1 + portPos2) / 2f;
+            var targetCenter = (Vector2)(portPos1 + portPos2) / 2f;
             var centerDir = targetCenter - oldCenter;
             portalSpeed += centerDir.magnitude * portalAcceleration * centerDir.normalized;
-            
+
             var oldSize = movingPortalRect.size;
             var targetSize = (Vector2)(portPos1 - portPos2);
             var sizeDir = targetSize - oldSize;
@@ -136,33 +138,20 @@ public class PortalManager : MonoBehaviour
         );
         portalRect.center = movingPortalRect.center; // Need to re-set this in case size was changed
 
-        if (cameraSwitcher.switched) portalRect.center += (Vector2) offs.offset;
+        if (cameraSwitcher.switched) portalRect.center += (Vector2)offs.offset;
 
         portalEffect.portalShape = portalRect;
-        
+
         // If we let go of the left mouse button, end selection
-        if ((Input.GetMouseButtonUp(0) && !disabled) || (isSelecting && disabled))
+        if (isSelecting && Input.GetMouseButtonUp(0) && !disabled)
         {
-            // Stop portal from moving
-            portalSpeed = new Vector2();
-            portalSizeSpeed = new Vector2();
+            endSelection(false);
+        }
 
-            // Disable portal effect
-            portalEffect.portalShape = new Rect();
-            portalEffect.Disable();
-
-            // We're no longer selecting the portal
-            isSelecting = false;
-
-            // Create the portal flash effect
-            var flash = Instantiate(portalFlashPrefab);
-            flash.transform.position = portalRect.center;
-            flash.GetComponent<PortalTransferEffect>().startScale = portalRect.size;
-
-            // Do the portal transfer
-            var transferRect = new Rect(portalRect);
-            if (cameraSwitcher.switched) transferRect.center -= (Vector2) offs.offset;
-            StartCoroutine(portalTransfer(transferRect.min, transferRect.max, true));
+        // If we press the right mouse button or the portal is disabled, end selection with no flash or cutting
+        if (isSelecting && (Input.GetMouseButtonDown(1) || disabled))
+        {
+            endSelection(true);
         }
 
         if (isSelecting)
@@ -215,8 +204,14 @@ public class PortalManager : MonoBehaviour
             portalCam.orthographicSize = Mathf.Abs(portalRect.height) / 2;
             portalCam.rect = newRect;
 
+            blockedPortalCam.orthographicSize = portalCam.orthographicSize;
+            blockedPortalCam.rect = portalCam.rect;
+
             // Change portal position
             portalCam.transform.position = new Vector3(portalRect.center.x, portalRect.center.y, -10);
+            blockedPortalCam.transform.position = portalCam.transform.position;
+
+            // Blocked camera should always be in real world; portal camera should be opposite of real camera
             if (!cameraSwitcher.switched)
             {
                 portalCam.transform.position += offs.offset;
@@ -224,8 +219,116 @@ public class PortalManager : MonoBehaviour
             else
             {
                 portalCam.transform.position -= offs.offset;
+                blockedPortalCam.transform.position -= offs.offset;
+            }
+
+            portalEffect.blocked = !checkPortalValid();
+        }
+    }
+
+
+    public void initiatePortal()
+    {
+        portalCam.enabled = true;
+        blockedPortalCam.enabled = true;
+        portalEffect.Enable();
+        portalEffect.particleIntensity = 1f;
+
+        isSelecting = true;
+        if (SceneManager.GetActiveScene().name == "Intro Screen 1.1")
+        {
+            portPos1 = new Vector3(8.645569f, 5f, 0);
+        }
+        else
+        {
+            portPos1 = mainCam.ScreenToWorldPoint(Input.mousePosition);
+        }
+        movingPortalRect = new Rect(portPos1, new Vector2());
+
+        timeStopSound.Play();
+        portalDragSound.Play();
+        altWorldAmbience.Play();
+        afx.cancelEffects(portalDragSound);
+        afx.cancelEffects(altWorldAmbience);
+
+        freeze();
+    }
+
+    // End portal selection, and do cutting and extra effects if the portal wasn't cancelled
+    void endSelection(bool cancelled)
+    {
+        // Stop portal from moving
+        portalSpeed = new Vector2();
+        portalSizeSpeed = new Vector2();
+
+        // Disable portal effect
+        portalEffect.portalShape = new Rect();
+        portalEffect.Disable();
+
+        // We're no longer selecting the portal
+        isSelecting = false;
+
+        if (!cancelled)
+        {
+            var flashPrefab = portalFlashPrefab;
+
+            if (checkPortalValid())
+            {
+                // Do the portal transfer
+                var transferRect = new Rect(portalRect);
+                if (cameraSwitcher.switched) transferRect.center -= (Vector2)offs.offset;
+                StartCoroutine(portalTransfer(transferRect.min, transferRect.max, true));
+            }
+            else
+            {
+                flashPrefab = portalBlockedFlashPrefab;
+                blockedPortalSound.Play();
+                unfreeze();
+            }
+
+            // Create the portal flash effect
+            var flash = Instantiate(flashPrefab);
+            flash.transform.position = portalRect.center;
+            flash.GetComponent<PortalTransferEffect>().startScale = portalRect.size;
+        }
+
+        else
+        {
+            unfreeze();
+        }
+
+    }
+
+    // Check if anything is blocking the portal
+    bool checkPortalValid()
+    {
+        var portalBounds = new Bounds(portalRect.center, portalRect.size);
+        if (cameraSwitcher.switched)
+        {
+            portalBounds.center -= offs.offset;
+        }
+
+        bool blocked = false;
+
+        foreach (var obj in FindObjectsOfType<GameObject>())
+        {
+            // Get any objects in the character layer
+            if (obj.layer == LayerMask.NameToLayer("Character"))
+            {
+                // Only mesh and sprite renderers (e.g. not particles) should block the portal
+                Renderer renderer = obj.GetComponent<MeshRenderer>();
+                if (!renderer) renderer = obj.GetComponent<SpriteRenderer>();
+                if (!renderer) continue;
+
+                // If it's in the portal bounds, the portal is blocked
+                if (portalBounds.Intersects(renderer.bounds))
+                {
+                    blocked = true;
+                }
             }
         }
+
+        return !blocked;
     }
 
     // Freeze time while portal is being dragged
@@ -255,6 +358,7 @@ public class PortalManager : MonoBehaviour
     {
         portalEffect.particleIntensity = 0.2f;
         portalCam.enabled = false;
+        blockedPortalCam.enabled = false;
         portalCam.rect = new Rect();
         
         cutsceneManager.DisableGemma(false);
@@ -474,6 +578,7 @@ public class PortalManager : MonoBehaviour
     public void DisablePortalForLevel(bool disable)
     {
         disabledForLevel = disable;
+        DisablePortal(disable);
     }
 
     // Stop player from activating portals, used during cutscene

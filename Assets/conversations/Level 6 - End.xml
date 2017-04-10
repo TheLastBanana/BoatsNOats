@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dialog>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+We made it!
+</custom></text>
+  <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
+I’m a little sad we missed out on ice cream.
+</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+Well, it’s been....something Al.
+</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+Thanks for getting me here in one piece, though I’m pretty sure you could have carried me the whole way through.
+</custom></text>
+  <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
+That’s a nice positive thought! Good job Gemma!
+</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+You really are a strange little thing. What are you going to do now?
+</custom></text>
+  <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
+Just fly around I guess. I don’t really know what robots do for fun. Do you think there’s a club I could join?
+</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+I mean, I don’t know the rules of this whole interworld travel thing, but I could try bringing you back with me. You would be a handy little sidekick.
+</custom></text>
+  <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
+A sidekick! I’ve always wanted to be a sidekick!
+</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+Well that’s a strange dream. But yeah, come on. I’ve always wanted someone to talk to on my adventures.
+</custom></text>
+  <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
+Adventures! We get to go on adventures! I hope there’s ice cream!
+</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+There’s only ice cream if you start carrying me around places.
+</custom></text>
+  <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
+No ice cream it is! Let’s go pal!
+</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+Alright bud, you got it.
+</custom></text>
+</dialog>

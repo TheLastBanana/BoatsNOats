@@ -10,6 +10,8 @@ public class CutsceneManager : MonoBehaviour {
     public GameObject sceneMid1;
     public GameObject sceneMid2;
     public GameObject sceneMid3;
+    public GameObject sceneMid4;
+    public GameObject sceneMid5;
 
     public GameObject cameraManager;
     private CameraSwitcher cameraSwitcher;
@@ -18,30 +20,26 @@ public class CutsceneManager : MonoBehaviour {
     public PortalManager portalManager;
     public GameControls controls;
     private TypewriterText typewriterText;
+    public Canvas dialogueCanvas;
 
     // Gemma
     public GameObject Gemma;
     private PlayerController playerController;
-    private GameObject GemmaTextBubble;
     private Text GemmaText;
 
     // Al
     public GameObject Al;
     private Al AlScript;
-    private GameObject AlTextBubble;
     private Text AlText;
 
     // Loudspeaker1
-    public GameObject Loudspeaker1;
-    private GameObject LS1TextBubble;
-    private Text LS1Text;
+    public GameObject LoudspeakerWet;
+    private Text LSWetText;
 
     // Loudspeaker2
-    public GameObject Loudspeaker2;
-    private GameObject LS2TextBubble;
-    private Text LS2Text;
+    public GameObject LoudspeakerDry;
+    private Text LSDryText;
 
-    private GameObject currentTextBubble;
     private Text currentText;
 
     private int numTextCurrent;
@@ -66,32 +64,20 @@ public class CutsceneManager : MonoBehaviour {
 
         // Grab Gemma's stuff
         playerController = Gemma.GetComponent<PlayerController>();
-        GemmaTextBubble = Gemma.GetComponentInChildren<Canvas>(true).transform.FindChild("GemmaTextBubble").gameObject;
-        GemmaText = GemmaTextBubble.GetComponentInChildren<Text>(true);
-        GemmaTextBubble.SetActive(false);
+        GemmaText = dialogueCanvas.transform.FindChild("GemmaText").gameObject.GetComponent<Text>();
+        GemmaText.gameObject.SetActive(false);
 
         // Grab Al's stuff
         if (Al != null)
-        {
             AlScript = Al.GetComponent<Al>();
-            AlTextBubble = Al.GetComponentInChildren<Canvas>(true).transform.FindChild("AlTextBubble").gameObject;
-            AlText = AlTextBubble.GetComponentInChildren<Text>(true);
-            AlTextBubble.SetActive(false);
-        }
+        AlText = dialogueCanvas.transform.FindChild("AlText").gameObject.GetComponent<Text>();
+        AlText.gameObject.SetActive(false);
 
-        if (Loudspeaker1 != null)
-        {
-            LS1TextBubble = Loudspeaker1.GetComponentInChildren<Canvas>(true).transform.FindChild("LS1TextBubble").gameObject;
-            LS1Text = LS1TextBubble.GetComponentInChildren<Text>(true);
-            LS1TextBubble.SetActive(false);
-        }
-
-        if (Loudspeaker2 != null)
-        {
-            LS2TextBubble = Loudspeaker2.GetComponentInChildren<Canvas>(true).transform.FindChild("LS2TextBubble").gameObject;
-            LS2Text = LS2TextBubble.GetComponentInChildren<Text>(true);
-            LS2TextBubble.SetActive(false);
-        }
+        // Loudspeakers
+        LSWetText = dialogueCanvas.transform.FindChild("LSWetText").gameObject.GetComponent<Text>();
+        LSWetText.gameObject.SetActive(false);
+        LSDryText = dialogueCanvas.transform.FindChild("LSDryText").gameObject.GetComponent<Text>();
+        LSDryText.gameObject.SetActive(false);
 
         numTextCurrent = -1;
         numTexts = 0;
@@ -146,14 +132,20 @@ public class CutsceneManager : MonoBehaviour {
         if (startedText && !typewriterText.isTextDone() && (controls.SkipDialogue() || !typewriterText.hasSpeaker(numTextCurrent)))
         {
             startedText = false;
-            if (currentTextBubble != null)
-                currentTextBubble.SetActive(false);
+            if (currentText != null)
+                currentText.gameObject.SetActive(false);
             numTextCurrent += 1;
         }
 
-        // Let the player skip a pan
-        if (startedPan && controls.SkipDialogue())
-            EndPan();
+        if (controls.SkipDialogue())
+        {
+            // Let the player skip a pan
+            if (startedPan)
+                EndPan();
+
+            if (Al != null && !AlScript.DoneFlying())
+                AlScript.SkipFlying();
+         }
     }
 
     private bool Busy()
@@ -210,33 +202,18 @@ public class CutsceneManager : MonoBehaviour {
         tag = tag.ToLower();
 
         if (tag == "gemma")
-        {
-            currentTextBubble = GemmaTextBubble;
             currentText = GemmaText;
-        }
         else if (tag == "al")
-        {
-            currentTextBubble = AlTextBubble;
             currentText = AlText;
-        }
-        else if (tag == "loudspeaker1")
-        {
-            currentTextBubble = LS1TextBubble;
-            currentText = LS1Text;
-        }
-        else if (tag == "loudspeaker2")
-        {
-            currentTextBubble = LS2TextBubble;
-            currentText = LS2Text;
-        }
+        else if (tag == "loudspeakerwet")
+            currentText = LSWetText;
+        else if (tag == "loudspeakerdry")
+            currentText = LSDryText;
         else
-        {
-            currentTextBubble = null;
             currentText = null;
-        }
 
-        if (currentTextBubble != null)
-            currentTextBubble.SetActive(true);
+        if (currentText != null)
+            currentText.gameObject.SetActive(true);
         return currentText;
     }
 
@@ -312,16 +289,20 @@ public class CutsceneManager : MonoBehaviour {
             return Gemma;
         else if (tag == "al")
             return Al;
-        else if (tag == "loudspeaker1")
-            return Loudspeaker1;
-        else if (tag == "loudspeaker2")
-            return Loudspeaker2;
+        else if (tag == "loudspeakerwet")
+            return LoudspeakerWet;
+        else if (tag == "loudspeakerdry")
+            return LoudspeakerDry;
         else if (tag == "mid1")
             return sceneMid1;
         else if (tag == "mid2")
             return sceneMid2;
         else if (tag == "mid3")
             return sceneMid3;
+        else if (tag == "mid4")
+            return sceneMid4;
+        else if (tag == "mid5")
+            return sceneMid5;
         else
             return null;
     }

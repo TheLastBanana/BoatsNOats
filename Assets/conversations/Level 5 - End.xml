@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<dialog>
+  <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">You did it! Did you think about me? Was I your positive thought? I bet I was.</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">Please stop talking.</custom></text>
+  <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">Sure thing Positive Pal!</custom></text>
+</dialog>

@@ -6,6 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Levels/Level 0 (Intro).unity
+  - enabled: 1
     path: Assets/Levels/Level 1.1 (Tutorial).unity
   - enabled: 1
     path: Assets/Levels/Level 1.2 (Tutorial).unity
@@ -17,3 +19,5 @@ EditorBuildSettings:
     path: Assets/Levels/Level 4 (MGS).unity
   - enabled: 1
     path: Assets/Levels/Level 5 (Simple Circuits).unity
+  - enabled: 1
+    path: Assets/Levels/Level 6 (Outro).unity

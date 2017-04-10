@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dialog>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+So Al…
+</custom></text>
+  <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
+Yeah best buddy?
+</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+Why are you taking me through a sewer?
+</custom></text>
+  <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
+Oh, well, I mean isn’t it obvious? The ambience, the lighting, I love it down here. But it’s also the best way to get to where the dolphins keep the stone.
+</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+What? Why?
+</custom></text>
+  <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
+Well they had it in a museum, but then some mining badger tried to steal it. They got it back and set it up in a really secure facility. So we have to go through the sewer.
+</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+Ugh fine, just get us there quickly ok?
+</custom></text>
+  <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
+Don’t worry, I’m taking us straight there. Though we could stop for ice cream if you want!
+</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+I don’t want your gross sewer ice cream Al.
+</custom></text>
+  <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
+More for me!
+</custom></text>
+  <text xml:space="preserve">
+<custom move="mid1"/>
+</text>
+</dialog>
