@@ -235,6 +235,9 @@ public class TypewriterText : MonoBehaviour {
     void Start()
     {
         cutsceneManager = GetComponent<CutsceneManager>();
+
+        // Preload voice resources
+        Resources.LoadAll("Voices");
     }
 
     void Update()
