@@ -598,8 +598,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -35, y: 146}
-  m_SizeDelta: {x: 1158, y: 200}
+  m_AnchoredPosition: {x: -9, y: 64.75001}
+  m_SizeDelta: {x: 600, y: 118.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1000029731
 MonoBehaviour:
@@ -622,7 +622,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: 3fae1b8cdba2def4da31e7dc5412b687, type: 3}
-    m_FontSize: 100
+    m_FontSize: 51
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
@@ -1338,7 +1338,7 @@ GameObject:
   - component: {fileID: 1862769390}
   - component: {fileID: 1862769392}
   m_Layer: 5
-  m_Name: Text
+  m_Name: Start
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1359,8 +1359,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -96, y: -60}
-  m_SizeDelta: {x: 194, y: 131}
+  m_AnchoredPosition: {x: -9, y: -27}
+  m_SizeDelta: {x: 92, y: 65}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1862769390
 MonoBehaviour:
@@ -1383,10 +1383,10 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: 3fae1b8cdba2def4da31e7dc5412b687, type: 3}
-    m_FontSize: 66
+    m_FontSize: 31
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 3
     m_MaxSize: 67
     m_Alignment: 0
     m_AlignByGeometry: 0
