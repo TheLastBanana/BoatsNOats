@@ -22,7 +22,7 @@ public class FadeOut : MonoBehaviour
         
         // Rescale
         float camHeight = 2f * parentCamera.orthographicSize;
-        float camWidth = camHeight * parentCamera.aspect;
+        float camWidth = camHeight / Screen.height * Screen.width;
         Vector3 extents = boxRen.bounds.extents;
         float xScale = camWidth / extents.x / 2;
         float yScale = camHeight / extents.y / 2;

@@ -735,7 +735,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4272466104377214}
   - component: {fileID: 212401376076988206}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: FadeBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
