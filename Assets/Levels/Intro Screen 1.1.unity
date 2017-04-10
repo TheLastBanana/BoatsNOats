@@ -176,7 +176,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4581003831457108, guid: 4398d3492b8db16489da0d8f98cf2aba, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 6.9393406
+      value: 30.7
       objectReference: {fileID: 0}
     - target: {fileID: 4581003831457108, guid: 4398d3492b8db16489da0d8f98cf2aba, type: 2}
       propertyPath: m_LocalPosition.y
@@ -560,6 +560,12 @@ Transform:
   m_Father: {fileID: 281442321}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &999209812 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114956116339019524, guid: 4398d3492b8db16489da0d8f98cf2aba,
+    type: 2}
+  m_PrefabInternal: {fileID: 450619164}
+  m_Script: {fileID: 11500000, guid: 3e45c56b01c461a4199d59eaf7458ad5, type: 3}
 --- !u!1 &1000029729
 GameObject:
   m_ObjectHideFlags: 0
@@ -819,7 +825,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1495004437}
   m_Layer: 0
-  m_Name: Target
+  m_Name: Gemma Target
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -945,7 +951,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Gemma: {fileID: 831177390}
-  target: {fileID: 1495004436}
+  gemmaTarget: {fileID: 1495004436}
+  Al: {fileID: 999209812}
+  alTarget: {fileID: 1716959715}
 --- !u!4 &1519922846
 Transform:
   m_ObjectHideFlags: 0
@@ -1290,6 +1298,34 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 1716019796}
   m_Script: {fileID: 11500000, guid: 23129ebc973c194489634efc9b7ce7c1, type: 3}
+--- !u!1 &1716959715
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1716959716}
+  m_Layer: 0
+  m_Name: Al Target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1716959716
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1716959715}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 13.4, y: 1.2, z: -9}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1862769387
 GameObject:
   m_ObjectHideFlags: 0
@@ -1403,18 +1439,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1862769390}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1355922233}
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 1
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!1 &1961070141

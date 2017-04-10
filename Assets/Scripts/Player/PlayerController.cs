@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
     private float storedGravity;
 
     private bool isWalking = false;
+    Coroutine currentWalk;
 
     void Start()
     {
@@ -133,27 +134,40 @@ public class PlayerController : MonoBehaviour
         _animator.SetBool("Ground", _controller.isGrounded);
     }
 
+    public void FlyToPosition(Vector3 target)
+    {
+        currentWalk = StartCoroutine(walkToPosition(target));
+    }
 
-    public void walkToPosition(Vector3 target)
+    IEnumerator walkToPosition(Vector3 target)
     {
         isWalking = true;
         Vector3 start = transform.position;
- 
 
         if (target.x > start.x)
         {
-            
             if (transform.localScale.x > 0f)
                 FlipGemma();
-            normalizedHorizontalSpeed = 1;
+            while (transform.position.x < target.x)
+            {
+                normalizedHorizontalSpeed = 1;
+                yield return null;
+            }
         }
         else
         {
-            
             if (transform.localScale.x < 0f)
                 FlipGemma();
-            normalizedHorizontalSpeed = -1;
+            while (transform.position.x > target.x)
+            {
+                normalizedHorizontalSpeed = -1;
+                yield return null;
+            }
+                
         }
+            
+
+        normalizedHorizontalSpeed = 0;
     }
     private void FlipGemma()
     {

@@ -5,33 +5,28 @@ using UnityEngine;
 public class IntroCutscene : MonoBehaviour {
 
     public PlayerController Gemma;
-    public GameObject target;
+    public GameObject gemmaTarget;
+    public Al Al;
+    public GameObject alTarget;
 
-    private bool testvar = false;
+    private bool playOnce = false;
 	// Use this for initialization
 	void Start () {
         Gemma = Gemma.GetComponent<PlayerController>();
         StartCoroutine(Waitforscreen());
-
+        Al.FlyToPosition(alTarget.transform.position);
     }
 	
 	// Update is called once per frame
 	void Update () {
-        
-
-        if(Gemma.transform.position.x > target.transform.position.x)
-        {
-            Gemma.normalizedHorizontalSpeed = 0;
-        }
-
     }
     IEnumerator Waitforscreen()
     {
         yield return new WaitForSeconds(5);
-        if (!testvar)
+        if (!playOnce)
         {
-            Gemma.walkToPosition(target.transform.position);
-            testvar = true;
+            Gemma.FlyToPosition(gemmaTarget.transform.position);
+            playOnce = true;
         }
     }
 }
