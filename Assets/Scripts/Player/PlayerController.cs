@@ -142,23 +142,18 @@ public class PlayerController : MonoBehaviour
 
         if (target.x > start.x)
         {
-            Debug.Log("Right");
+            
             if (transform.localScale.x > 0f)
                 FlipGemma();
             normalizedHorizontalSpeed = 1;
         }
         else
         {
-            Debug.Log("Left");
+            
             if (transform.localScale.x < 0f)
                 FlipGemma();
             normalizedHorizontalSpeed = -1;
         }
- 
-        //normalizedHorizontalSpeed = 0;
-
-
-
     }
     private void FlipGemma()
     {

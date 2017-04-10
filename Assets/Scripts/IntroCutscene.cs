@@ -11,21 +11,27 @@ public class IntroCutscene : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         Gemma = Gemma.GetComponent<PlayerController>();
-        
+        StartCoroutine(Waitforscreen());
+
     }
 	
 	// Update is called once per frame
 	void Update () {
-        if (!testvar)
-        {
-            Gemma.walkToPosition(target.transform.position);
-            testvar = true;
-        }
+        
 
         if(Gemma.transform.position.x > target.transform.position.x)
         {
             Gemma.normalizedHorizontalSpeed = 0;
         }
 
+    }
+    IEnumerator Waitforscreen()
+    {
+        yield return new WaitForSeconds(5);
+        if (!testvar)
+        {
+            Gemma.walkToPosition(target.transform.position);
+            testvar = true;
+        }
     }
 }
