@@ -112,6 +112,8 @@ public class PlayerController : MonoBehaviour
 		{
 			_velocity.y = Mathf.Sqrt( 2f * jumpHeight * -gravity );
             _sound.PlayJumpEffect();
+            _animator.SetTrigger("Jump");
+            _animator.SetBool("Jumped", true);
         }
 
 
@@ -132,6 +134,10 @@ public class PlayerController : MonoBehaviour
 
 
         _animator.SetBool("Ground", _controller.isGrounded);
+        if (_controller.isGrounded)
+        {
+            _animator.SetBool("Jumped", false);
+        }
     }
 
     public void FlyToPosition(Vector3 target)
