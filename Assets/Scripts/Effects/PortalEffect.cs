@@ -6,6 +6,7 @@ public class PortalEffect : MonoBehaviour
     public GameObject edgePrefab;
     public GameObject middlePrefab;
     public Rect portalShape;
+    public Transform artifact;
     public float sizeSpeedCurve = 0.8f;
     public float particleIntensity = 1f;
     public float minBorderThickness = 0.1f;
@@ -13,6 +14,7 @@ public class PortalEffect : MonoBehaviour
     public float waveThickness = 0.2f;
     public float changeRate = 0.1f;
     public float wavinessAreaThreshold = 1.0f;
+    public float midpointDistance = 0.1f;
 
     public Material defaultMaterial;
     public Material blockedMaterial;
@@ -28,8 +30,8 @@ public class PortalEffect : MonoBehaviour
     float[] edgeBaseRates;
     float[] edgeBaseSpeeds;
 
-    const int numBorderVerts = 20;
-    const int numBorderTris = 16;
+    const int numBorderVerts = 22;
+    const int numBorderTris = 18;
 
     bool _blocked;
     public bool blocked
@@ -185,26 +187,7 @@ public class PortalEffect : MonoBehaviour
 
         mesh.vertices = new Vector3[numBorderVerts];
         mesh.normals = new Vector3[numBorderVerts];
-        mesh.triangles = new int[numBorderTris * 3]
-        {
-            0, 1, 2,
-            1, 3, 2,
-            2, 4, 8,
-            4, 6, 8,
-            5, 3, 7,
-            3, 9, 7,
-            8, 9, 10,
-            9, 11, 10,
-
-            12, 13, 0,
-            13, 1, 0,
-            14, 0, 10,
-            14, 10, 15,
-            1, 16, 17,
-            1, 17, 11,
-            10, 11, 19,
-            10, 19, 18
-        };
+        mesh.triangles = new int[numBorderTris * 3];
 
         GetComponent<MeshFilter>().mesh = mesh;
     }
@@ -213,6 +196,8 @@ public class PortalEffect : MonoBehaviour
     void UpdateMesh()
     {
         float animTime = Time.time * changeRate;
+
+        var artifactPos = artifact.position - transform.position;
 
         // If we're below this threshold, be less wavy
         float waviness = Mathf.Clamp01(Mathf.Abs(portalShape.width * portalShape.height / wavinessAreaThreshold));
@@ -289,6 +274,119 @@ public class PortalEffect : MonoBehaviour
 
             new Vector3(Mathf.Lerp(inner.xMax, inner.xMin, edge2Offset), outer.yMin - edge2Height),
             new Vector3(Mathf.Lerp(inner.xMax, inner.xMin, edge1Offset), outer.yMin - edge1Height),
+
+            new Vector3(artifactPos.x, artifactPos.y),
+            artifactPos.normalized * (artifactPos.magnitude - midpointDistance)
+        };
+
+        // Determine where lines leading to artifact should connect to the portal
+        int artifactPtA;
+        int artifactPtB;
+
+        // Check what quadrant around the artifact the portal sits in (there are 8 spots around the
+        // artifact that we care about: left, right, up, down, and the diagonals in between)
+        int xQuadrant;
+        int yQuadrant;
+
+        if (artifactPos.x < outer.xMin) xQuadrant = 2;
+        else if (artifactPos.x > outer.xMax) xQuadrant = 0;
+        else xQuadrant = 1;
+
+        if (artifactPos.y < outer.yMin) yQuadrant = 2;
+        else if (artifactPos.y > outer.yMax) yQuadrant = 0;
+        else yQuadrant = 1;
+
+        var quadrant = xQuadrant + yQuadrant * 3;
+
+        switch (quadrant)
+        {
+            // Top-left
+            case 6:
+                artifactPtA = 1;
+                artifactPtB = 10;
+                break;
+
+            // Top
+            case 7:
+                artifactPtA = 10;
+                artifactPtB = 11;
+                break;
+
+            // Top-right
+            case 8:
+                artifactPtA = 0;
+                artifactPtB = 11;
+                break;
+
+            // Left
+            case 3:
+                artifactPtA = 1;
+                artifactPtB = 11;
+                break;
+
+            // Center
+            case 4:
+                artifactPtA = 0;
+                artifactPtB = 0;
+                break;
+
+            // Right
+            case 5:
+                artifactPtA = 0;
+                artifactPtB = 10;
+                break;
+
+            // Bottom-left
+            case 0:
+                artifactPtA = 0;
+                artifactPtB = 11;
+                break;
+
+            // Bottom
+            case 1:
+                artifactPtA = 0;
+                artifactPtB = 1;
+                break;
+
+            // Bottom-right
+            case 2:
+                artifactPtA = 1;
+                artifactPtB = 10;
+                break;
+
+            default:
+                artifactPtA = 0;
+                artifactPtB = 0;
+                break;
+        }
+
+        mesh.triangles = new int[numBorderTris * 3]
+        {
+            0, 1, 2,
+            1, 3, 2,
+            2, 4, 8,
+            4, 6, 8,
+            5, 3, 7,
+            3, 9, 7,
+            8, 9, 10,
+            9, 11, 10,
+
+            12, 13, 0,
+            13, 1, 0,
+            14, 0, 10,
+            14, 10, 15,
+            1, 16, 17,
+            1, 17, 11,
+            10, 11, 19,
+            10, 19, 18,
+
+            20,
+            artifactPtA,
+            21,
+
+            20,
+            21,
+            artifactPtB
         };
 
         mesh.RecalculateBounds();

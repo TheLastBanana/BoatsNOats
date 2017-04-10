@@ -9881,6 +9881,11 @@ Prefab:
       propertyPath: m_LocalPosition.y
       value: 3.62
       objectReference: {fileID: 0}
+    - target: {fileID: 114580626449500856, guid: 06d7fe0b7b7ba4844835d6b3b4400e43,
+        type: 2}
+      propertyPath: artifact
+      value: 
+      objectReference: {fileID: 1394443283}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 06d7fe0b7b7ba4844835d6b3b4400e43, type: 2}
   m_IsPrefabParent: 0
@@ -10437,6 +10442,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 86c80030c01d2e544885821a6e4c35a0, type: 2}
   m_IsPrefabParent: 0
+--- !u!4 &1394443283 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4901619701527488, guid: c86eda601f8a9cc40b2f7577bccf4596,
+    type: 2}
+  m_PrefabInternal: {fileID: 1590757252}
 --- !u!4 &1396034766 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4046122447908382, guid: 0d97b9c6cd6aece4cb653b98c2be3b1a,
