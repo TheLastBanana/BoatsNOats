@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4581003831457108}
   - component: {fileID: 95777741363055388}
   - component: {fileID: 114956116339019524}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Al
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37,7 +37,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4160407544432640}
   - component: {fileID: 212670539657776660}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: eye
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -53,7 +53,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4056115165030494}
   - component: {fileID: 212943215120300756}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: thruster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -71,7 +71,7 @@ GameObject:
   - component: {fileID: 199055307454289652}
   - component: {fileID: 198951157836987654}
   - component: {fileID: 114878097434037528}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Big Rings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87,7 +87,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4481331285896890}
   - component: {fileID: 212866930362292276}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -105,7 +105,7 @@ GameObject:
   - component: {fileID: 199462994017612192}
   - component: {fileID: 198507279864628266}
   - component: {fileID: 114321659084057800}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Small Blobs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -120,7 +120,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4344361496830638}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: rig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -135,7 +135,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4287268110842968}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: thruster_pivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
