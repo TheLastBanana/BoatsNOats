@@ -380,7 +380,7 @@ public class TypewriterText : MonoBehaviour {
                         // We founds the end of the tag and it's an atomic tag
                         if (line[i] == '/' && line[i+1] == '>')
                         {
-                            Debug.Log("Found atomic tag: " + tag);
+                            // Debug.Log("Found atomic tag: " + tag);
                             atomTag = true;
                             ++i; // Skip the /, we don't want it in the tag string
                             continue; // just go back to checking the loop (should be > now)
@@ -419,9 +419,9 @@ public class TypewriterText : MonoBehaviour {
             dia.text = actualLine;
             
             // TODO remove debugs
-            Debug.Log("Actual text: " + actualLine);
-            foreach (FormatTag tag in dia.format)
-                Debug.Log(tag);
+            //Debug.Log("Actual text: " + actualLine);
+            //foreach (FormatTag tag in dia.format)
+            //    Debug.Log(tag);
             
             // Add to the list of parsed dialogs
             dialogs.Add(dia);
@@ -487,7 +487,7 @@ public class TypewriterText : MonoBehaviour {
             Stack<FormatTag> activeFTags = new Stack<FormatTag>();
             // Iterate once over every character up to where we are in the
             // string to build up the next updated string
-            for (int j = 0; j < i; ++j)
+            for (int j = 0; j <= i; ++j)
             {
                 // Push new starting tags and append the ending tag to the text
                 foreach (FormatTag tag in fTags)
@@ -507,6 +507,8 @@ public class TypewriterText : MonoBehaviour {
                 }
 
                 line += fullLine[j];
+                if (fullLine[j].Equals("?"))
+                    Debug.Log(fullLine[j]);
             }
 
             // We haven't reached the point in the full string where these tags
