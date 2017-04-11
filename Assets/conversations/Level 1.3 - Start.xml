@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dialog>
   <text xml:space="preserve">
-<custom pan="al" delay="0.5"/>
+<custom pan="mid5" delay="0.5"/>
 </text>
   <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/>
 <custom speed="0.0"/>♫ <i>I<custom speed="0.2"/> <custom speed="0.0"/>love<custom speed="0.2"/> <custom speed="0.0"/>fil<custom speed="0.2"/>i<custom speed="0.0"/>ng,<custom speed="0.2"/> <custom speed="0.0"/>I<custom speed="0.2"/> <custom speed="0.0"/>love<custom speed="0.2"/> <custom speed="0.0"/>fil<custom speed="0.2"/>i<custom speed="0.0"/>ng.<custom speed="0.2"/> <custom speed="0.0"/>Yes<custom speed="0.2"/> <custom speed="0.0"/>I<custom speed="0.4"/> <custom speed="0.0"/>do,<custom speed="0.4"/> <custom speed="0.0"/>yes<custom speed="0.2"/> <custom speed="0.0"/>I<custom speed="0.2"/> <custom speed="0.0"/>do.<custom speed="0.4"/> <custom speed="0.0"/>Fil<custom speed="0.125"/>i<custom speed="0.0"/>ng<custom speed="0.125"/> <custom speed="0.0"/>leaves<custom speed="0.125"/> <custom speed="0.0"/>me<custom speed="0.125"/> <custom speed="0.0"/>smil<custom speed="0.2"/>i<custom speed="0.0"/>ng,<custom speed="0.2"/> <custom speed="0.0"/>fil<custom speed="0.125"/>i<custom speed="0.0"/>ng<custom speed="0.125"/> <custom speed="0.0"/>leaves<custom speed="0.125"/> <custom speed="0.0"/>me<custom speed="0.125"/> <custom speed="0.0"/>smil<custom speed="0.2"/>i<custom speed="0.0"/>ng.<custom speed="0.2"/> <custom speed="0.0"/>It<custom speed="0.2"/> <custom speed="0.0"/>is<custom speed="0.2"/> <custom speed="0.0"/>fun,<custom speed="0.4"/> <custom speed="0.0"/>it<custom speed="0.2"/> <custom speed="0.0"/>is<custom speed="0.2"/> <custom speed="0.0"/>fun.</i> ♫
