@@ -8,7 +8,7 @@
 A game by:
   Stuart Bildfell (Programming)
   Marek Buchanan (Writing, Lead Design)
-  Elliot Colp (Programming, Sound Design, Animation)
+  Elliot Colp (Programming, Sound Design, Music, Animation)
   Deanna Dombroski (Art, Animation, Production)
   Braedy Kuzma (Programming)
   Mickael Zerihoun (Programming)
