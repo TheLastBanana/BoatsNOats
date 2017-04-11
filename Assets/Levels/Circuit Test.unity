@@ -2326,6 +2326,11 @@ Prefab:
       propertyPath: rightBound
       value: 
       objectReference: {fileID: 1836440827}
+    - target: {fileID: 114580626449500856, guid: 06d7fe0b7b7ba4844835d6b3b4400e43,
+        type: 2}
+      propertyPath: artifact
+      value: 
+      objectReference: {fileID: 1961391235}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 06d7fe0b7b7ba4844835d6b3b4400e43, type: 2}
   m_IsPrefabParent: 0
@@ -2815,6 +2820,11 @@ Prefab:
 --- !u!4 &1961391234 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4122906171310608, guid: c86eda601f8a9cc40b2f7577bccf4596,
+    type: 2}
+  m_PrefabInternal: {fileID: 1961391233}
+--- !u!4 &1961391235 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4901619701527488, guid: c86eda601f8a9cc40b2f7577bccf4596,
     type: 2}
   m_PrefabInternal: {fileID: 1961391233}
 --- !u!1 &1964256840
