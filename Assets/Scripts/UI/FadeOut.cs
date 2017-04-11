@@ -11,7 +11,7 @@ public class FadeOut : MonoBehaviour
     private bool animate = false;
     private bool wasAnimating = false;
     private float curFrame = 0;
-    private const float frameCount = 256;
+    public float frameCount = 256;
 
 
     // Use this for initialization
