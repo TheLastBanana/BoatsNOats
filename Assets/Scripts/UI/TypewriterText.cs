@@ -197,6 +197,23 @@ class AnimationTag : Tag
     }
 }
 
+class PortalTag : Tag
+{
+    public int start { get; set; }
+    public int end { get { return start; } set { this.start = value; } }
+
+    public PortalTag(int start, int end)
+    {
+        this.start = start;
+        this.end = end;
+    }
+
+    public override string ToString()
+    {
+        return "PortalTag(" + start + ", " + end + ")";
+    }
+}
+
 class Dialog
 {
     public string text { get; set; }
@@ -207,6 +224,7 @@ class Dialog
     public List<PanTag> pans { get; private set; }
     public List<MoveTag> moves { get; private set; }
     public List<AnimationTag> animations { get; private set; }
+    public List<PortalTag> portals { get; private set; }
 
     public Dialog()
     {
@@ -218,6 +236,7 @@ class Dialog
         pans = new List<PanTag>();
         moves = new List<MoveTag>();
         animations = new List<AnimationTag>();
+        portals = new List<PortalTag>();
     }
 
     public void addTag(FormatTag tag)
@@ -248,6 +267,11 @@ class Dialog
     public void addAnimation(AnimationTag tag)
     {
         animations.Add(tag);
+    }
+
+    public void addPortal(PortalTag tag)
+    {
+        portals.Add(tag);
     }
 }
 
@@ -383,6 +407,13 @@ public class TypewriterText : MonoBehaviour {
 
                 t = at;
             }
+            else if (split[1].StartsWith("portal"))
+            {
+                PortalTag pt = new PortalTag(start, end);
+                dia.addPortal(pt);
+
+                t = pt;
+            }
             else
             {
                 Debug.Assert(false, "Unknown custom tag");
@@ -491,9 +522,10 @@ public class TypewriterText : MonoBehaviour {
         List<FormatTag> fTags = dialogs[dialogNum].format; // The formatters for this line
         List<SpeedTag> sTags = dialogs[dialogNum].speeds;
         List<VoiceTag> vTags = dialogs[dialogNum].voices;
-        List<PanTag> pTags = dialogs[dialogNum].pans;
+        List<PanTag> panTags = dialogs[dialogNum].pans;
         List<MoveTag> mTags = dialogs[dialogNum].moves;
         List<AnimationTag> aTags = dialogs[dialogNum].animations;
+        List<PortalTag> portalTags = dialogs[dialogNum].portals;
 
         // Keep track of what speed we're putting letters out at
         Stack<SpeedTag> activeSTags = new Stack<SpeedTag>();
@@ -523,7 +555,7 @@ public class TypewriterText : MonoBehaviour {
                     loadVoice(tag.voice);
 
             // Pan camera in cutscene
-            foreach (PanTag tag in pTags)
+            foreach (PanTag tag in panTags)
                 if (tag.start == i)
                     startPan(tag);
 
@@ -536,6 +568,11 @@ public class TypewriterText : MonoBehaviour {
             foreach (AnimationTag tag in aTags)
                 if (tag.start == i)
                     startAnimation(tag);
+
+            // Do a screen wide portal effect
+            foreach (PortalTag tag in portalTags)
+                if (tag.start == i)
+                    doPortalEffect(tag);
 
             // Play voice and set its delay if there's a speaker
             if (voice != null && text != null)
@@ -643,7 +680,13 @@ public class TypewriterText : MonoBehaviour {
     // Call to CutsceneManager to start an animation on someone
     private void startAnimation(AnimationTag tag)
     {
-        cutsceneManager.startAnimation(tag.name, tag.animation);
+        cutsceneManager.StartAnimation(tag.name, tag.animation);
+    }
+
+    // Call to CutsceneManger to do a screen wide portal effect
+    private void doPortalEffect(PortalTag tag)
+    {
+        cutsceneManager.QueuePortalEffect();
     }
 
     private Text setSpeaker(SpeakerTag tag)

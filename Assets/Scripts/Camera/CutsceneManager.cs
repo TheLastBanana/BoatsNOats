@@ -51,6 +51,7 @@ public class CutsceneManager : MonoBehaviour {
     Queue<CameraPanInfo> pans;
     Queue<MoveInfo> moves;
     private bool startedPan;
+    private bool doAPortal;
     private bool endCutscene; // Last cutscene in the level, will do scene transition after
 
     // Use this for initialization
@@ -88,6 +89,7 @@ public class CutsceneManager : MonoBehaviour {
         pans = new Queue<CameraPanInfo>();
         moves = new Queue<MoveInfo>();
         startedPan = false;
+        doAPortal = false;
         endCutscene = false;
     }
 	
@@ -103,28 +105,32 @@ public class CutsceneManager : MonoBehaviour {
 
         if (!Busy())
         {
-            if (pans.Count > 0 && moves.Count <= 0)
+            if (doAPortal)
+            {
+                doAPortal = false;
+                DoPortalEffect();
+            }
+
+            // Pans and moves
+            else if (pans.Count > 0 && moves.Count <= 0)
                 StartPan();
             else if (pans.Count <= 0 && moves.Count > 0)
                 StartMove();
             else if (pans.Count > 0 && moves.Count > 0)
             {
-                CameraPanInfo pan = pans.Peek();
-                MoveInfo move = moves.Peek();
-
                 // If there is both a pan and a move queued up, whichever was added first will go first
-                if (move.tagStart <= pan.tagStart)
+                if (moves.Peek().tagStart <= pans.Peek().tagStart)
                     StartMove();
                 else
                     StartPan();
             }
-        }
 
-        // Start the next text if we're not currently doing one and are otherwise not busy
-        if (!typewriterText.isTextDone() && !Busy())
-        {
-            startedText = true;
-            typewriterText.startText(numTextCurrent);
+            // Start the next text if we're not currently doing one
+            else if (!typewriterText.isTextDone())
+            {
+                startedText = true;
+                typewriterText.startText(numTextCurrent);
+            }
         }
 
         // If the text has gone through, wait for the player to hit a skip key before finishing the text
@@ -288,7 +294,7 @@ public class CutsceneManager : MonoBehaviour {
         cameraPanner.enabled = false;
     }
 
-    public void startAnimation(string name, string animation)
+    public void StartAnimation(string name, string animation)
     {
         name = name.ToLower();
         GameObject target = null;
@@ -306,6 +312,19 @@ public class CutsceneManager : MonoBehaviour {
             target.GetComponent<Animator>().SetTrigger(animation);
         else
             Debug.LogError("Null animation target. Are you sure object exsits / tag is right?");
+    }
+
+    public void QueuePortalEffect()
+    {
+        doAPortal = true;
+    }
+
+    // Do a screen wide portal effect and move Gemma
+    private void DoPortalEffect()
+    {
+        // TODO: Portal effect + move Gemma
+
+        // TODO: Add to Busy() return a check for being done here
     }
 
     // Called to signify the cutscene is the last in the level and we need to level change after
