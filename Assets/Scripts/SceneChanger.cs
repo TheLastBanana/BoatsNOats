@@ -16,6 +16,7 @@ public class SceneChanger : MonoBehaviour
     private int currentScene;
     private int nextScene;
     private bool loadNextScene;
+    private bool restarted;
 
     // Use this for initialization
     void Start()
@@ -26,16 +27,23 @@ public class SceneChanger : MonoBehaviour
         currentScene = SceneManager.GetActiveScene().buildIndex;
         nextScene = currentScene + 1;
         loadNextScene = false;
+        restarted = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (controls.RestartLevel())
+        if (!restarted && controls.RestartLevel())
+        {
+            restarted = true;
             DoLoadScene(currentScene);
+        }
 
-        if (loadNextScene)
+        if (!restarted && loadNextScene)
+        {
+            restarted = true;
             DoLoadScene(nextScene);
+        }
 
         if (controls.QuitGame())
         {
@@ -79,6 +87,9 @@ public class SceneChanger : MonoBehaviour
     // TODO: Transition stuff goes here
     private void DoLoadScene(int scene)
     {
+        // Disables player controls (moving Gemma, creating portals, Tabbing to view other world)
+        cutsceneManager.DisableControls(true);
+
         // TODO: Disable animations, physics, pistons, the works
         StartCoroutine(Transition(scene));
     }

@@ -32,7 +32,7 @@ public class IntroCutscene : MonoBehaviour {
         yield return new WaitForSeconds(2);
         if (!playOnce)
         {
-            Gemma.FlyToPosition(gemmaTarget.transform.position);
+            Gemma.WalkToPosition(gemmaTarget.transform.position);
             while (!Gemma.DoneWalking())
             {
                 yield return null;

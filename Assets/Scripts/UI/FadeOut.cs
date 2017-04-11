@@ -51,7 +51,7 @@ public class FadeOut : MonoBehaviour
             boxRen.color = boxColor;
             
             // Reset
-            if (curFrame == frameCount)
+            if (curFrame >= frameCount)
             {
                 wasAnimating = false;
                 animate = false;

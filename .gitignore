@@ -28,3 +28,6 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+# This stupid file
+/Assets/Graphics/Effects/Shaders/Portal.mat

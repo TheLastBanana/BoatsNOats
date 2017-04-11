@@ -142,17 +142,19 @@ class MoveTag : Tag
     public int start { get; set; }
     public int end { get { return start; } set { this.start = value; } }
     public string dest { get; set; }
+    public string mover { get; set; }
 
-    public MoveTag(string dest, int start)
+    public MoveTag(string dest, int start, string mover)
     {
         this.dest = dest;
         this.start = start;
+        this.mover = mover;
         this.end = end;
     }
 
     public override string ToString()
     {
-        return "MoveTag(" + dest + ", " + start + ", " + end + ")";
+        return "MoveTag(" + dest + ", " + mover + ", " + start + ", " + end + ")";
     }
 }
 
@@ -174,6 +176,27 @@ class SpeakerTag : Tag
     }
 }
 
+class AnimationTag : Tag
+{
+    public int start { get; set; }
+    public int end { get { return start; } set { this.start = value; } }
+    public string name { get; set; }
+    public string animation { get; set; }
+
+    public AnimationTag(string name, string animation, int start, int end)
+    {
+        this.name = name;
+        this.animation = animation;
+        this.start = start;
+        this.end = end;
+    }
+
+    public override string ToString()
+    {
+        return "AnimationTag(" + name + ", " + animation + ", " + start + ", " + end + ")";
+    }
+}
+
 class Dialog
 {
     public string text { get; set; }
@@ -183,6 +206,7 @@ class Dialog
     public List<VoiceTag> voices { get; private set; }
     public List<PanTag> pans { get; private set; }
     public List<MoveTag> moves { get; private set; }
+    public List<AnimationTag> animations { get; private set; }
 
     public Dialog()
     {
@@ -193,6 +217,7 @@ class Dialog
         voices = new List<VoiceTag>();
         pans = new List<PanTag>();
         moves = new List<MoveTag>();
+        animations = new List<AnimationTag>();
     }
 
     public void addTag(FormatTag tag)
@@ -218,6 +243,11 @@ class Dialog
     public void addMove(MoveTag tag)
     {
         moves.Add(tag);
+    }
+
+    public void addAnimation(AnimationTag tag)
+    {
+        animations.Add(tag);
     }
 }
 
@@ -313,10 +343,15 @@ public class TypewriterText : MonoBehaviour {
             }
             else if (split[1].StartsWith("move"))
             {
-                string[] moveSplit = split[1].Split('=');
-                Debug.Assert(moveSplit.Length == 2, "Move split not 2");
-                string dest = moveSplit[1].Replace("\"", ""); // Values are quoted..
-                MoveTag mt = new MoveTag(dest, start);
+                Debug.Assert(split.Length > 2, "Not enough parameters for move");
+                string[] destSplit = split[1].Split('=');
+                string[] moverSplit = split[2].Split('=');
+                Debug.Assert(destSplit.Length == 2, "Destination split not 2");
+                Debug.Assert(moverSplit.Length == 2, "Mover split not 2");
+
+                string dest = destSplit[1].Replace("\"", ""); // Values are quoted..
+                string mover = moverSplit[1].Replace("\"", ""); // Values are quoted..
+                MoveTag mt = new MoveTag(dest, start, mover);
                 dia.addMove(mt);
 
                 t = mt;
@@ -330,6 +365,23 @@ public class TypewriterText : MonoBehaviour {
                 dia.speaker = st;
 
                 t = st;
+            }
+            else if (split[1].StartsWith("animation"))
+            {
+                Debug.Assert(split.Length > 2, "Not enough parameters for animation");
+                string[] nameSplit = split[1].Split('=');
+                string[] animationSplit = tagString.Split('=');
+                Debug.Assert(nameSplit.Length == 2, "Name split not 2");
+                Debug.Assert(animationSplit.Length == 3, "Animation split not 3");
+
+                string name = nameSplit[1].Replace("\"", ""); // Values are quoted..
+                string animation = animationSplit[2].Replace("\"", ""); // Values are quoted..
+                animation = animation.Trim();
+
+                AnimationTag at = new AnimationTag(name, animation, start, end);
+                dia.addAnimation(at);
+
+                t = at;
             }
             else
             {
@@ -441,6 +493,7 @@ public class TypewriterText : MonoBehaviour {
         List<VoiceTag> vTags = dialogs[dialogNum].voices;
         List<PanTag> pTags = dialogs[dialogNum].pans;
         List<MoveTag> mTags = dialogs[dialogNum].moves;
+        List<AnimationTag> aTags = dialogs[dialogNum].animations;
 
         // Keep track of what speed we're putting letters out at
         Stack<SpeedTag> activeSTags = new Stack<SpeedTag>();
@@ -474,10 +527,15 @@ public class TypewriterText : MonoBehaviour {
                 if (tag.start == i)
                     startPan(tag);
 
-            // Move Al somewhere
+            // Move someone somewhere
             foreach (MoveTag tag in mTags)
                 if (tag.start == i)
-                    moveAl(tag);
+                    startMove(tag);
+
+            // Start an animation on someone
+            foreach (AnimationTag tag in aTags)
+                if (tag.start == i)
+                    startAnimation(tag);
 
             // Play voice and set its delay if there's a speaker
             if (voice != null && text != null)
@@ -576,10 +634,16 @@ public class TypewriterText : MonoBehaviour {
         cutsceneManager.QueuePan(tag.objName, tag.start, tag.delay);
     }
 
-    // Call to CutsceneManager to move Al
-    private void moveAl(MoveTag tag)
+    // Call to CutsceneManager to move someone
+    private void startMove(MoveTag tag)
     {
-        cutsceneManager.QueueAl(tag.dest, tag.start);
+        cutsceneManager.QueueMove(tag.dest, tag.start, tag.mover);
+    }
+
+    // Call to CutsceneManager to start an animation on someone
+    private void startAnimation(AnimationTag tag)
+    {
+        cutsceneManager.startAnimation(tag.name, tag.animation);
     }
 
     private Text setSpeaker(SpeakerTag tag)

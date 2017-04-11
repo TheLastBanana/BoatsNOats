@@ -28,6 +28,6 @@ The walking hexagon is still on the move. Catch it before it covers our city in 
 Alright let’s keep going.
 </custom></text>
   <text xml:space="preserve">
-<custom move="mid1"/>
+<custom move="mid1" mover="al"/>
 </text>
 </dialog>

@@ -31,6 +31,6 @@ I don’t want your gross sewer ice cream Al.
 More for me!
 </custom></text>
   <text xml:space="preserve">
-<custom move="mid1"/>
+<custom move="mid1" mover="al"/>
 </text>
 </dialog>

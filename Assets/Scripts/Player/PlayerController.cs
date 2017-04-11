@@ -29,8 +29,11 @@ public class PlayerController : MonoBehaviour
     private float storedGravity;
 
 
+
     private bool isWalking = false;
+
     Coroutine currentWalk;
+    Vector3 currentTarget;
 
     void Start()
     {
@@ -102,7 +105,7 @@ public class PlayerController : MonoBehaviour
 			if( transform.localScale.x < 0f )
                 FlipGemma();
         }
-        else if(!isWalking)
+        else if(DoneWalking())
 		{
 			normalizedHorizontalSpeed = 0;
 		}
@@ -113,6 +116,8 @@ public class PlayerController : MonoBehaviour
 		{
 			_velocity.y = Mathf.Sqrt( 2f * jumpHeight * -gravity );
             _sound.PlayJumpEffect();
+            _animator.SetTrigger("Jump");
+            _animator.SetBool("Jumped", true);
         }
 
 
@@ -133,19 +138,47 @@ public class PlayerController : MonoBehaviour
 
 
         _animator.SetBool("Ground", _controller.isGrounded);
+        if (_controller.isGrounded)
+        {
+            _animator.SetBool("Jumped", false);
+        }
     }
+
     public bool DoneWalking()
     {
         return (currentWalk == null);
     }
-    public void FlyToPosition(Vector3 target)
+
+
+    public void WalkToPosition(Vector3 target)
+
     {
+        // Stop current walk animation
+        if (currentWalk != null)
+            StopCoroutine(currentWalk);
+
+        currentTarget = target;
         currentWalk = StartCoroutine(walkToPosition(target));
+    }
+
+    public void SkipWalking()
+    {
+        if (currentWalk != null)
+        {
+            StopCoroutine(currentWalk);
+            FinishWalking();
+        }
+    }
+
+    private void FinishWalking()
+    {
+        normalizedHorizontalSpeed = 0;
+        transform.position = new Vector3(currentTarget.x, transform.position.y, transform.position.z);
+        currentWalk = null;
     }
 
     IEnumerator walkToPosition(Vector3 target)
     {
-        isWalking = true;
         Vector3 start = transform.position;
 
         if (target.x > start.x)
@@ -169,9 +202,9 @@ public class PlayerController : MonoBehaviour
             }
                 
         }
+
         isWalking = false;
-        normalizedHorizontalSpeed = 0;
-        currentWalk = null;
+        FinishWalking();
     }
     public void FlipGemma()
     {
