@@ -94,7 +94,7 @@ public class PortalManager : MonoBehaviour
             
             if (SceneManager.GetActiveScene().name == "Intro Screen 1.1")
             {
-                portPos2 = new Vector3(-7.63f, -1f, 0);
+                portPos2 = new Vector3(28.36f, 2.59f, 0);
             }
             else
             {
@@ -233,11 +233,11 @@ public class PortalManager : MonoBehaviour
         blockedPortalCam.enabled = true;
         portalEffect.Enable();
         portalEffect.particleIntensity = 1f;
-
+        
         isSelecting = true;
         if (SceneManager.GetActiveScene().name == "Intro Screen 1.1")
         {
-            portPos1 = new Vector3(8.645569f, 5f, 0);
+            portPos1 = new Vector3(-14.72f, 11.45f, 0);
         }
         else
         {
@@ -255,7 +255,7 @@ public class PortalManager : MonoBehaviour
     }
 
     // End portal selection, and do cutting and extra effects if the portal wasn't cancelled
-    void endSelection(bool cancelled)
+    public void endSelection(bool cancelled)
     {
         // Stop portal from moving
         portalSpeed = new Vector2();

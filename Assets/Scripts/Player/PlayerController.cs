@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 storedVelocity;
     private float storedGravity;
 
+
     private bool isWalking = false;
     Coroutine currentWalk;
 
@@ -65,13 +66,13 @@ public class PlayerController : MonoBehaviour
 
 	void onTriggerEnterEvent( Collider2D col )
 	{
-		Debug.Log( "onTriggerEnterEvent: " + col.gameObject.name );
+		//Debug.Log( "onTriggerEnterEvent: " + col.gameObject.name );
 	}
 
 
 	void onTriggerExitEvent( Collider2D col )
 	{
-		Debug.Log( "onTriggerExitEvent: " + col.gameObject.name );
+		//Debug.Log( "onTriggerExitEvent: " + col.gameObject.name );
 	}
 
 	#endregion
@@ -133,7 +134,10 @@ public class PlayerController : MonoBehaviour
 
         _animator.SetBool("Ground", _controller.isGrounded);
     }
-
+    public bool DoneWalking()
+    {
+        return (currentWalk == null);
+    }
     public void FlyToPosition(Vector3 target)
     {
         currentWalk = StartCoroutine(walkToPosition(target));
@@ -165,11 +169,11 @@ public class PlayerController : MonoBehaviour
             }
                 
         }
-            
-
+        isWalking = false;
         normalizedHorizontalSpeed = 0;
+        currentWalk = null;
     }
-    private void FlipGemma()
+    public void FlipGemma()
     {
         transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
     }
