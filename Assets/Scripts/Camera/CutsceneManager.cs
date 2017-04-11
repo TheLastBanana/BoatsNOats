@@ -288,6 +288,26 @@ public class CutsceneManager : MonoBehaviour {
         cameraPanner.enabled = false;
     }
 
+    public void startAnimation(string name, string animation)
+    {
+        name = name.ToLower();
+        GameObject target = null;
+
+        if (name == "gemma")
+            target = Gemma;
+        else if (name == "al")
+            target = Al;
+        else if (name == "loudspeakerwet")
+            target = LoudspeakerWet;
+        else if (name == "loudspeakerdry")
+            target = LoudspeakerDry;
+
+        if (target != null)
+            target.GetComponent<Animator>().SetTrigger(animation);
+        else
+            Debug.LogError("Null animation target. Are you sure object exsits / tag is right?");
+    }
+
     // Called to signify the cutscene is the last in the level and we need to level change after
     public void IsEndCutscene()
     {
