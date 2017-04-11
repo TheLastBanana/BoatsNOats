@@ -14,7 +14,7 @@ public class IntroCutscene : MonoBehaviour {
     public CameraSwitcher camSwitcher;
 
     private bool playOnce = false;
-    private bool gemmaWalking = false;
+    
     // Use this for initialization
 	void Start () {
         Gemma = Gemma.GetComponent<PlayerController>();

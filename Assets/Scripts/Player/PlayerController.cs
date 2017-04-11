@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
 
 
 
-    private bool isWalking = false;
+
 
     Coroutine currentWalk;
     Vector3 currentTarget;
@@ -203,7 +203,6 @@ public class PlayerController : MonoBehaviour
                 
         }
 
-        isWalking = false;
         FinishWalking();
     }
     public void FlipGemma()

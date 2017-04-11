@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class logoscript : MonoBehaviour {
 
-    private bool fadein = false;
     float currentTime = 0f;
     float timeToMove = 3f;
 
@@ -30,6 +29,6 @@ public class logoscript : MonoBehaviour {
     public void startfade()
     {
         gameObject.SetActive(true);
-        fadein = true;
+        
     }
 }

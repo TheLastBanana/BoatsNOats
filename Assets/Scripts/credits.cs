@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class credits : MonoBehaviour {
 
-    private float speed = 0.2f;
+    
     public bool crawling = true;
     private RectTransform rect;
     public logoscript logoScript;
@@ -33,7 +33,7 @@ public class credits : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         
-        rect.sizeDelta = new Vector2(rect.rect.width, rect.rect.height+5f);
+        rect.sizeDelta = new Vector2(rect.rect.width, rect.rect.height+3.75f);
         if(rect.rect.height > 12384f)
         {
             if (once)
