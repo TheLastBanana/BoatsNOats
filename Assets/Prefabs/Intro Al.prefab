@@ -761,7 +761,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e45c56b01c461a4199d59eaf7458ad5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flySound: {fileID: 0}
+  flySound: {fileID: 82278453885284008}
   flySpeed: 7.5
   flyAnimStopTime: 0.25
 --- !u!198 &198035188005212258
