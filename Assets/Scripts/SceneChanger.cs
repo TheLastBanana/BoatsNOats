@@ -16,6 +16,7 @@ public class SceneChanger : MonoBehaviour
     private int currentScene;
     private int nextScene;
     private bool loadNextScene;
+    private bool restarted;
 
     // Use this for initialization
     void Start()
@@ -26,14 +27,15 @@ public class SceneChanger : MonoBehaviour
         currentScene = SceneManager.GetActiveScene().buildIndex;
         nextScene = currentScene + 1;
         loadNextScene = false;
+        restarted = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (controls.RestartLevel())
+        if (!restarted && controls.RestartLevel())
         {
-            loadNextScene = false;
+            restarted = true;
             DoLoadScene(currentScene);
         }
 
