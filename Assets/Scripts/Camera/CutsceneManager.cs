@@ -12,6 +12,10 @@ public class CutsceneManager : MonoBehaviour {
     public GameObject sceneMid3;
     public GameObject sceneMid4;
     public GameObject sceneMid5;
+    public GameObject leftBound;
+    public GameObject rightBound;
+    public GameObject portalFlashPrefab;
+    public WorldOffsets offs;
 
     public GameObject cameraManager;
     private CameraSwitcher cameraSwitcher;
@@ -53,6 +57,7 @@ public class CutsceneManager : MonoBehaviour {
     private bool startedPan;
     private bool doAPortal;
     private bool endCutscene; // Last cutscene in the level, will do scene transition after
+    private GameObject currentFlash;
 
     // Use this for initialization
     void Start () {
@@ -161,9 +166,9 @@ public class CutsceneManager : MonoBehaviour {
     {
         // Are we busy with either dialogue, doing a pan, or moving Gemma or Al?
         if (Al != null)
-            return (startedText || startedPan || !playerController.DoneWalking() || !AlScript.DoneFlying());
+            return (startedText || startedPan || !playerController.DoneWalking() || currentFlash || !AlScript.DoneFlying());
         else
-            return (startedText || startedPan || !playerController.DoneWalking());
+            return (startedText || startedPan || !playerController.DoneWalking() || currentFlash);
     }
 
     public void DisableControls(bool disable)
@@ -322,9 +327,21 @@ public class CutsceneManager : MonoBehaviour {
     // Do a screen wide portal effect and move Gemma
     private void DoPortalEffect()
     {
-        // TODO: Portal effect + move Gemma
+        Gemma.transform.position += offs.offset;
+        leftBound.transform.position += offs.offset;
+        rightBound.transform.position += offs.offset;
 
-        // TODO: Add to Busy() return a check for being done here
+        currentFlash = Instantiate(portalFlashPrefab);
+        var flashPos = Camera.main.transform.position + offs.offset;
+        flashPos.z = 0;
+
+        currentFlash.transform.position = flashPos;
+
+        // Scale to screen size
+        float camHeight = 2f * Camera.main.orthographicSize;
+        float camWidth = camHeight / Screen.height * Screen.width;
+
+        currentFlash.GetComponent<PortalTransferEffect>().startScale = new Vector3(camWidth, camHeight, 1f);
     }
 
     // Called to signify the cutscene is the last in the level and we need to level change after

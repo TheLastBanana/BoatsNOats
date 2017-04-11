@@ -2090,6 +2090,12 @@ Transform:
   m_PrefabParentObject: {fileID: 4046122447908382, guid: 9bf2d2ccf2da57a488557f1a4bee711f,
     type: 2}
   m_PrefabInternal: {fileID: 1469793346}
+--- !u!114 &1483450192 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114537670656804216, guid: 06d7fe0b7b7ba4844835d6b3b4400e43,
+    type: 2}
+  m_PrefabInternal: {fileID: 1716019796}
+  m_Script: {fileID: 11500000, guid: 7d0e109ce0ca81b488bbaf18d37527b4, type: 3}
 --- !u!1 &1493432337
 GameObject:
   m_ObjectHideFlags: 0
@@ -2699,11 +2705,27 @@ Prefab:
       propertyPath: artifact
       value: 
       objectReference: {fileID: 1961391235}
-    - target: {fileID: 114337358316129176, guid: 06d7fe0b7b7ba4844835d6b3b4400e43,
+    - target: {fileID: 114697566736478712, guid: 06d7fe0b7b7ba4844835d6b3b4400e43,
         type: 2}
-      propertyPath: pointTo
+      propertyPath: leftBound
       value: 
-      objectReference: {fileID: 831177388}
+      objectReference: {fileID: 827124640}
+    - target: {fileID: 114697566736478712, guid: 06d7fe0b7b7ba4844835d6b3b4400e43,
+        type: 2}
+      propertyPath: rightBound
+      value: 
+      objectReference: {fileID: 832555911}
+    - target: {fileID: 114697566736478712, guid: 06d7fe0b7b7ba4844835d6b3b4400e43,
+        type: 2}
+      propertyPath: portalFlashPrefab
+      value: 
+      objectReference: {fileID: 1588745804119268, guid: 5a3878f26abc6a040b024cff129d7ab3,
+        type: 2}
+    - target: {fileID: 114697566736478712, guid: 06d7fe0b7b7ba4844835d6b3b4400e43,
+        type: 2}
+      propertyPath: offs
+      value: 
+      objectReference: {fileID: 1483450192}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 06d7fe0b7b7ba4844835d6b3b4400e43, type: 2}
   m_IsPrefabParent: 0
@@ -3173,11 +3195,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4122906171310608, guid: c86eda601f8a9cc40b2f7577bccf4596, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -7.63
+      value: -6.78
       objectReference: {fileID: 0}
     - target: {fileID: 4122906171310608, guid: c86eda601f8a9cc40b2f7577bccf4596, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -0.9760165
+      value: -0.97
       objectReference: {fileID: 0}
     - target: {fileID: 4122906171310608, guid: c86eda601f8a9cc40b2f7577bccf4596, type: 2}
       propertyPath: m_LocalPosition.z

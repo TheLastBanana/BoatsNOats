@@ -6,7 +6,6 @@ public class CameraTracker : MonoBehaviour {
 
     public GameObject Gemma;
     public Camera mainCam, altCam;
-    private float xMin, xMax;
     public float yMin, yMax;
     public WorldOffsets offs;
     public GameObject LeftBoundary;
@@ -15,14 +14,14 @@ public class CameraTracker : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        xMin = LeftBoundary.transform.position.x;
-        xMax = RightBoundary.transform.position.x;
         currentTarget = Gemma;
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
+        var xMin = LeftBoundary.transform.position.x;
+        var xMax = RightBoundary.transform.position.x;
         // Get transforms to get player location and  manipulate cameras
         Transform mainCamTrans = mainCam.GetComponent<Transform>();
         Transform altCamTrans = altCam.GetComponent<Transform>();
