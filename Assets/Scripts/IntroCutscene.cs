@@ -43,6 +43,7 @@ public class IntroCutscene : MonoBehaviour {
             {
                 yield return null;
             }
+            yield return new WaitForSeconds(1);
             portalManager.initiatePortal();
             yield return new WaitForSeconds(1);
             AudioSource audio = GetComponent<AudioSource>();
