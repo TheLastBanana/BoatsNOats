@@ -70,11 +70,7 @@ public class PortalManager : MonoBehaviour
         afx = GetComponent<AudioEffects>();
         portalEffect = Instantiate(portalParticlePrefab).GetComponent<PortalEffect>();
 
-        if (artifact == null)
-        {
-            Debug.LogError("Artifact property of PortalManager needs to be assigned!");
-        }
-        else
+        if (artifact != null)
         {
             portalEffect.artifact = artifact;
         }
