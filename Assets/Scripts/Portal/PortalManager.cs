@@ -21,6 +21,7 @@ public class PortalManager : MonoBehaviour
     public float dragLpfHigh = 3000.0f;
     public float dragPitchLow = 1.0f;
     public float dragPitchHigh = 2.0f;
+    public Transform artifact;
 
     // World info
     public Camera mainCam;
@@ -68,6 +69,15 @@ public class PortalManager : MonoBehaviour
     {
         afx = GetComponent<AudioEffects>();
         portalEffect = Instantiate(portalParticlePrefab).GetComponent<PortalEffect>();
+
+        if (artifact == null)
+        {
+            Debug.LogError("Artifact property of PortalManager needs to be assigned!");
+        }
+        else
+        {
+            portalEffect.artifact = artifact;
+        }
 
         disabledForLevel = false;
         disabled = false;
