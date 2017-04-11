@@ -13,9 +13,12 @@ I’m Al! I told you already I’m an AI.
 Yeah, saying it again doesn’t make me understand.
 </custom></text>
   <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
-You know! An AI! A robot! A mechanical helper! The dolphins made me. I do all the work they don’t like to do. And you know dolphins, they just flop around and giggle all day.
+You know! An AI! A robot! A mechanical helper! The dolphins made me. I do all the work they don’t like to do.
 </custom></text>
-    <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
+  <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
+And you know dolphins, they just flop around and giggle all day.
+</custom></text>  
+  <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
 We’re everywhere! Are you from out of town or something?
 </custom></text>
   <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
