@@ -32,10 +32,16 @@ public class SceneChanger : MonoBehaviour
     void Update()
     {
         if (controls.RestartLevel())
+        {
+            loadNextScene = false;
             DoLoadScene(currentScene);
+        }
 
         if (loadNextScene)
+        {
+            loadNextScene = false;
             DoLoadScene(nextScene);
+        }
 
         if (controls.QuitGame())
         {
