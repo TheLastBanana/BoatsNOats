@@ -49,6 +49,7 @@ public class Al : MonoBehaviour
 
     void FinishFly()
     {
+        anim.SetBool("Flying", false);
         transform.position = currentTarget;
         rig.localScale = rigScale;
         currentFly = null;
