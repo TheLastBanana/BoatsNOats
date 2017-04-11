@@ -26,6 +26,12 @@ public class FadeOut : MonoBehaviour
         Vector3 extents = boxRen.bounds.extents;
         float xScale = camWidth / extents.x / 2;
         float yScale = camHeight / extents.y / 2;
+
+        // Make slightly larger to account for sliding when gemma pauses
+        xScale *= 1.2f;
+        yScale *= 1.2f;
+
+        // Apply scale
         fadeBox.transform.localScale = new Vector3(xScale, yScale, 1);
     }
 
