@@ -157,6 +157,17 @@ public class CutsceneManager : MonoBehaviour {
             return (startedText || startedPan);
     }
 
+    public void DisableControls(bool disable)
+    {
+        if (disable)
+            playerController.StopForCutscene();
+        else
+            playerController.ResumeAfterCutscene();
+
+        cameraSwitcher.SetCutscene(disable);
+        portalManager.DisablePortal(disable);
+    }
+
     public void RunCutscene(TextAsset textFile)
     {
         typewriterText.setTextFile(textFile);
@@ -165,9 +176,7 @@ public class CutsceneManager : MonoBehaviour {
 
         // Disable player control
         runningCutscene = true;
-        playerController.StopForCutscene();
-        cameraSwitcher.SetCutscene(true);
-        portalManager.DisablePortal(true);
+        DisableControls(true);
     }
 
     private void EndCutscene()
@@ -184,10 +193,8 @@ public class CutsceneManager : MonoBehaviour {
         // Resume player control
         if (!endCutscene)
         {
-            playerController.ResumeAfterCutscene();
-            cameraSwitcher.SetCutscene(false);
             cameraTracker.UpdateTarget(Gemma);
-            portalManager.DisablePortal(false);
+            DisableControls(false);
         }
 
         // If this was the last cutscene in a level do a scene transition now

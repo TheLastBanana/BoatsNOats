@@ -39,9 +39,9 @@ public class SceneChanger : MonoBehaviour
             DoLoadScene(currentScene);
         }
 
-        if (loadNextScene)
+        if (!restarted && loadNextScene)
         {
-            loadNextScene = false;
+            restarted = true;
             DoLoadScene(nextScene);
         }
 
@@ -87,6 +87,9 @@ public class SceneChanger : MonoBehaviour
     // TODO: Transition stuff goes here
     private void DoLoadScene(int scene)
     {
+        // Disables player controls (moving Gemma, creating portals, Tabbing to view other world)
+        cutsceneManager.DisableControls(true);
+
         // TODO: Disable animations, physics, pistons, the works
         StartCoroutine(Transition(scene));
     }
