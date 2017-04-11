@@ -142,11 +142,13 @@ class MoveTag : Tag
     public int start { get; set; }
     public int end { get { return start; } set { this.start = value; } }
     public string dest { get; set; }
+    public string mover { get; set; }
 
-    public MoveTag(string dest, int start)
+    public MoveTag(string dest, int start, string mover)
     {
         this.dest = dest;
         this.start = start;
+        this.mover = mover;
         this.end = end;
     }
 
@@ -313,10 +315,15 @@ public class TypewriterText : MonoBehaviour {
             }
             else if (split[1].StartsWith("move"))
             {
-                string[] moveSplit = split[1].Split('=');
-                Debug.Assert(moveSplit.Length == 2, "Move split not 2");
-                string dest = moveSplit[1].Replace("\"", ""); // Values are quoted..
-                MoveTag mt = new MoveTag(dest, start);
+                Debug.Assert(split.Length > 2, "Not enough parameters for move");
+                string[] destSplit = split[1].Split('=');
+                string[] moverSplit = split[2].Split('=');
+                Debug.Assert(destSplit.Length == 2, "Destination split not 2");
+                Debug.Assert(moverSplit.Length == 2, "Mover split not 2");
+
+                string dest = destSplit[1].Replace("\"", ""); // Values are quoted..
+                string mover = moverSplit[1].Replace("\"", ""); // Values are quoted..
+                MoveTag mt = new MoveTag(dest, start, mover);
                 dia.addMove(mt);
 
                 t = mt;
@@ -477,7 +484,7 @@ public class TypewriterText : MonoBehaviour {
             // Move Al somewhere
             foreach (MoveTag tag in mTags)
                 if (tag.start == i)
-                    moveAl(tag);
+                    startMove(tag);
 
             // Play voice and set its delay if there's a speaker
             if (voice != null && text != null)
@@ -577,9 +584,9 @@ public class TypewriterText : MonoBehaviour {
     }
 
     // Call to CutsceneManager to move Al
-    private void moveAl(MoveTag tag)
+    private void startMove(MoveTag tag)
     {
-        cutsceneManager.QueueAl(tag.dest, tag.start);
+        cutsceneManager.QueueMove(tag.dest, tag.start, tag.mover);
     }
 
     private Text setSpeaker(SpeakerTag tag)

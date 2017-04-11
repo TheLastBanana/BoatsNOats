@@ -49,7 +49,7 @@ public class CutsceneManager : MonoBehaviour {
     private bool runningCutscene;
     private bool startedText;
     Queue<CameraPanInfo> pans;
-    Queue<AlMoveInfo> moves;
+    Queue<MoveInfo> moves;
     private bool startedPan;
     private bool endCutscene; // Last cutscene in the level, will do scene transition after
 
@@ -86,7 +86,7 @@ public class CutsceneManager : MonoBehaviour {
         runningCutscene = false;
         startedText = false;
         pans = new Queue<CameraPanInfo>();
-        moves = new Queue<AlMoveInfo>();
+        moves = new Queue<MoveInfo>();
         startedPan = false;
         endCutscene = false;
     }
@@ -106,15 +106,15 @@ public class CutsceneManager : MonoBehaviour {
             if (pans.Count > 0 && moves.Count <= 0)
                 StartPan();
             else if (pans.Count <= 0 && moves.Count > 0)
-                MoveAl();
+                StartMove();
             else if (pans.Count > 0 && moves.Count > 0)
             {
                 CameraPanInfo pan = pans.Peek();
-                AlMoveInfo move = moves.Peek();
+                MoveInfo move = moves.Peek();
 
                 // If there is both a pan and a move queued up, whichever was added first will go first
                 if (move.tagStart <= pan.tagStart)
-                    MoveAl();
+                    StartMove();
                 else
                     StartPan();
             }
@@ -143,6 +143,9 @@ public class CutsceneManager : MonoBehaviour {
             if (startedPan)
                 EndPan();
 
+            if (!playerController.DoneWalking())
+                playerController.SkipWalking();
+
             if (Al != null && !AlScript.DoneFlying())
                 AlScript.SkipFlying();
          }
@@ -150,11 +153,11 @@ public class CutsceneManager : MonoBehaviour {
 
     private bool Busy()
     {
-        // Are we busy with either dialogue, doing a pan, waiting after a pan, or moving Al?
+        // Are we busy with either dialogue, doing a pan, or moving Gemma or Al?
         if (Al != null)
-            return (startedText || startedPan || !AlScript.DoneFlying());
+            return (startedText || startedPan || !playerController.DoneWalking() || !AlScript.DoneFlying());
         else
-            return (startedText || startedPan);
+            return (startedText || startedPan || !playerController.DoneWalking());
     }
 
     public void DisableControls(bool disable)
@@ -224,19 +227,34 @@ public class CutsceneManager : MonoBehaviour {
         return currentText;
     }
 
-    public void QueueAl(string objName, int tagStart)
+    public void QueueMove(string dest, int tagStart, string mover)
     {
-        Debug.Assert(Al != null, "Al not assigned, can't do a move!");
-        GameObject target = getLocationFromTag(objName.ToLower());
+        GameObject target = getLocationFromTag(dest.ToLower());
         if (target != null)
         {
-            moves.Enqueue(new AlMoveInfo(tagStart, target.GetComponent<Transform>().position));
+            moves.Enqueue(new MoveInfo(tagStart, target.GetComponent<Transform>().position, mover));
         }
     }
 
-    private void MoveAl()
+    private void StartMove()
     {
-        AlScript.FlyToPosition(moves.Dequeue().target);
+        MoveInfo move = moves.Dequeue();
+        string mover = move.mover.ToLower();
+        Vector3 target = move.target;
+
+        if (mover == "gemma")
+        {
+            playerController.WalkToPosition(target);
+        }
+        else if (mover == "al")
+        {
+            Debug.Assert(Al != null, "Al not assigned, can't do a move!");
+            AlScript.FlyToPosition(target);
+        }
+        else
+        {
+            Debug.LogError("Unrecognized mover, not doing move!");
+        }
     }
 
     public void QueuePan(string objName, int tagStart, float delay)
@@ -333,14 +351,16 @@ public class CameraPanInfo
     }
 }
 
-public class AlMoveInfo
+public class MoveInfo
 {
     public int tagStart;
     public Vector3 target;
+    public string mover;
 
-    public AlMoveInfo(int ts, Vector3 t)
+    public MoveInfo(int ts, Vector3 t, string m)
     {
         tagStart = ts;
         target = t;
+        mover = m;
     }
 }

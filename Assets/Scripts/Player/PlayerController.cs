@@ -28,8 +28,8 @@ public class PlayerController : MonoBehaviour
     private Vector2 storedVelocity;
     private float storedGravity;
 
-    private bool isWalking = false;
     Coroutine currentWalk;
+    Vector3 currentTarget;
 
     void Start()
     {
@@ -101,7 +101,7 @@ public class PlayerController : MonoBehaviour
 			if( transform.localScale.x < 0f )
                 FlipGemma();
         }
-        else if(!isWalking)
+        else if(DoneWalking())
 		{
 			normalizedHorizontalSpeed = 0;
 		}
@@ -140,14 +140,39 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void FlyToPosition(Vector3 target)
+    public void WalkToPosition(Vector3 target)
     {
+        // Stop current walk animation
+        if (currentWalk != null)
+            StopCoroutine(currentWalk);
+
+        currentTarget = target;
         currentWalk = StartCoroutine(walkToPosition(target));
+    }
+
+    public bool DoneWalking()
+    {
+        return (currentWalk == null);
+    }
+
+    public void SkipWalking()
+    {
+        if (currentWalk != null)
+        {
+            StopCoroutine(currentWalk);
+            FinishWalking();
+        }
+    }
+
+    private void FinishWalking()
+    {
+        normalizedHorizontalSpeed = 0;
+        transform.position = new Vector3(currentTarget.x, transform.position.y, transform.position.z);
+        currentWalk = null;
     }
 
     IEnumerator walkToPosition(Vector3 target)
     {
-        isWalking = true;
         Vector3 start = transform.position;
 
         if (target.x > start.x)
@@ -171,9 +196,8 @@ public class PlayerController : MonoBehaviour
             }
                 
         }
-            
-
-        normalizedHorizontalSpeed = 0;
+        
+        FinishWalking();
     }
     private void FlipGemma()
     {

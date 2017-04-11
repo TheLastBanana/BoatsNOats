@@ -10,7 +10,7 @@
 FREE! WOOHOO!
 </custom></text>
   <text xml:space="preserve">
-<custom move="mid3"/><custom move="mid2"/><custom move="mid3"/><custom pan="al" delay="0.5"/>
+<custom move="mid3" mover="al"/><custom move="mid2" mover="al"/><custom move="mid3" mover="al"/><custom pan="al" delay="0.5"/>
 </text>
   <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
 Look at this! I can go wherever I want! My chip’s gone! I’m free! Thank you you great, soft, feathery... thing!
