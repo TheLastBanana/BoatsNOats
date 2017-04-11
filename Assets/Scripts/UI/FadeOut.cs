@@ -28,8 +28,8 @@ public class FadeOut : MonoBehaviour
         float yScale = camHeight / extents.y / 2;
 
         // Make slightly larger to account for sliding when gemma pauses
-        xScale *= 1.2f;
-        yScale *= 1.2f;
+        xScale *= 1.1f;
+        yScale *= 1.1f;
 
         // Apply scale
         fadeBox.transform.localScale = new Vector3(xScale, yScale, 1);
@@ -41,15 +41,15 @@ public class FadeOut : MonoBehaviour
         {
             if (!wasAnimating)
             {
-                // Make new position
-                Vector3 newPos = parentCamera.transform.position;
-                newPos.z = fadeBox.transform.position.z;
-                fadeBox.transform.position = newPos;
-
                 // Enable the renderer
                 boxRen.enabled = true;
                 wasAnimating = true;
             }
+
+            // Make new position
+            Vector3 newPos = parentCamera.transform.position;
+            newPos.z = fadeBox.transform.position.z;
+            fadeBox.transform.position = newPos;
 
             // Fade
             Color boxColor = boxRen.color;
