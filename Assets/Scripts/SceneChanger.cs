@@ -12,6 +12,8 @@ public class SceneChanger : MonoBehaviour
 
     // Need the fader from the Main Camera
     public FadeOut fader;
+    public float frameCountRestart = 128;
+    public float frameCountNextLevel = 256;
 
     private int currentScene;
     private int nextScene;
@@ -36,13 +38,13 @@ public class SceneChanger : MonoBehaviour
         if (!restarted && controls.RestartLevel())
         {
             restarted = true;
-            DoLoadScene(currentScene);
+            DoLoadScene(currentScene, frameCountRestart, false);
         }
 
         if (!restarted && loadNextScene)
         {
             restarted = true;
-            DoLoadScene(nextScene);
+            DoLoadScene(nextScene, frameCountNextLevel, true);
         }
 
         if (controls.QuitGame())
@@ -85,20 +87,21 @@ public class SceneChanger : MonoBehaviour
 
     // Do everything to load another scene
     // TODO: Transition stuff goes here
-    private void DoLoadScene(int scene)
+    private void DoLoadScene(int scene, float frameCount, bool nextLevel)
     {
         // Disables player controls (moving Gemma, creating portals, Tabbing to view other world)
         cutsceneManager.DisableControls(true);
+        controls.DisableSkipping(true);
 
-        // TODO: Disable animations, physics, pistons, the works
-        StartCoroutine(Transition(scene));
+        // TODO: Play sound if nextLevel == true
+        StartCoroutine(Transition(scene, frameCount));
     }
 
 
     // Does a transition by animating the fade out, then loading the next scene
-    private IEnumerator Transition(int scene)
+    private IEnumerator Transition(int scene, float frameCount)
     {
-        fader.StartFadeOut(cutsceneManager.Gemma.transform.position);
+        fader.StartFadeOut(cutsceneManager.Gemma.transform.position, frameCount);
 
         // Lambda wait while we are animating
         yield return new WaitWhile(() => fader.isAnimating());

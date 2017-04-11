@@ -11,7 +11,7 @@ public class FadeOut : MonoBehaviour
     private bool animate = false;
     private bool wasAnimating = false;
     private float curFrame = 0;
-    public float frameCount = 256;
+    private float frameCount = 256;
 
 
     // Use this for initialization
@@ -69,8 +69,9 @@ public class FadeOut : MonoBehaviour
     }
 
     // THIS IS THE PUBLIC INTERFACE
-    public void StartFadeOut(Vector2 pos)
+    public void StartFadeOut(Vector2 pos, float count)
     {
+        frameCount = count;
         animate = true;
     }
 

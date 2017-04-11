@@ -12,11 +12,18 @@ public class GameControls : MonoBehaviour {
     public bool DisablePortalThisLevel = false;
 
     private float skipDialogueLast = 0f;
+    private bool disableSkipping;
 
     void Start()
     {
         if (portalManager != null)
             portalManager.DisablePortalForLevel(DisablePortalThisLevel);
+        disableSkipping = false;
+    }
+
+    public void DisableSkipping(bool disable)
+    {
+        disableSkipping = disable;
     }
 
     public bool GemmaLeft()
@@ -48,6 +55,9 @@ public class GameControls : MonoBehaviour {
 
     public bool SkipDialogue()
     {
+        if (disableSkipping)
+            return false;
+
         // We don't want multiple presses from one physical press, this is also why GetKeyDown is used instead of GetKey
         if (Time.time - skipDialogueLast > 0.1f)
         {
