@@ -370,12 +370,14 @@ public class TypewriterText : MonoBehaviour {
             {
                 Debug.Assert(split.Length > 2, "Not enough parameters for animation");
                 string[] nameSplit = split[1].Split('=');
-                string[] animationSplit = split[2].Split('=');
+                string[] animationSplit = tagString.Split('=');
                 Debug.Assert(nameSplit.Length == 2, "Name split not 2");
-                Debug.Assert(animationSplit.Length == 2, "Animation split not 2");
+                Debug.Assert(animationSplit.Length == 3, "Animation split not 3");
 
                 string name = nameSplit[1].Replace("\"", ""); // Values are quoted..
-                string animation = animationSplit[1].Replace("\"", ""); // Values are quoted..
+                string animation = animationSplit[2].Replace("\"", ""); // Values are quoted..
+                animation = animation.Trim();
+
                 AnimationTag at = new AnimationTag(name, animation, start, end);
                 dia.addAnimation(at);
 
