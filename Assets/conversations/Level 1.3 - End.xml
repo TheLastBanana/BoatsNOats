@@ -6,6 +6,9 @@
   <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/>
 <custom speed="0.0"/>♫ <i>I<custom speed="0.2"/> <custom speed="0.0"/>love-<custom speed="0.2"/> <custom speed="0.0"/>fil<custom speed="0.2"/>i<custom speed="0.0"/>ng-<custom speed="0.2"/> <custom speed="0.0"/>fil<custom speed="0.2"/>i<custom speed="0.0"/>ng-<custom speed="0.2"/> <custom speed="0.0"/>fil-<custom speed="0.2"/> <custom speed="0.0"/>f-<custom speed="0.2"/> <custom speed="0.0"/>f-<custom speed="0.2"/> <custom speed="0.0"/>f-</i>
 </text>
+  <text xml:space="preserve">
+<custom animation="al" anim_to_do="Get Up"/>
+</text>
   <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
 FREE! WOOHOO!
 </custom></text>
