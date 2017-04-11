@@ -67,6 +67,7 @@ class LevelToolsWindow : EditorWindow
         var newTrns = newObj.transform;
         newTrns.position = obj.position + offsets.offset;
         newTrns.rotation = obj.rotation;
+        newTrns.localScale = obj.localScale;
         newTrns.parent = dstObj;
     }
 

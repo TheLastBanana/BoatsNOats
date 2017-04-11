@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
 	public float jumpHeight = 3.5f;
 
     [HideInInspector]
-	private float normalizedHorizontalSpeed = 0;
+	public float normalizedHorizontalSpeed = 0;
 
 	private CharacterController2D _controller;
 	private Animator _animator;
@@ -21,17 +21,18 @@ public class PlayerController : MonoBehaviour
     private PlayerEffects _sound;
 	private RaycastHit2D _lastControllerColliderHit;
 	private Vector3 _velocity;
-    private Transform canvasTransform;
+    public GameControls controls;
 
-    private bool inputDisabled;
+    public bool inputDisabled;
     private bool portalSelecting;
     private Vector2 storedVelocity;
     private float storedGravity;
 
+    Coroutine currentWalk;
+    Vector3 currentTarget;
+
     void Start()
     {
-        canvasTransform = GetComponentInChildren<Canvas>().transform;
-        inputDisabled = false;
         portalSelecting = false;
     }
 
@@ -83,36 +84,36 @@ public class PlayerController : MonoBehaviour
         if (portalSelecting)
             return;
 
-		if( _controller.isGrounded )
+        if (_controller.isGrounded)
         {
             _velocity.y = 0;
-            _animator.SetBool("Ground", true);
         }
 
-        if ( Input.GetKey( KeyCode.D ) && !inputDisabled)
+        if (controls.GemmaRight() && !inputDisabled)
 		{
 			normalizedHorizontalSpeed = 1;
             if (transform.localScale.x > 0f)
                 FlipGemma();
 		}
-		else if( Input.GetKey( KeyCode.A ) && !inputDisabled)
+		else if (controls.GemmaLeft() && !inputDisabled)
 		{
 			normalizedHorizontalSpeed = -1;
 			if( transform.localScale.x < 0f )
                 FlipGemma();
         }
-        else
+        else if(DoneWalking())
 		{
 			normalizedHorizontalSpeed = 0;
 		}
 
 
-		// we can only jump whilst grounded
-		if( _controller.isGrounded && (Input.GetKeyDown( KeyCode.Space ) || Input.GetKeyDown( KeyCode.W )) && !inputDisabled)
+        // we can only jump whilst grounded
+        if (_controller.isGrounded && controls.GemmaJump() && !inputDisabled)
 		{
 			_velocity.y = Mathf.Sqrt( 2f * jumpHeight * -gravity );
             _sound.PlayJumpEffect();
-            _animator.SetBool("Ground", false);
+            _animator.SetTrigger("Jump");
+            _animator.SetBool("Jumped", true);
         }
 
 
@@ -123,34 +124,84 @@ public class PlayerController : MonoBehaviour
 		// apply gravity before moving
 		_velocity.y += gravity * Time.deltaTime;
 
-		// if holding down bump up our movement amount and turn off one way platform detection for a frame.
-		// this lets us jump down through one way platforms
-		if( _controller.isGrounded && Input.GetKey( KeyCode.S ) && !inputDisabled)
-		{
-			_velocity.y *= 3f;
-			_controller.ignoreOneWayPlatformsThisFrame = true;
-		}
-
         _animator.SetFloat("Speed", Mathf.Abs(_velocity.x));
 		_controller.move( _velocity * Time.deltaTime );
 
 		// grab our current _velocity to use as a base for all calculations
 		_velocity = _controller.velocity;
-	}
 
+
+
+
+        _animator.SetBool("Ground", _controller.isGrounded);
+        if (_controller.isGrounded)
+        {
+            _animator.SetBool("Jumped", false);
+        }
+    }
+
+    public void WalkToPosition(Vector3 target)
+    {
+        // Stop current walk animation
+        if (currentWalk != null)
+            StopCoroutine(currentWalk);
+
+        currentTarget = target;
+        currentWalk = StartCoroutine(walkToPosition(target));
+    }
+
+    public bool DoneWalking()
+    {
+        return (currentWalk == null);
+    }
+
+    public void SkipWalking()
+    {
+        if (currentWalk != null)
+        {
+            StopCoroutine(currentWalk);
+            FinishWalking();
+        }
+    }
+
+    private void FinishWalking()
+    {
+        normalizedHorizontalSpeed = 0;
+        transform.position = new Vector3(currentTarget.x, transform.position.y, transform.position.z);
+        currentWalk = null;
+    }
+
+    IEnumerator walkToPosition(Vector3 target)
+    {
+        Vector3 start = transform.position;
+
+        if (target.x > start.x)
+        {
+            if (transform.localScale.x > 0f)
+                FlipGemma();
+            while (transform.position.x < target.x)
+            {
+                normalizedHorizontalSpeed = 1;
+                yield return null;
+            }
+        }
+        else
+        {
+            if (transform.localScale.x < 0f)
+                FlipGemma();
+            while (transform.position.x > target.x)
+            {
+                normalizedHorizontalSpeed = -1;
+                yield return null;
+            }
+                
+        }
+        
+        FinishWalking();
+    }
     private void FlipGemma()
     {
-        // Get canvas' x position
-        float canvasX = canvasTransform.position.x;
-
-        // Flip Gemma
         transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
-
-        // Flip canvas back
-        canvasTransform.localScale = new Vector3(-canvasTransform.localScale.x, canvasTransform.localScale.y, canvasTransform.localScale.z);
-
-        // Reset canvas' x position
-        canvasTransform.position = new Vector3(canvasX, canvasTransform.position.y, canvasTransform.position.z);
     }
 
     public void StopForCutscene()

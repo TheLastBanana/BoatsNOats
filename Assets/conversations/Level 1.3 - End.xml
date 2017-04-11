@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dialog>
+  <text xml:space="preserve">
+<custom pan="al" delay="0.1"/>
+</text>
+  <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/>
+<custom speed="0.0"/>♫ <i>I<custom speed="0.2"/> <custom speed="0.0"/>love-<custom speed="0.2"/> <custom speed="0.0"/>fil<custom speed="0.2"/>i<custom speed="0.0"/>ng-<custom speed="0.2"/> <custom speed="0.0"/>fil<custom speed="0.2"/>i<custom speed="0.0"/>ng-<custom speed="0.2"/> <custom speed="0.0"/>fil-<custom speed="0.2"/> <custom speed="0.0"/>f-<custom speed="0.2"/> <custom speed="0.0"/>f-<custom speed="0.2"/> <custom speed="0.0"/>f-</i>
+</text>
+  <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
+FREE! WOOHOO!
+</custom></text>
+  <text xml:space="preserve">
+<custom move="mid3" mover="al"/><custom move="mid2" mover="al"/><custom move="mid3" mover="al"/><custom pan="al" delay="0.5"/>
+</text>
+  <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
+Look at this! I can go wherever I want! My chip’s gone! I’m free! Thank you you great, soft, feathery... thing!
+</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+Excuse me? I’m not a thing! I’m Gemma, Thief extraordinaire! I’m a bird like you!
+</custom></text>
+  <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
+I’m not a bird! I’m an AI!
+</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+A what now?
+</custom></text>
+  <text xml:space="preserve">
+<custom pan="loudspeakerdry" delay="0.5"/>
+</text>
+  <text xml:space="preserve"><custom speaker="loudspeakerdry"/><custom voice="Dolphin Loudspeaker"/><custom speed="0.015">
+The feathered intruder is still at large and leaving behind piles of blue debris! All officers engage in pursuit of a long legged and hexagonal shaped criminal!
+</custom></text>
+  <text xml:space="preserve">
+<custom pan="al" delay="0.5"/>
+</text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+Help me, I’ve got to get off these main streets!
+</custom></text>
+  <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
+Alright! Just follow me new feathery friend!
+</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+We’re not friends!
+</custom></text>
+  <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
+Follow me new feathery buddy!
+</custom></text>
+</dialog>

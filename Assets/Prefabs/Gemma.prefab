@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4663284607010738}
   - component: {fileID: 212623778038726586}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: l_eye_wht
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36,7 +36,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4702200269325200}
   - component: {fileID: 212339842842547284}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: arti_case
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52,7 +52,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4901619701527488}
   - component: {fileID: 212113265311214832}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: arti_jewel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -68,7 +68,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4241238999597902}
   - component: {fileID: 212562486356281004}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: GemmaTextBubble
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -85,7 +85,7 @@ GameObject:
   - component: {fileID: 4939161580628706}
   - component: {fileID: 199516067889453170}
   - component: {fileID: 198125798529380314}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Star Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -133,7 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4286717240002132}
   - component: {fileID: 212984921738513306}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: c_beak_top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -164,7 +164,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4752445111909970}
   - component: {fileID: 212481181735954946}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: c_strap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -180,7 +180,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4449200268114990}
   - component: {fileID: 212972654194296770}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: l_eye_pupil
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -197,7 +197,7 @@ GameObject:
   - component: {fileID: 4863091190986172}
   - component: {fileID: 199182692971463456}
   - component: {fileID: 198768897196981228}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Step Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -213,7 +213,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4691467772902028}
   - component: {fileID: 212897868547074356}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: r_eye_pupil
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -229,7 +229,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4269259162604518}
   - component: {fileID: 212485391311831882}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: r_eye_wht
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -262,7 +262,7 @@ GameObject:
   - component: {fileID: 4029047085916654}
   - component: {fileID: 199998757876260516}
   - component: {fileID: 198967883412008290}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -278,7 +278,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4683607588570070}
   - component: {fileID: 212993174431195034}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: l_leg_foot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -294,7 +294,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4632287506543130}
   - component: {fileID: 212509177118640494}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: arti_handle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -333,7 +333,7 @@ GameObject:
   - component: {fileID: 222778184411509546}
   - component: {fileID: 114649883462147012}
   - component: {fileID: 114094537650083764}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: GemmaText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -350,7 +350,7 @@ GameObject:
   - component: {fileID: 4865083801183412}
   - component: {fileID: 199648726842338314}
   - component: {fileID: 198124821260904076}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Star Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -382,7 +382,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4952526701597906}
   - component: {fileID: 212059429972822998}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: c_wing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -398,7 +398,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4888014423141104}
   - component: {fileID: 212947538165634182}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: c_bag
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -430,7 +430,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4931030051119274}
   - component: {fileID: 212879249306690590}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: l_eye_grn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -447,7 +447,7 @@ GameObject:
   - component: {fileID: 4186424240227808}
   - component: {fileID: 199142730260884072}
   - component: {fileID: 198506278013471486}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Jump Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -463,7 +463,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4685613404094602}
   - component: {fileID: 212257779024261568}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: r_eye_grn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -479,7 +479,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4403090771179318}
   - component: {fileID: 212560588290765260}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: r_leg_up
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -495,7 +495,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4482588636742692}
   - component: {fileID: 212660641996224068}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: l_leg_up
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -511,7 +511,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4850243297882304}
   - component: {fileID: 212434613329003118}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: r_leg_low
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -527,7 +527,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4447840292379876}
   - component: {fileID: 212491888545559644}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: c_beak_bottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -543,7 +543,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4204739914074328}
   - component: {fileID: 212209117189532430}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: c_body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -559,7 +559,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4408758133510124}
   - component: {fileID: 212298871472173182}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: r_leg_foot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -609,7 +609,7 @@ GameObject:
   - component: {fileID: 223340186176732844}
   - component: {fileID: 114613738564583194}
   - component: {fileID: 114678429713657264}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: GemmaDialogueCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -642,7 +642,7 @@ GameObject:
   - component: {fileID: 4983478940244106}
   - component: {fileID: 199172708941108812}
   - component: {fileID: 198310584197077316}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Land Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -658,7 +658,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4552159916131994}
   - component: {fileID: 212825648704546498}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: l_leg_low
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -714,7 +714,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1359047794276204}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.72, z: 0}
+  m_LocalPosition: {x: -39.27, y: 3.59, z: 0}
   m_LocalScale: {x: -0.3, y: 0.3, z: 1}
   m_Children:
   - {fileID: 4204739914074328}
@@ -1988,7 +1988,7 @@ Animator:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1359047794276204}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: b2b191ec57f71ab4d9106303e3b31144, type: 2}
   m_CullingMode: 0
@@ -2009,7 +2009,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b1e771e1c2550744b87cca2d8750a02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cutsceneManager: {fileID: 0}
+  controls: {fileID: 0}
 --- !u!114 &114348896398289756
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2026,6 +2026,9 @@ MonoBehaviour:
   groundDamping: 20
   inAirDamping: 5
   jumpHeight: 3.5
+  normalizedHorizontalSpeed: 0
+  controls: {fileID: 0}
+  inputDisabled: 0
 --- !u!114 &114585863027102874
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2229,7 +2232,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -12732843
+  randomSeed: 1711711270
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -4722,7 +4725,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 422971139
+  randomSeed: -1698204494
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -7215,7 +7218,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -825621329
+  randomSeed: -1515701074
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -9708,7 +9711,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 1214550661
+  randomSeed: -636809343
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -12189,7 +12192,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 810095689
+  randomSeed: -1793529696
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -14682,7 +14685,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 1154525717
+  randomSeed: -1988122766
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -17202,7 +17205,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1623670231
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_RenderMode: 0
   m_SortMode: 0
   m_MinParticleSize: 0
@@ -17252,7 +17255,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1623670231
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_RenderMode: 0
   m_SortMode: 0
   m_MinParticleSize: 0
@@ -17302,7 +17305,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1623670231
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_RenderMode: 0
   m_SortMode: 0
   m_MinParticleSize: 0
@@ -17352,7 +17355,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1623670231
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_RenderMode: 0
   m_SortMode: 0
   m_MinParticleSize: 0
@@ -17402,7 +17405,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1623670231
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_RenderMode: 0
   m_SortMode: 0
   m_MinParticleSize: 0

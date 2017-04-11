@@ -8,10 +8,15 @@ public class SceneChanger : MonoBehaviour
 {
     public CutsceneManager cutsceneManager;
     private CutsceneInfo cutsceneInfo;
+    public GameControls controls;
+
+    // Need the fader from the Main Camera
+    public FadeOut fader;
 
     private int currentScene;
     private int nextScene;
     private bool loadNextScene;
+    private bool restarted;
 
     // Use this for initialization
     void Start()
@@ -22,16 +27,42 @@ public class SceneChanger : MonoBehaviour
         currentScene = SceneManager.GetActiveScene().buildIndex;
         nextScene = currentScene + 1;
         loadNextScene = false;
+        restarted = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
-            SceneManager.LoadScene(currentScene);
+        if (!restarted && controls.RestartLevel())
+        {
+            restarted = true;
+            DoLoadScene(currentScene);
+        }
 
-        if (loadNextScene)
-            SceneManager.LoadScene(nextScene);
+        if (!restarted && loadNextScene)
+        {
+            restarted = true;
+            DoLoadScene(nextScene);
+        }
+
+        if (controls.QuitGame())
+        {
+            #if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+            #endif
+
+            #if UNITY_STANDALONE_OSX
+                Application.Quit();
+            #endif
+
+            #if UNITY_STANDALONE_WIN
+                Application.Quit();
+            #endif   
+            
+                
+  
+        }
+        
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -40,15 +71,38 @@ public class SceneChanger : MonoBehaviour
         {
             // No cutscene, end level
             if (cutsceneInfo.textFile == null)
-                LoadNextScene();
+                SetLoadNextScene();
             // Tell the manager this is an end level cutscene
             else
                 cutsceneManager.IsEndCutscene();
         }
     }
 
-    public void LoadNextScene()
+    public void SetLoadNextScene()
     {
         loadNextScene = true;
+    }
+
+    // Do everything to load another scene
+    // TODO: Transition stuff goes here
+    private void DoLoadScene(int scene)
+    {
+        // Disables player controls (moving Gemma, creating portals, Tabbing to view other world)
+        cutsceneManager.DisableControls(true);
+
+        // TODO: Disable animations, physics, pistons, the works
+        StartCoroutine(Transition(scene));
+    }
+
+
+    // Does a transition by animating the fade out, then loading the next scene
+    private IEnumerator Transition(int scene)
+    {
+        fader.StartFadeOut(cutsceneManager.Gemma.transform.position);
+
+        // Lambda wait while we are animating
+        yield return new WaitWhile(() => fader.isAnimating());
+
+        SceneManager.LoadScene(scene);
     }
 }

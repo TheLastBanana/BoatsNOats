@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dialog>
+  <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
+Okay, those dolphins won’t catch up for a while now.
+</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+Thanks for the help. Whatever you are.  
+</custom></text>
+  <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
+I’m Al! I told you already I’m an AI.
+</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+Yeah, saying it again doesn’t make me understand.
+</custom></text>
+  <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
+You know! An AI! A robot! A mechanical helper! The dolphins made me. I do all the work they don’t like to do. And you know dolphins, they just flop around and giggle all day.
+</custom></text>
+    <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
+We’re everywhere! Are you from out of town or something?
+</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+You don’t even know.
+</custom></text>
+  <text xml:space="preserve"><custom speaker="loudspeakerwet"/><custom voice="Dolphin Loudspeaker"/><custom speed="0.015">
+The walking hexagon is still on the move. Catch it before it covers our city in a weird blue mess!
+</custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+Alright let’s keep going.
+</custom></text>
+  <text xml:space="preserve">
+<custom move="mid1" mover="al"/>
+</text>
+</dialog>
