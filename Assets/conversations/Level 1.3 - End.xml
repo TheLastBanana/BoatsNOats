@@ -13,6 +13,9 @@
 FREE! WOOHOO!
 </custom></text>
   <text xml:space="preserve">
+<custom animation="al" anim_to_do="Idle"/>
+</text>
+  <text xml:space="preserve">
 <custom move="mid3" mover="al"/><custom move="mid2" mover="al"/><custom move="mid3" mover="al"/><custom pan="al" delay="0.5"/>
 </text>
   <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
