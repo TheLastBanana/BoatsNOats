@@ -16,7 +16,7 @@ What’s that sound? That can’t be good.<custom portal=""></custom>
 Ok now this ain’t right.
 </custom></text>
   <text xml:space="preserve">
-<custom pan="loudspeakerdry" delay="0.3"/>
+<custom pan="mid2" delay="0.3"/>
 </text>
   <text xml:space="preserve"><custom speaker="loudspeakerdry"/><custom voice="Dolphin Loudspeaker"/><custom speed="0.015">
 Intruder alert! Alarm has been tripped. Security dolphins converge on the intruder.

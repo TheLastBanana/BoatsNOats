@@ -68,7 +68,7 @@ public class PortalManager : MonoBehaviour
     private Rect lastRect;
     
     // Use this for initialization
-    void Start()
+    void Awake()
     {
         afx = GetComponent<AudioEffects>();
         portalEffect = Instantiate(portalParticlePrefab).GetComponent<PortalEffect>();

@@ -14,7 +14,7 @@ public class GameControls : MonoBehaviour {
     private float skipDialogueLast = 0f;
     private bool disableSkipping;
 
-    void Start()
+    void Awake()
     {
         if (portalManager != null)
             portalManager.DisablePortalForLevel(DisablePortalThisLevel);

@@ -24,7 +24,7 @@ public class CameraSwitcher : MonoBehaviour
     private bool inCutscene;
     AudioEffects afx;
 
-    void Start ()
+    void Awake()
     {
         _switched = false;
         inCutscene = false;

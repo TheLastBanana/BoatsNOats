@@ -298,8 +298,6 @@ public class TypewriterText : MonoBehaviour {
     {
         if (!started)
             skipText = false;
-        else if (controls.SkipDialogue())
-            skipText = true;
     }
 
     // Figure out how to parse a tag string and return an appropriate tag while adding it to the dialog
@@ -700,9 +698,14 @@ public class TypewriterText : MonoBehaviour {
     }
 
     // Check if the text is done animating
-    public bool isTextDone()
+    public bool isTextStarted()
     {
         return started;
+    }
+
+    public void doSkipText()
+    {
+        skipText = true;
     }
 
     public int numDialogsLoaded()

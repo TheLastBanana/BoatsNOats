@@ -146,7 +146,7 @@ public class CutsceneManager : MonoBehaviour {
             }
 
             // Start the next text if we're not currently doing one
-            else if (!typewriterText.isTextDone())
+            else if (!typewriterText.isTextStarted())
             {
                 startedText = true;
                 typewriterText.startText(numTextCurrent);
@@ -162,35 +162,30 @@ public class CutsceneManager : MonoBehaviour {
             }
         }
 
-        // If the text has gone through, wait for the player to hit a skip key before finishing the text
-        // OR if there's no speaker then just auto skip
-        if (startedText && !typewriterText.isTextDone() && (controls.SkipDialogue() || !typewriterText.hasSpeaker(numTextCurrent)))
-        {
-            if (speaker)
-            {
-                var animator = speaker.GetComponent<Animator>();
-                if (animator)
-                {
-                    animator.SetBool("Talking", false);
-                }
-            }
-
-            startedText = false;
-            if (currentText != null)
-                currentText.gameObject.SetActive(false);
-            numTextCurrent += 1;
-        }
+        // If the typewriter text script has gone through and there's no speaker than auto skip
+        if (startedText && !typewriterText.isTextStarted() && !typewriterText.hasSpeaker(numTextCurrent))
+            DoAfterText();
 
         if (controls.SkipDialogue())
         {
-            // Let the player skip a pan
-            if (startedPan)
+            // Skip text typewriter effect and display whole text
+            if (typewriterText.isTextStarted())
+                typewriterText.doSkipText();
+
+            // If text has gone through we're waiting for user input to close the text bubble
+            else if (startedText && !typewriterText.isTextStarted())
+                DoAfterText();
+
+            // Skip camera panning
+            else if (startedPan)
                 EndPan();
 
-            if (!playerController.DoneWalking())
+            // Skip Gemma walking
+            else if (!playerController.DoneWalking())
                 playerController.SkipWalking();
 
-            if (Al != null && !AlScript.DoneFlying())
+            // Skip Al flying
+            else if (Al != null && !AlScript.DoneFlying())
                 AlScript.SkipFlying();
          }
     }
@@ -204,6 +199,23 @@ public class CutsceneManager : MonoBehaviour {
         else
             return (startedText || startedPan || !playerController.DoneWalking()
                     || currentFlash || isFading);
+    }
+
+    private void DoAfterText()
+    {
+        if (speaker)
+        {
+            var animator = speaker.GetComponent<Animator>();
+            if (animator)
+            {
+                animator.SetBool("Talking", false);
+            }
+        }
+
+        startedText = false;
+        if (currentText != null)
+            currentText.gameObject.SetActive(false);
+        numTextCurrent += 1;
     }
 
     public void DisableControls(bool disable)
@@ -454,8 +466,9 @@ public class CutsceneManager : MonoBehaviour {
         // Lambda wait while we are animating
         yield return new WaitWhile(() => fader.isAnimating());
 
-        // Enable controls
-        DisableControls(false);
+        // Enable controls if we don't have a cutscene at the start of the level
+        if (!runningCutscene)
+            DisableControls(false);
 
         // Done fading
         isFading = false;
