@@ -6,7 +6,7 @@ public class Piston : MonoBehaviour
 {
 
     public GameObject head;
-    public GameObject rod;
+    public GameObject[] rods;
     public GameObject bottom;
     public float maxDisplacement;
     public bool startExtended;
@@ -19,8 +19,7 @@ public class Piston : MonoBehaviour
     private Vector3 botSize;
     private Vector3 rodSize;
     private Vector3 headSize;
-    private float headMin;
-    private float headMax;
+    private float curDisp = 0;
     private float speed;
     private bool movingUp;
     private bool wasMoving = false;
@@ -40,12 +39,8 @@ public class Piston : MonoBehaviour
     {
         // Get sprite sizes
         botSize = bottom.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.bounds.size;
-        rodSize = rod.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.bounds.size;
+        rodSize = rods[0].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.bounds.size;
         headSize = head.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.bounds.size;
-
-        // Head places
-        headMin = botSize.y / 2 + headSize.y / 2;
-        headMax = headMin + maxDisplacement;
         
         // Speed is arbitrarily a fifth of the head size I guess
         speed = headSize.y / 5;
@@ -85,14 +80,22 @@ public class Piston : MonoBehaviour
 
         // Should we start extended
         if (startExtended)
-        { 
+        {
+            // Say we're at maxDisp
+            curDisp = maxDisplacement;
+
+            // Move head
             Vector3 headPos = head.transform.localPosition;
             headPos.y += maxDisplacement;
             head.transform.localPosition = headPos;
 
-            Vector3 rodScale = rod.transform.localScale;
-            rodScale.y = (headPos.y - headMin) / rodSize.y;
-            rod.transform.localScale = rodScale;
+            // Rescale
+            foreach (GameObject rod in rods)
+            {
+                Vector3 rodScale = rod.transform.localScale;
+                rodScale.y = curDisp / rodSize.y;
+                rod.transform.localScale = rodScale;
+            }
         }
     }
 
@@ -118,21 +121,23 @@ public class Piston : MonoBehaviour
         {
             float localPosY = head.transform.localPosition.y;
 
+            float distToMove = maxDisplacement - curDisp;
+
+            // No more distance to move, not moving up
+            if (distToMove == 0)
+                movingUp = false;
             // Still got at least one more tick before we hit max
-            if (localPosY < headMax - speed)
+            else if (distToMove >= speed)
             {
                 movingUp = true;
                 posDelta = speed;
             }
             // We're within speed distance of max, so move that much
-            else if (localPosY < headMax)
+            else if (maxDisplacement - curDisp < speed)
             {
                 movingUp = true;
-                posDelta = headMax - localPosY;
+                posDelta = distToMove;
             }
-            // Equal to (or greater than, do nothing, but say we're not moving up
-            else
-                movingUp = false;
         }
         // If it's not powered we move down
         else if (!powered)
@@ -141,27 +146,31 @@ public class Piston : MonoBehaviour
             movingUp = false;
 
             float localPosY = head.transform.localPosition.y;
-
+            
             // Still got at least one more tick before we hit min
-            if (localPosY > headMin + speed)
+            if (curDisp >= speed)
                 posDelta = -speed;
 
             // We're within speed distance of min, so move that much
-            else if (localPosY > headMin)
-                posDelta = headMin- localPosY;
-
-            // No else, if we're less than or equal to then we don't do anything
+            else if (curDisp < speed && curDisp > 0)
+                posDelta = -curDisp;
         }
 
         if (posDelta != 0)
         {
+            // Track changes to curDisp
+            curDisp += posDelta;
+
             Vector3 headPos = head.transform.localPosition;
             headPos.y += posDelta;
             head.transform.localPosition = headPos;
-            
-            Vector3 rodScale = rod.transform.localScale;
-            rodScale.y = (headPos.y - headMin) / rodSize.y;
-            rod.transform.localScale = rodScale;
+
+            foreach (GameObject rod in rods)
+            {
+                Vector3 rodScale = rod.transform.localScale;
+                rodScale.y = curDisp / rodSize.y;
+                rod.transform.localScale = rodScale;
+            }
 
             // Make movement sounds
             if (!muted && !wasMoving)
