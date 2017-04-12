@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class SceneChanger : MonoBehaviour
 {
+    public bool playLevelComplete = true;
     public CutsceneManager cutsceneManager;
     private CutsceneInfo cutsceneInfo;
     public GameControls controls;
@@ -101,7 +102,7 @@ public class SceneChanger : MonoBehaviour
     // Does a transition by animating the fade out, then loading the next scene
     private IEnumerator Transition(int scene, float frameCount, bool nextLevel)
     {
-        if (nextLevel)
+        if (nextLevel && playLevelComplete)
         {
             // Stop music and play level complete
             musicManager.stopMusic();
