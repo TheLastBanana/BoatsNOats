@@ -494,12 +494,15 @@ public class PortalManager : MonoBehaviour
                 // See https://forum.unity3d.com/threads/call-nested-coroutines-without-yielding.145570/#post-996475
                 var e = cutObject(selectableObject, bounds);
                 while (e.MoveNext())
-                    yield return e.Current;
+                {
+                    yield return null;
+                }
 
-                if (selectableObject == null) continue;
-
-                // The original object was cut, or the original object is fully contained in the portal    
-                cuts.Add(selectableObject.gameObject);
+                if ((bool) e.Current && selectableObject != null)
+                {
+                    // The original object was cut, or the original object is fully contained in the portal    
+                    cuts.Add(selectableObject.gameObject);
+                }
             }
 
             // Cut off iteration if we've exceeded the max time
@@ -574,10 +577,19 @@ public class PortalManager : MonoBehaviour
             cutLines.Add(new Vector2[] { selectMin, Vector2.right });
 
         // Iterate the list of lines, cutting along each of them.
+        bool inside = true;
         var outer = new List<GameObject>();
         foreach (var line in cutLines)
         {
             var cuts = selectableObject.SplitOnPlane(line[0], line[1]);
+
+            // If the original object wasn't on the left, then it's not inside the portal, so
+            // we should stop trying to cut it
+            if (cuts[0] == null)
+            {
+                inside = false;
+                break;
+            }
 
             // Object 1 is the "right" object (if it exists). This will be outside the portal
             if (cuts[1] != null) outer.Add(cuts[1]);
@@ -608,6 +620,8 @@ public class PortalManager : MonoBehaviour
 
         if (selectableObject != null)
             selectableObject.SendMessage("OnSplitMergeFinished", null, SendMessageOptions.DontRequireReceiver);
+
+        yield return inside;
     }
 
     // Stop player from activating portals, used before Gemma gets artifact
