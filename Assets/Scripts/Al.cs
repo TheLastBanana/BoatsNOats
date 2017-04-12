@@ -8,6 +8,7 @@ public class Al : MonoBehaviour
     Coroutine currentFly;
     Transform rig;
     Vector3 rigScale;
+    Vector3 flyStartScale;
     public AudioSource flySound;
     Vector3 currentTarget;
     public float flySpeed = 2.0f;
@@ -51,13 +52,13 @@ public class Al : MonoBehaviour
     {
         anim.SetBool("Flying", false);
         transform.position = currentTarget;
-        rig.localScale = rigScale;
+        rig.localScale = flyStartScale;
         currentFly = null;
     }
 
     IEnumerator FlyCoroutine()
     {
-        var startScale = rig.localScale;
+        flyStartScale = rig.localScale;
 
         anim.SetBool("Flying", true);
         Vector3 start = transform.position;
