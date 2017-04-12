@@ -3105,6 +3105,7 @@ MonoBehaviour:
   portalFlashPrefab: {fileID: 1588745804119268, guid: 5a3878f26abc6a040b024cff129d7ab3,
     type: 2}
   offs: {fileID: 114537670656804216}
+  fader: {fileID: 114424393670326002}
   cameraManager: {fileID: 1065581217306714}
   portalManager: {fileID: 114580626449500856}
   controls: {fileID: 114232900420386978}
@@ -3113,6 +3114,7 @@ MonoBehaviour:
   Al: {fileID: 0}
   LoudspeakerWet: {fileID: 0}
   LoudspeakerDry: {fileID: 0}
+  fadeIn: 1
 --- !u!114 &114717450731081886
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3124,9 +3126,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 810bbb47ce7d3a54ebabe39231a7c7af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playLevelComplete: 1
   cutsceneManager: {fileID: 114697566736478712}
   controls: {fileID: 114232900420386978}
-  levelComplete: {fileID: 82351499728613338}
+  levelComplete: {fileID: 0}
   musicManager: {fileID: 114214324677864962}
   fader: {fileID: 114424393670326002}
   frameCountRestart: 128

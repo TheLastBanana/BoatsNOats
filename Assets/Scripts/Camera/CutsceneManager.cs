@@ -16,6 +16,7 @@ public class CutsceneManager : MonoBehaviour {
     public GameObject rightBound;
     public GameObject portalFlashPrefab;
     public WorldOffsets offs;
+    public FadeOut fader;
 
     public GameObject cameraManager;
     private CameraSwitcher cameraSwitcher;
@@ -43,6 +44,10 @@ public class CutsceneManager : MonoBehaviour {
     // Loudspeaker2
     public GameObject LoudspeakerDry;
     private Text LSDryText;
+
+    // FadeIn info
+    public bool fadeIn = true;
+    private bool isFading = false;
 
     private Text currentText;
 
@@ -98,6 +103,15 @@ public class CutsceneManager : MonoBehaviour {
         startedPan = false;
         doAPortal = false;
         endCutscene = false;
+
+
+        // Disable player control for fade
+        runningCutscene = true;
+        DisableControls(true);
+
+        // Do fade
+        isFading = true;
+        StartCoroutine(FadeIn(128));
     }
 	
 	// Update is called once per frame
@@ -186,9 +200,11 @@ public class CutsceneManager : MonoBehaviour {
     {
         // Are we busy with either dialogue, doing a pan, or moving Gemma or Al?
         if (Al != null)
-            return (startedText || startedPan || !playerController.DoneWalking() || currentFlash || !AlScript.DoneFlying());
+            return (startedText || startedPan || !playerController.DoneWalking()
+                    || currentFlash || !AlScript.DoneFlying() || isFading);
         else
-            return (startedText || startedPan || !playerController.DoneWalking() || currentFlash);
+            return (startedText || startedPan || !playerController.DoneWalking()
+                    || currentFlash || isFading);
     }
 
     public void DisableControls(bool disable)
@@ -428,6 +444,23 @@ public class CutsceneManager : MonoBehaviour {
             return sceneMid5;
         else
             return null;
+    }
+
+
+    private IEnumerator FadeIn(float frameCount)
+    {
+        // Fade in
+        fader.StartFade(Gemma.transform.position, frameCount, true);
+
+        // Lambda wait while we are animating
+        yield return new WaitWhile(() => fader.isAnimating());
+
+        // Enable controls
+        DisableControls(false);
+        controls.DisableSkipping(false);
+
+        // Done fading
+        isFading = false;
     }
 }
 
