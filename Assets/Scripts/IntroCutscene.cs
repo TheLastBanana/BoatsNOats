@@ -20,6 +20,7 @@ public class IntroCutscene : MonoBehaviour {
         Gemma = Gemma.GetComponent<PlayerController>();
         StartCoroutine(Waitforscreen());
         camSwitcher.SetCutscene(true);
+        
     }
 	
 	// Update is called once per frame
@@ -52,7 +53,7 @@ public class IntroCutscene : MonoBehaviour {
             title.SetActive(true);
             startButton.SetActive(true);
             playOnce = true;
-            
+            Gemma.inputDisabled = true;
         }
     }
 }
