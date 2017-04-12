@@ -67,7 +67,7 @@ public class PortalManager : MonoBehaviour
 
     private Vector3 lastStart;
     private Vector3 lastEnd;
-
+    
     // Use this for initialization
     void Start()
     {
@@ -89,6 +89,13 @@ public class PortalManager : MonoBehaviour
         // For when Gemma doesn't have the artifact
         if (disabledForLevel)
             return;
+
+        //Undo
+        if (gameControls.LastPortal())
+        {
+            Undo();
+        }
+            
 
         // If we press the left mouse button, save mouse location and portal creation
         if (!isTransferring && Input.GetMouseButtonDown(0) && !disabled && !(SceneManager.GetActiveScene().name == "Intro Screen 1.1"))
@@ -205,8 +212,12 @@ public class PortalManager : MonoBehaviour
     {
         if(lastEnd != Vector3.zero && lastStart != Vector3.zero)
         {
+            Debug.Log(lastStart);
+            Debug.Log(lastEnd);
+            
             initiatePortal(lastStart);
             isDragging(lastEnd);
+            endSelection(false);
         }
     }
 
@@ -225,6 +236,7 @@ public class PortalManager : MonoBehaviour
         else if(startPoint != Vector3.zero)
         {
             portPos1 = startPoint;
+            lastStart = portPos1;
         }
         else
         {
@@ -251,6 +263,7 @@ public class PortalManager : MonoBehaviour
         else if (endPoint != Vector3.zero)
         {
             portPos2 = endPoint;
+            lastEnd = portPos2;
         }
         else 
         {
@@ -332,7 +345,7 @@ public class PortalManager : MonoBehaviour
         }
 
     }
-
+    
     // Check if anything is blocking the portal
     bool checkPortalValid()
     {
