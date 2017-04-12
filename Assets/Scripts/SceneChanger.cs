@@ -106,6 +106,9 @@ public class SceneChanger : MonoBehaviour
         {
             // Stop music and play level complete
             musicManager.stopMusic();
+
+            yield return new WaitForSecondsRealtime(0.75f);
+
             levelComplete.PlayDelayed(0);
 
             // Wait an unscaled amount of time, we don't scale our music playing
