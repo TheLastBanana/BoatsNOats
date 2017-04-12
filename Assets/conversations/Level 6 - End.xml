@@ -6,6 +6,9 @@ We made it!
   <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
 I’m a little sad we missed out on ice cream.
 </custom></text>
+  <text xml:space="preserve">
+<custom pan="gemma" delay="0"/><custom move="mid1" mover="gemma"/>
+</text>
   <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
 Well, it’s been....something Al.
 </custom></text>
@@ -42,4 +45,10 @@ No ice cream it is! Let’s go pal!
   <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
 Alright bud, you got it.
 </custom></text>
+  <text xml:space="preserve">
+<custom move="mid2" mover="gemma"/><custom move="mid3" mover="al"/>
+</text>
+  <text xml:space="preserve">
+<custom portal=""/>
+</text>
 </dialog>

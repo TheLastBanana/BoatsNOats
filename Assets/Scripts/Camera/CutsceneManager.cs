@@ -103,7 +103,7 @@ public class CutsceneManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         // Check if we've gone through everything
-        if (numTextCurrent == numTexts && pans.Count <= 0 && moves.Count <= 0 && !Busy())
+        if (numTextCurrent == numTexts && pans.Count <= 0 && moves.Count <= 0 && !doAPortal && !Busy())
             EndCutscene();
 
         // We're not in a cutscene
