@@ -19,6 +19,7 @@ public class Piston : MonoBehaviour
     private Vector3 botSize;
     private Vector3 rodSize;
     private Vector3 headSize;
+    private float offset;
     private float curDisp = 0;
     private float speed;
     private bool movingUp;
@@ -44,6 +45,9 @@ public class Piston : MonoBehaviour
         
         // Speed is arbitrarily a fifth of the head size I guess
         speed = headSize.y / 5;
+
+        // Get the initial offset of the head to scale the rods to
+        offset = head.transform.localPosition.y - (headSize.y / 2) - rods[0].transform.localPosition.y;
 
         // Get all splittables associated with this
         splittables = new List<Splittable>();
@@ -93,7 +97,7 @@ public class Piston : MonoBehaviour
             foreach (GameObject rod in rods)
             {
                 Vector3 rodScale = rod.transform.localScale;
-                rodScale.y = curDisp / rodSize.y;
+                rodScale.y = (curDisp + offset) / rodSize.y;
                 rod.transform.localScale = rodScale;
             }
         }
@@ -168,7 +172,7 @@ public class Piston : MonoBehaviour
             foreach (GameObject rod in rods)
             {
                 Vector3 rodScale = rod.transform.localScale;
-                rodScale.y = curDisp / rodSize.y;
+                rodScale.y = (curDisp + offset )/ rodSize.y;
                 rod.transform.localScale = rodScale;
             }
 
