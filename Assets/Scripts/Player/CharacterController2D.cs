@@ -3,6 +3,10 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
+/*
+ * This script taken from https://github.com/prime31/CharacterController2D
+ * and modified to fit our game
+ */
 
 namespace Prime31
 {

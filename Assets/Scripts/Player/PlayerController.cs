@@ -2,6 +2,10 @@
 using System.Collections;
 using Prime31;
 
+/*
+ * This script taken from https://github.com/prime31/CharacterController2D
+ * and modified to fit our game
+ */
 
 public class PlayerController : MonoBehaviour
 {

@@ -35,3 +35,6 @@ http://freesound.org/people/adcbicycle/sounds/13885/
 Font credits:
 https://fonts.google.com/specimen/Gloria+Hallelujah
 http://www.dafont.com/dimbo.font
+
+Code credits:
+https://github.com/prime31/CharacterController2D
