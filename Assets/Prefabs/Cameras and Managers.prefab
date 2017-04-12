@@ -3243,8 +3243,8 @@ MonoBehaviour:
   levelComplete: {fileID: 82345621803426488}
   musicManager: {fileID: 114214324677864962}
   fader: {fileID: 114424393670326002}
-  frameCountRestart: 128
-  frameCountNextLevel: 256
+  frameCountRestart: 16
+  frameCountNextLevel: 32
 --- !u!114 &114725031805864312
 MonoBehaviour:
   m_ObjectHideFlags: 1

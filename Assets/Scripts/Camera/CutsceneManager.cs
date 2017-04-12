@@ -110,7 +110,7 @@ public class CutsceneManager : MonoBehaviour {
 
         // Do fade
         isFading = true;
-        StartCoroutine(FadeIn(128));
+        StartCoroutine(FadeIn(32));
     }
 	
 	// Update is called once per frame
