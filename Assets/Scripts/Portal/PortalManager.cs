@@ -87,7 +87,7 @@ public class PortalManager : MonoBehaviour
             return;
 
         // If we press the left mouse button, save mouse location and portal creation
-        if (!isTransferring && Input.GetMouseButtonDown(0) && !disabled)
+        if (!isTransferring && Input.GetMouseButtonDown(0) && !disabled && !(SceneManager.GetActiveScene().name == "Intro Screen 1.1"))
         {
             initiatePortal();
         }
