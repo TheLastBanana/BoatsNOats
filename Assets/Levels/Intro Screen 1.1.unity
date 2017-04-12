@@ -1569,6 +1569,11 @@ Prefab:
       propertyPath: playLevelComplete
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114697566736478712, guid: 06d7fe0b7b7ba4844835d6b3b4400e43,
+        type: 2}
+      propertyPath: fadeIn
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 06d7fe0b7b7ba4844835d6b3b4400e43, type: 2}
   m_IsPrefabParent: 0
