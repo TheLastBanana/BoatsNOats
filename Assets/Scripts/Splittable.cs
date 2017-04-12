@@ -6,7 +6,8 @@ using System.Reflection;
 // An object which can be split up by the portal.
 public class Splittable : MonoBehaviour
 {
-    static private float minSizeMagnitude = 0.00001f;
+    // A split object with a size below this threshold will be deleted
+    static private float minSize = 0.00001f;
     private Vector3 startPoint;
 
     enum Side
@@ -160,10 +161,12 @@ public class Splittable : MonoBehaviour
 
             Side meshSide = SplitMesh(leftChild.gameObject, rightChild.gameObject, localMatrix);
             Side collSide = SplitCollider(leftChild.gameObject, rightChild.gameObject, localMatrix);
-
-            // If a mesh/collider is entirely on one side (or is on no side at all)
-            bool meshAllLeft = (meshSide == Side.Left || meshSide == Side.Neither || rightChild.GetComponent<Renderer>().bounds.extents.sqrMagnitude < minSizeMagnitude);
-            bool meshAllRight = (meshSide == Side.Right || meshSide == Side.Neither || leftChild.GetComponent<Renderer>().bounds.extents.sqrMagnitude < minSizeMagnitude);
+            
+            // Check if a mesh/collider is entirely on one side, on no side at all, or is too small to bother with
+            var rightSize = rightChild.GetComponent<Renderer>().bounds.size;
+            var leftSize = leftChild.GetComponent<Renderer>().bounds.size;
+            bool meshAllLeft = (meshSide == Side.Left || meshSide == Side.Neither || Mathf.Min(rightSize.x, rightSize.y) < minSize);
+            bool meshAllRight = (meshSide == Side.Right || meshSide == Side.Neither || Mathf.Min(leftSize.x, leftSize.y) < minSize);
             bool collAllLeft = (collSide == Side.Left || collSide == Side.Neither);
             bool collAllRight = (collSide == Side.Right || collSide == Side.Neither);
 
@@ -216,17 +219,18 @@ public class Splittable : MonoBehaviour
             rightParent = null;
         }
 
+        var leftParent = gameObject;
         if (transform.childCount == 0)
         {
-            Destroy(gameObject);
-            rightParent = null;
+            Destroy(leftParent);
+            leftParent = null;
         }
 
         _isSplit = true;
         if (rightParent != null) rightParent.GetComponent<Splittable>()._isSplit = true;
 
         List<GameObject> gameObjectList = new List<GameObject>();
-        gameObjectList.Add(gameObject);
+        gameObjectList.Add(leftParent);
         gameObjectList.Add(rightParent);
         return gameObjectList;
     }

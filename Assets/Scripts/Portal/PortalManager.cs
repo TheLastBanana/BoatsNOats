@@ -65,9 +65,8 @@ public class PortalManager : MonoBehaviour
     private bool disabledForLevel;
     private bool disabled;
 
-    private Vector3 lastStart;
-    private Vector3 lastEnd;
-
+    private Rect lastRect;
+    
     // Use this for initialization
     void Awake()
     {
@@ -89,6 +88,13 @@ public class PortalManager : MonoBehaviour
         // For when Gemma doesn't have the artifact
         if (disabledForLevel)
             return;
+
+        //Undo
+        if (gameControls.LastPortal())
+        {
+            Undo();
+        }
+            
 
         // If we press the left mouse button, save mouse location and portal creation
         if (!isTransferring && Input.GetMouseButtonDown(0) && !disabled && !(SceneManager.GetActiveScene().name == "Intro Screen 1.1"))
@@ -203,10 +209,10 @@ public class PortalManager : MonoBehaviour
 
     private void Undo()
     {
-        if(lastEnd != Vector3.zero && lastStart != Vector3.zero)
+        if (lastRect != null)
         {
-            initiatePortal(lastStart);
-            isDragging(lastEnd);
+            portalRect = lastRect;
+            endSelection(false);
         }
     }
 
@@ -229,7 +235,6 @@ public class PortalManager : MonoBehaviour
         else
         {
             portPos1 = mainCam.ScreenToWorldPoint(Input.mousePosition);
-            lastStart = portPos1;
         }
         movingPortalRect = new Rect(portPos1, new Vector2());
 
@@ -260,7 +265,6 @@ public class PortalManager : MonoBehaviour
             Mathf.Clamp(Input.mousePosition.y, 0, 2 * mainCam.pixelHeight)
             );
             portPos2 = mainCam.ScreenToWorldPoint(clampedMousePos);
-            lastEnd = portPos2;
         }
 
 
@@ -309,6 +313,7 @@ public class PortalManager : MonoBehaviour
             if (checkPortalValid())
             {
                 // Do the portal transfer
+                lastRect = new Rect(portalRect);
                 var transferRect = new Rect(portalRect);
                 if (cameraSwitcher.switched) transferRect.center -= (Vector2)offs.offset;
                 StartCoroutine(portalTransfer(transferRect.min, transferRect.max, true));
@@ -332,7 +337,7 @@ public class PortalManager : MonoBehaviour
         }
 
     }
-
+    
     // Check if anything is blocking the portal
     bool checkPortalValid()
     {
@@ -473,9 +478,6 @@ public class PortalManager : MonoBehaviour
     // Returns a list of the objects that are inside the bounds post-split in cuts
     IEnumerator cutInBounds(Bounds bounds, List<GameObject> cuts)
     {
-        Bounds expandedBounds = bounds;
-        expandedBounds.Expand(0.01f); // Add some wiggle room for sending things between worlds
-
         // Loop over splittables
         foreach (var selectableObject in FindObjectsOfType<Splittable>())
         {
@@ -489,12 +491,15 @@ public class PortalManager : MonoBehaviour
                 // See https://forum.unity3d.com/threads/call-nested-coroutines-without-yielding.145570/#post-996475
                 var e = cutObject(selectableObject, bounds);
                 while (e.MoveNext())
-                    yield return e.Current;
+                {
+                    yield return null;
+                }
 
-                if (selectableObject == null) continue;
-
-                // The original object was cut, or the original object is fully contained in the portal    
-                cuts.Add(selectableObject.gameObject);
+                if ((bool) e.Current && selectableObject != null)
+                {
+                    // The original object was cut, or the original object is fully contained in the portal    
+                    cuts.Add(selectableObject.gameObject);
+                }
             }
 
             // Cut off iteration if we've exceeded the max time
@@ -553,20 +558,23 @@ public class PortalManager : MonoBehaviour
         var cutLines = new List<Vector2[]>();
 
         // Right side
-        if (selectMax.x > objMin.x && selectMax.x < objMax.x)
+        if (selectMax.x >= objMin.x && selectMax.x <= objMax.x)
             cutLines.Add(new Vector2[] { selectMax, Vector2.up });
 
         // Left side
-        if (selectMin.x > objMin.x && selectMin.x < objMax.x)
+        if (selectMin.x >= objMin.x && selectMin.x <= objMax.x)
             cutLines.Add(new Vector2[] { selectMin, Vector2.down });
 
         // Top side
-        if (selectMax.y > objMin.y && selectMax.y < objMax.y)
+        if (selectMax.y >= objMin.y && selectMax.y <= objMax.y)
             cutLines.Add(new Vector2[] { selectMax, Vector2.left });
 
         // Bottom side
-        if (selectMin.y > objMin.y && selectMin.y < objMax.y)
+        if (selectMin.y >= objMin.y && selectMin.y <= objMax.y)
             cutLines.Add(new Vector2[] { selectMin, Vector2.right });
+        
+        // If we have no cuts, obviously this object isn't in the portal
+        bool alwaysInside = true;
 
         // Iterate the list of lines, cutting along each of them.
         var outer = new List<GameObject>();
@@ -574,11 +582,16 @@ public class PortalManager : MonoBehaviour
         {
             var cuts = selectableObject.SplitOnPlane(line[0], line[1]);
 
+            // If the original object wasn't on the left, then it's not inside the portal, so
+            // we should stop trying to cut it
+            if (cuts[0] == null)
+            {
+                alwaysInside = false;
+                break;
+            }
+
             // Object 1 is the "right" object (if it exists). This will be outside the portal
             if (cuts[1] != null) outer.Add(cuts[1]);
-
-            // Object 0 should always be the original object
-            Debug.Assert(cuts[0] == selectableObject.gameObject);
 
             // Cut off iteration if we've exceeded the max time
             if (Time.realtimeSinceStartup - cutStartTime > maxCutTime)
@@ -600,12 +613,14 @@ public class PortalManager : MonoBehaviour
                 Destroy(obj);
             }
         }
-
+        
         if (outer.Count > 0 && outer[0] != null)
             outer[0].SendMessage("OnSplitMergeFinished", null, SendMessageOptions.DontRequireReceiver);
 
         if (selectableObject != null)
             selectableObject.SendMessage("OnSplitMergeFinished", null, SendMessageOptions.DontRequireReceiver);
+
+        yield return alwaysInside;
     }
 
     // Stop player from activating portals, used before Gemma gets artifact
