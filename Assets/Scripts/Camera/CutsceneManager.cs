@@ -106,7 +106,6 @@ public class CutsceneManager : MonoBehaviour {
 
 
         // Disable player control for fade
-        runningCutscene = true;
         DisableControls(true);
 
         // Do fade
@@ -457,7 +456,6 @@ public class CutsceneManager : MonoBehaviour {
 
         // Enable controls
         DisableControls(false);
-        controls.DisableSkipping(false);
 
         // Done fading
         isFading = false;
