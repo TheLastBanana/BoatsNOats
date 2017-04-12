@@ -454,8 +454,9 @@ public class CutsceneManager : MonoBehaviour {
         // Lambda wait while we are animating
         yield return new WaitWhile(() => fader.isAnimating());
 
-        // Enable controls
-        DisableControls(false);
+        // Enable controls if we don't have a cutscene at the start of the level
+        if (!runningCutscene)
+            DisableControls(false);
 
         // Done fading
         isFading = false;

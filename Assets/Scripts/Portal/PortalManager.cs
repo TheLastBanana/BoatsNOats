@@ -69,7 +69,7 @@ public class PortalManager : MonoBehaviour
     private Vector3 lastEnd;
 
     // Use this for initialization
-    void Start()
+    void Awake()
     {
         afx = GetComponent<AudioEffects>();
         portalEffect = Instantiate(portalParticlePrefab).GetComponent<PortalEffect>();
