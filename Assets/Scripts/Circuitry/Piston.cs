@@ -16,7 +16,7 @@ public class Piston : MonoBehaviour
     public AudioSource loopSound;
     public AudioSource endSound;
 
-    private Vector3 botSize;
+    //private Vector3 botSize;
     private Vector3 rodSize;
     private Vector3 headSize;
     private float offset;
@@ -39,7 +39,7 @@ public class Piston : MonoBehaviour
     private void Awake()
     {
         // Get sprite sizes
-        botSize = bottom.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.bounds.size;
+        //botSize = bottom.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.bounds.size;
         rodSize = rods[0].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.bounds.size;
         headSize = head.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite.bounds.size;
         
@@ -123,8 +123,6 @@ public class Piston : MonoBehaviour
         // If it's powered we move up
         if (powered)
         {
-            float localPosY = head.transform.localPosition.y;
-
             float distToMove = maxDisplacement - curDisp;
 
             // No more distance to move, not moving up
@@ -148,8 +146,6 @@ public class Piston : MonoBehaviour
         {
             // Unpowered, we're definitely not moving up
             movingUp = false;
-
-            float localPosY = head.transform.localPosition.y;
             
             // Still got at least one more tick before we hit min
             if (curDisp >= speed)
