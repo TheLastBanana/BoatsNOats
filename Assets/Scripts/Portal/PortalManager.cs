@@ -65,8 +65,7 @@ public class PortalManager : MonoBehaviour
     private bool disabledForLevel;
     private bool disabled;
 
-    private Vector3 lastStart;
-    private Vector3 lastEnd;
+    private Rect lastRect;
     
     // Use this for initialization
     void Start()
@@ -210,13 +209,9 @@ public class PortalManager : MonoBehaviour
 
     private void Undo()
     {
-        if(lastEnd != Vector3.zero && lastStart != Vector3.zero)
+        if (lastRect != null)
         {
-            Debug.Log(lastStart);
-            Debug.Log(lastEnd);
-            
-            initiatePortal(lastStart);
-            isDragging(lastEnd);
+            portalRect = lastRect;
             endSelection(false);
         }
     }
@@ -236,12 +231,10 @@ public class PortalManager : MonoBehaviour
         else if(startPoint != Vector3.zero)
         {
             portPos1 = startPoint;
-            lastStart = portPos1;
         }
         else
         {
             portPos1 = mainCam.ScreenToWorldPoint(Input.mousePosition);
-            lastStart = portPos1;
         }
         movingPortalRect = new Rect(portPos1, new Vector2());
 
@@ -263,7 +256,6 @@ public class PortalManager : MonoBehaviour
         else if (endPoint != Vector3.zero)
         {
             portPos2 = endPoint;
-            lastEnd = portPos2;
         }
         else 
         {
@@ -273,7 +265,6 @@ public class PortalManager : MonoBehaviour
             Mathf.Clamp(Input.mousePosition.y, 0, 2 * mainCam.pixelHeight)
             );
             portPos2 = mainCam.ScreenToWorldPoint(clampedMousePos);
-            lastEnd = portPos2;
         }
 
 
@@ -322,6 +313,7 @@ public class PortalManager : MonoBehaviour
             if (checkPortalValid())
             {
                 // Do the portal transfer
+                lastRect = new Rect(portalRect);
                 var transferRect = new Rect(portalRect);
                 if (cameraSwitcher.switched) transferRect.center -= (Vector2)offs.offset;
                 StartCoroutine(portalTransfer(transferRect.min, transferRect.max, true));
@@ -590,9 +582,6 @@ public class PortalManager : MonoBehaviour
             // Object 1 is the "right" object (if it exists). This will be outside the portal
             if (cuts[1] != null) outer.Add(cuts[1]);
 
-            // Object 0 should always be the original object
-            Debug.Assert(cuts[0] == selectableObject.gameObject);
-
             // Cut off iteration if we've exceeded the max time
             if (Time.realtimeSinceStartup - cutStartTime > maxCutTime)
             {
@@ -613,7 +602,7 @@ public class PortalManager : MonoBehaviour
                 Destroy(obj);
             }
         }
-
+        
         if (outer.Count > 0 && outer[0] != null)
             outer[0].SendMessage("OnSplitMergeFinished", null, SendMessageOptions.DontRequireReceiver);
 

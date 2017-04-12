@@ -216,17 +216,18 @@ public class Splittable : MonoBehaviour
             rightParent = null;
         }
 
+        var leftParent = gameObject;
         if (transform.childCount == 0)
         {
-            Destroy(gameObject);
-            rightParent = null;
+            Destroy(leftParent);
+            leftParent = null;
         }
 
         _isSplit = true;
         if (rightParent != null) rightParent.GetComponent<Splittable>()._isSplit = true;
 
         List<GameObject> gameObjectList = new List<GameObject>();
-        gameObjectList.Add(gameObject);
+        gameObjectList.Add(leftParent);
         gameObjectList.Add(rightParent);
         return gameObjectList;
     }
