@@ -10,6 +10,7 @@ public class FadeOut : MonoBehaviour
 
     private bool animate = false;
     private bool wasAnimating = false;
+    private bool fadeIn = false;
     private float curFrame = 0;
     private float frameCount = 256;
 
@@ -53,12 +54,19 @@ public class FadeOut : MonoBehaviour
 
             // Fade
             Color boxColor = boxRen.color;
-            boxColor.a = Mathf.Lerp(0, 1, curFrame / frameCount);
+            if (fadeIn)
+                boxColor.a = Mathf.Lerp(1, 0, curFrame / frameCount);
+            else
+                boxColor.a = Mathf.Lerp(0, 1, curFrame / frameCount);
             boxRen.color = boxColor;
             
             // Reset
             if (curFrame >= frameCount)
             {
+                // If it was fading in we probably don't want the box to
+                // render anymore
+                if (fadeIn)
+                    boxRen.enabled = false;
                 wasAnimating = false;
                 animate = false;
             }
@@ -69,9 +77,10 @@ public class FadeOut : MonoBehaviour
     }
 
     // THIS IS THE PUBLIC INTERFACE
-    public void StartFadeOut(Vector2 pos, float count)
+    public void StartFade(Vector2 pos, float count, bool fadeIn)
     {
         frameCount = count;
+        this.fadeIn = fadeIn;
         animate = true;
     }
 
