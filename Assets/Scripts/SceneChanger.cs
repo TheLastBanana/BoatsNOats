@@ -9,6 +9,8 @@ public class SceneChanger : MonoBehaviour
     public CutsceneManager cutsceneManager;
     private CutsceneInfo cutsceneInfo;
     public GameControls controls;
+    public AudioSource levelComplete;
+    public MusicManager musicManager;
 
     // Need the fader from the Main Camera
     public FadeOut fader;
@@ -94,14 +96,22 @@ public class SceneChanger : MonoBehaviour
         controls.DisableSkipping(true);
 
         // TODO: Play sound if nextLevel == true
-        StartCoroutine(Transition(scene, frameCount));
+        StartCoroutine(Transition(scene, frameCount, nextLevel));
     }
-
-
     // Does a transition by animating the fade out, then loading the next scene
-    private IEnumerator Transition(int scene, float frameCount)
+    private IEnumerator Transition(int scene, float frameCount, bool nextLevel)
     {
-        fader.StartFadeOut(cutsceneManager.Gemma.transform.position, frameCount);
+        if (nextLevel)
+        {
+            // Stop music and play level complete
+            musicManager.stopMusic();
+            levelComplete.PlayDelayed(0);
+
+            // Wait an unscaled amount of time, we don't scale our music playing
+            yield return new WaitForSecondsRealtime(3);
+
+        }
+        fader.StartFade(cutsceneManager.Gemma.transform.position, frameCount, false);
 
         // Lambda wait while we are animating
         yield return new WaitWhile(() => fader.isAnimating());
