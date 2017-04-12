@@ -22,6 +22,7 @@ public class PortalManager : MonoBehaviour
     public float dragPitchLow = 1.0f;
     public float dragPitchHigh = 2.0f;
     public Transform artifact;
+    public GameControls gameControls;
 
     // World info
     public Camera mainCam;
@@ -64,6 +65,9 @@ public class PortalManager : MonoBehaviour
     private bool disabledForLevel;
     private bool disabled;
 
+    private Vector3 lastStart;
+    private Vector3 lastEnd;
+
     // Use this for initialization
     void Start()
     {
@@ -97,44 +101,8 @@ public class PortalManager : MonoBehaviour
         // we can update the final mouse position
         if (isSelecting)
         {
+            isDragging();
             
-            if (SceneManager.GetActiveScene().name == "Intro Screen 1.1")
-            {
-                portPos2 = new Vector3(28.36f, 2.59f, 0);
-            }
-            else
-            {
-                Vector2 clampedMousePos;
-                clampedMousePos = new Vector2(
-                Mathf.Clamp(Input.mousePosition.x, 0, mainCam.pixelWidth),
-                Mathf.Clamp(Input.mousePosition.y, 0, 2 * mainCam.pixelHeight)
-                );
-                portPos2 = mainCam.ScreenToWorldPoint(clampedMousePos);
-            }
-            
-            
-
-            // The further the current portal rectangle is from the target, the
-            // faster it accelerates towards it
-            var oldCenter = movingPortalRect.center;
-            var targetCenter = (Vector2)(portPos1 + portPos2) / 2f;
-            var centerDir = targetCenter - oldCenter;
-            portalSpeed += centerDir.magnitude * portalAcceleration * centerDir.normalized;
-
-            var oldSize = movingPortalRect.size;
-            var targetSize = (Vector2)(portPos1 - portPos2);
-            var sizeDir = targetSize - oldSize;
-            portalSizeSpeed += sizeDir.magnitude * portalAcceleration * sizeDir.normalized;
-
-            // Apply damping
-            portalSpeed *= portalDamping;
-            portalSizeSpeed *= portalDamping;
-
-            // Move the portal rectangle
-            movingPortalRect.center = movingPortalRect.center + portalSpeed;
-            movingPortalRect.size = movingPortalRect.size + portalSizeSpeed;
-
-            musicManager.volume = portalMusicVolume;
         }
 
         // Make sure portal isn't too small
@@ -233,8 +201,16 @@ public class PortalManager : MonoBehaviour
         }
     }
 
+    private void Undo()
+    {
+        if(lastEnd != Vector3.zero && lastStart != Vector3.zero)
+        {
+            initiatePortal(lastStart);
+            isDragging(lastEnd);
+        }
+    }
 
-    public void initiatePortal()
+    public void initiatePortal(Vector3 startPoint = default(Vector3))
     {
         portalCam.enabled = true;
         blockedPortalCam.enabled = true;
@@ -246,9 +222,14 @@ public class PortalManager : MonoBehaviour
         {
             portPos1 = new Vector3(-14.72f, 11.45f, 0);
         }
+        else if(startPoint != Vector3.zero)
+        {
+            portPos1 = startPoint;
+        }
         else
         {
             portPos1 = mainCam.ScreenToWorldPoint(Input.mousePosition);
+            lastStart = portPos1;
         }
         movingPortalRect = new Rect(portPos1, new Vector2());
 
@@ -259,6 +240,52 @@ public class PortalManager : MonoBehaviour
         afx.cancelEffects(altWorldAmbience);
 
         freeze();
+    }
+
+    public void isDragging(Vector3 endPoint = default(Vector3))
+    {
+        if (SceneManager.GetActiveScene().name == "Intro Screen 1.1")
+        {
+            portPos2 = new Vector3(28.36f, 2.59f, 0);
+        }
+        else if (endPoint != Vector3.zero)
+        {
+            portPos2 = endPoint;
+        }
+        else 
+        {
+            Vector2 clampedMousePos;
+            clampedMousePos = new Vector2(
+            Mathf.Clamp(Input.mousePosition.x, 0, mainCam.pixelWidth),
+            Mathf.Clamp(Input.mousePosition.y, 0, 2 * mainCam.pixelHeight)
+            );
+            portPos2 = mainCam.ScreenToWorldPoint(clampedMousePos);
+            lastEnd = portPos2;
+        }
+
+
+
+        // The further the current portal rectangle is from the target, the
+        // faster it accelerates towards it
+        var oldCenter = movingPortalRect.center;
+        var targetCenter = (Vector2)(portPos1 + portPos2) / 2f;
+        var centerDir = targetCenter - oldCenter;
+        portalSpeed += centerDir.magnitude * portalAcceleration * centerDir.normalized;
+
+        var oldSize = movingPortalRect.size;
+        var targetSize = (Vector2)(portPos1 - portPos2);
+        var sizeDir = targetSize - oldSize;
+        portalSizeSpeed += sizeDir.magnitude * portalAcceleration * sizeDir.normalized;
+
+        // Apply damping
+        portalSpeed *= portalDamping;
+        portalSizeSpeed *= portalDamping;
+
+        // Move the portal rectangle
+        movingPortalRect.center = movingPortalRect.center + portalSpeed;
+        movingPortalRect.size = movingPortalRect.size + portalSizeSpeed;
+
+        musicManager.volume = portalMusicVolume;
     }
 
     // End portal selection, and do cutting and extra effects if the portal wasn't cancelled
