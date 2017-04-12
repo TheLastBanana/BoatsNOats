@@ -24,7 +24,7 @@ We’re everywhere! Are you from out of town or something?
   <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
 You don’t even know.
 </custom></text>
-  <text xml:space="preserve"><custom speaker="loudspeakerwet"/><custom voice="Dolphin Loudspeaker"/><custom speed="0.015">
+  <text xml:space="preserve"><custom speaker="loudspeakerdry"/><custom voice="Dolphin Loudspeaker"/><custom speed="0.015">
 The walking hexagon is still on the move. Catch it before it covers our city in a weird blue mess!
 </custom></text>
   <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
