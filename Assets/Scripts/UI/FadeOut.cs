@@ -82,6 +82,7 @@ public class FadeOut : MonoBehaviour
         frameCount = count;
         this.fadeIn = fadeIn;
         animate = true;
+        curFrame = 0;
     }
 
     public bool isAnimating()
