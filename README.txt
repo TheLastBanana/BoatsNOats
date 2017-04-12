@@ -31,3 +31,6 @@ http://freesound.org/people/mcpable/sounds/131934/
 http://freesound.org/people/hanstimm/sounds/6900/
 http://freesound.org/people/jenc/sounds/523/
 http://freesound.org/people/adcbicycle/sounds/13885/
+
+Font credits:
+https://fonts.google.com/specimen/Gloria+Hallelujah
