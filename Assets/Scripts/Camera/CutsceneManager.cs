@@ -143,7 +143,6 @@ public class CutsceneManager : MonoBehaviour {
                     var animator = speaker.GetComponent<Animator>();
                     if (animator)
                     {
-                        print(speaker);
                         animator.SetBool("Talking", true);
                     }
                 }
