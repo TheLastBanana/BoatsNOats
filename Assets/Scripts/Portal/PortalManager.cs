@@ -478,9 +478,6 @@ public class PortalManager : MonoBehaviour
     // Returns a list of the objects that are inside the bounds post-split in cuts
     IEnumerator cutInBounds(Bounds bounds, List<GameObject> cuts)
     {
-        Bounds expandedBounds = bounds;
-        expandedBounds.Expand(0.01f); // Add some wiggle room for sending things between worlds
-
         // Loop over splittables
         foreach (var selectableObject in FindObjectsOfType<Splittable>())
         {
@@ -561,23 +558,25 @@ public class PortalManager : MonoBehaviour
         var cutLines = new List<Vector2[]>();
 
         // Right side
-        if (selectMax.x > objMin.x && selectMax.x < objMax.x)
+        if (selectMax.x >= objMin.x && selectMax.x <= objMax.x)
             cutLines.Add(new Vector2[] { selectMax, Vector2.up });
 
         // Left side
-        if (selectMin.x > objMin.x && selectMin.x < objMax.x)
+        if (selectMin.x >= objMin.x && selectMin.x <= objMax.x)
             cutLines.Add(new Vector2[] { selectMin, Vector2.down });
 
         // Top side
-        if (selectMax.y > objMin.y && selectMax.y < objMax.y)
+        if (selectMax.y >= objMin.y && selectMax.y <= objMax.y)
             cutLines.Add(new Vector2[] { selectMax, Vector2.left });
 
         // Bottom side
-        if (selectMin.y > objMin.y && selectMin.y < objMax.y)
+        if (selectMin.y >= objMin.y && selectMin.y <= objMax.y)
             cutLines.Add(new Vector2[] { selectMin, Vector2.right });
+        
+        // If we have no cuts, obviously this object isn't in the portal
+        bool alwaysInside = true;
 
         // Iterate the list of lines, cutting along each of them.
-        bool inside = true;
         var outer = new List<GameObject>();
         foreach (var line in cutLines)
         {
@@ -587,7 +586,7 @@ public class PortalManager : MonoBehaviour
             // we should stop trying to cut it
             if (cuts[0] == null)
             {
-                inside = false;
+                alwaysInside = false;
                 break;
             }
 
@@ -621,7 +620,7 @@ public class PortalManager : MonoBehaviour
         if (selectableObject != null)
             selectableObject.SendMessage("OnSplitMergeFinished", null, SendMessageOptions.DontRequireReceiver);
 
-        yield return inside;
+        yield return alwaysInside;
     }
 
     // Stop player from activating portals, used before Gemma gets artifact
