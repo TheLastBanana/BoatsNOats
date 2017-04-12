@@ -492,7 +492,12 @@ public class PortalManager : MonoBehaviour
                 var e = cutObject(selectableObject, bounds);
                 while (e.MoveNext())
                 {
-                    yield return null;
+                    // Cut off iteration if we've exceeded the max time
+                    if (Time.realtimeSinceStartup - cutStartTime > maxCutTime)
+                    {
+                        yield return null;
+                        cutStartTime = Time.realtimeSinceStartup;
+                    }
                 }
 
                 if ((bool) e.Current && selectableObject != null)
@@ -500,13 +505,6 @@ public class PortalManager : MonoBehaviour
                     // The original object was cut, or the original object is fully contained in the portal    
                     cuts.Add(selectableObject.gameObject);
                 }
-            }
-
-            // Cut off iteration if we've exceeded the max time
-            if (Time.realtimeSinceStartup - cutStartTime > maxCutTime)
-            {
-                yield return null;
-                cutStartTime = Time.realtimeSinceStartup;
             }
         }
     }
