@@ -229,6 +229,7 @@ public class PortalManager : MonoBehaviour
             }
 
             portalEffect.blocked = !checkPortalValid();
+            portalEffect.drawBeam = !cameraSwitcher.switched;
         }
     }
 

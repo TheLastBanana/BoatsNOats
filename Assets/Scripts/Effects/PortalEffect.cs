@@ -14,6 +14,7 @@ public class PortalEffect : MonoBehaviour
     public float waveThickness = 0.2f;
     public float changeRate = 0.1f;
     public float wavinessAreaThreshold = 1.0f;
+    public bool drawBeam = true;
 
     public Material defaultMaterial;
     public Material blockedMaterial;
@@ -337,91 +338,98 @@ public class PortalEffect : MonoBehaviour
             int artifactPtB;
             int artifactPtC;
 
-            // Check what quadrant around the artifact the portal sits in (there are 8 spots around the
-            // artifact that we care about: left, right, up, down, and the diagonals in between)
-            int xQuadrant;
-            int yQuadrant;
-
-            if (artifactPos.x < outer.xMin) xQuadrant = 2;
-            else if (artifactPos.x > outer.xMax) xQuadrant = 0;
-            else xQuadrant = 1;
-
-            if (artifactPos.y < outer.yMin) yQuadrant = 2;
-            else if (artifactPos.y > outer.yMax) yQuadrant = 0;
-            else yQuadrant = 1;
-
-            var quadrant = xQuadrant + yQuadrant * 3;
-
-            switch (quadrant)
+            if (drawBeam)
             {
-                // Bottom-left
-                case 0:
-                    artifactPtA = 0;
-                    artifactPtB = 11;
-                    artifactPtC = 1;
-                    break;
+                // Check what quadrant around the artifact the portal sits in (there are 8 spots around the
+                // artifact that we care about: left, right, up, down, and the diagonals in between)
+                int xQuadrant;
+                int yQuadrant;
 
-                // Bottom
-                case 1:
-                    artifactPtA = 0;
-                    artifactPtB = 1;
-                    artifactPtC = 1;
-                    break;
+                if (artifactPos.x < outer.xMin) xQuadrant = 2;
+                else if (artifactPos.x > outer.xMax) xQuadrant = 0;
+                else xQuadrant = 1;
 
-                // Bottom-right
-                case 2:
-                    artifactPtA = 1;
-                    artifactPtB = 10;
-                    artifactPtC = 0;
-                    break;
+                if (artifactPos.y < outer.yMin) yQuadrant = 2;
+                else if (artifactPos.y > outer.yMax) yQuadrant = 0;
+                else yQuadrant = 1;
 
-                // Left
-                case 3:
-                    artifactPtA = 1;
-                    artifactPtB = 11;
-                    artifactPtC = 11;
-                    break;
+                var quadrant = xQuadrant + yQuadrant * 3;
 
-                // Center
-                case 4:
-                    artifactPtA = 20;
-                    artifactPtB = 20;
-                    artifactPtC = 20;
-                    break;
+                switch (quadrant)
+                {
+                    // Bottom-left
+                    case 0:
+                        artifactPtA = 0;
+                        artifactPtB = 11;
+                        artifactPtC = 1;
+                        break;
 
-                // Right
-                case 5:
-                    artifactPtA = 0;
-                    artifactPtB = 10;
-                    artifactPtC = 10;
-                    break;
+                    // Bottom
+                    case 1:
+                        artifactPtA = 0;
+                        artifactPtB = 1;
+                        artifactPtC = 1;
+                        break;
 
-                // Top-left
-                case 6:
-                    artifactPtA = 1;
-                    artifactPtB = 10;
-                    artifactPtC = 11;
-                    break;
+                    // Bottom-right
+                    case 2:
+                        artifactPtA = 1;
+                        artifactPtB = 10;
+                        artifactPtC = 0;
+                        break;
 
-                // Top
-                case 7:
-                    artifactPtA = 10;
-                    artifactPtB = 11;
-                    artifactPtC = 11;
-                    break;
+                    // Left
+                    case 3:
+                        artifactPtA = 1;
+                        artifactPtB = 11;
+                        artifactPtC = 11;
+                        break;
 
-                // Top-right
-                case 8:
-                    artifactPtA = 0;
-                    artifactPtB = 11;
-                    artifactPtC = 10;
-                    break;
+                    // Center
+                    case 4:
+                        artifactPtA = 20;
+                        artifactPtB = 20;
+                        artifactPtC = 20;
+                        break;
 
-                default:
-                    artifactPtA = 20;
-                    artifactPtB = 20;
-                    artifactPtC = 20;
-                    break;
+                    // Right
+                    case 5:
+                        artifactPtA = 0;
+                        artifactPtB = 10;
+                        artifactPtC = 10;
+                        break;
+
+                    // Top-left
+                    case 6:
+                        artifactPtA = 1;
+                        artifactPtB = 10;
+                        artifactPtC = 11;
+                        break;
+
+                    // Top
+                    case 7:
+                        artifactPtA = 10;
+                        artifactPtB = 11;
+                        artifactPtC = 11;
+                        break;
+
+                    // Top-right
+                    case 8:
+                        artifactPtA = 0;
+                        artifactPtB = 11;
+                        artifactPtC = 10;
+                        break;
+
+                    default:
+                        artifactPtA = 20;
+                        artifactPtB = 20;
+                        artifactPtC = 20;
+                        break;
+                }
+            }
+            else
+            {
+                artifactPtA = artifactPtB = artifactPtC = 20;
             }
 
             beamMesh.triangles = new int[numBeamTris * 3]
