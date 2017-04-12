@@ -1160,7 +1160,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1727815371207092}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 57.84, y: 4.09, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4100109693591150}
@@ -1202,7 +1202,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1332570852559736}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -39.35, y: 3.08, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4100109693591150}
@@ -1450,7 +1450,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1555246752482372}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 55.04, y: 3.27, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4100109693591150}
@@ -2932,7 +2932,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d0e109ce0ca81b488bbaf18d37527b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 54, y: 0, z: 0}
+  offset: {x: 120, y: 0, z: 0}
 --- !u!114 &114569836085780110
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3081,7 +3081,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cutsceneManager: {fileID: 114697566736478712}
-  textFile: {fileID: 0}
+  textFile: {fileID: 4900000, guid: 2827d01c1b5e2c542baf01b76818599b, type: 3}
 --- !u!114 &114697566736478712
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3129,7 +3129,7 @@ MonoBehaviour:
   playLevelComplete: 1
   cutsceneManager: {fileID: 114697566736478712}
   controls: {fileID: 114232900420386978}
-  levelComplete: {fileID: 0}
+  levelComplete: {fileID: 82351499728613338}
   musicManager: {fileID: 114214324677864962}
   fader: {fileID: 114424393670326002}
   frameCountRestart: 128
@@ -3199,7 +3199,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cutsceneManager: {fileID: 114697566736478712}
-  textFile: {fileID: 0}
+  textFile: {fileID: 4900000, guid: bcc897e6b749dd74294eb8b861384c79, type: 3}
 --- !u!114 &114863008017044136
 MonoBehaviour:
   m_ObjectHideFlags: 1
