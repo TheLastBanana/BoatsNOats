@@ -366,6 +366,13 @@ public class CutsceneManager : MonoBehaviour {
         leftBound.transform.position += offs.offset;
         rightBound.transform.position += offs.offset;
 
+        // Make artifact visible as she's picked it up now
+        Gemma.transform.FindChild("c_body").FindChild("c_strap").FindChild("arti_handle").gameObject.SetActive(true);
+
+        // Move Al too in the last level
+        if (Al != null)
+            Al.transform.position += offs.offset;
+
         currentFlash = Instantiate(portalFlashPrefab);
         var flashPos = Camera.main.transform.position + offs.offset;
         flashPos.z = 0;
