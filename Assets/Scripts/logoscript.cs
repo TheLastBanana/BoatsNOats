@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class logoscript : MonoBehaviour {
 
@@ -22,7 +23,7 @@ public class logoscript : MonoBehaviour {
         }
         else
         {
-            //gameObject.SetActive(false);
+            SceneManager.LoadScene(0);
         }
     }
 

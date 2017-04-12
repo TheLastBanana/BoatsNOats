@@ -16,7 +16,10 @@ Oh, well, I mean isn’t it obvious? The ambience, the lighting, I love it down 
 What? Why?
 </custom></text>
   <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
-Well they had it in a museum, but then some mining badger tried to steal it. They got it back and set it up in a really secure facility. So we have to go through the sewer.
+Well they had it in a museum, but then some mining badger tried to steal it. 
+</custom></text>
+  <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
+They got it back and set it up in a really secure facility. So we have to go through the sewer.
 </custom></text>
   <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
 Ugh fine, just get us there quickly ok?
