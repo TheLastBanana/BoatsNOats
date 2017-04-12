@@ -53,6 +53,14 @@ public class GameControls : MonoBehaviour {
             return Input.GetKeyUp(key);
     }
 
+    public bool LastPortal()
+    {
+        if (DisablePortalThisLevel)
+            return false;
+
+        return Input.GetKey(KeyCode.Q);
+    }
+
     public bool SkipDialogue()
     {
         if (disableSkipping)
