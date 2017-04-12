@@ -59,6 +59,8 @@ public class CutsceneManager : MonoBehaviour {
     private bool endCutscene; // Last cutscene in the level, will do scene transition after
     private GameObject currentFlash;
 
+    private GameObject speaker;
+
     // Use this for initialization
     void Start () {
         cameraSwitcher = cameraManager.GetComponent<CameraSwitcher>();
@@ -135,6 +137,16 @@ public class CutsceneManager : MonoBehaviour {
             {
                 startedText = true;
                 typewriterText.startText(numTextCurrent);
+                
+                if (speaker)
+                {
+                    var animator = speaker.GetComponent<Animator>();
+                    if (animator)
+                    {
+                        print(speaker);
+                        animator.SetBool("Talking", true);
+                    }
+                }
             }
         }
 
@@ -142,6 +154,15 @@ public class CutsceneManager : MonoBehaviour {
         // OR if there's no speaker then just auto skip
         if (startedText && !typewriterText.isTextDone() && (controls.SkipDialogue() || !typewriterText.hasSpeaker(numTextCurrent)))
         {
+            if (speaker)
+            {
+                var animator = speaker.GetComponent<Animator>();
+                if (animator)
+                {
+                    animator.SetBool("Talking", false);
+                }
+            }
+
             startedText = false;
             if (currentText != null)
                 currentText.gameObject.SetActive(false);
@@ -223,15 +244,30 @@ public class CutsceneManager : MonoBehaviour {
         tag = tag.ToLower();
 
         if (tag == "gemma")
+        {
             currentText = GemmaText;
+            speaker = Gemma;
+        }
         else if (tag == "al")
+        {
             currentText = AlText;
+            speaker = Al;
+        }
         else if (tag == "loudspeakerwet")
+        {
             currentText = LSWetText;
+            speaker = LoudspeakerWet;
+        }
         else if (tag == "loudspeakerdry")
+        {
             currentText = LSDryText;
+            speaker = LoudspeakerDry;
+        }
         else
+        {
             currentText = null;
+            speaker = null;
+        }
 
         if (currentText != null)
             currentText.gameObject.SetActive(true);
