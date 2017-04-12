@@ -53,7 +53,7 @@ public class IntroCutscene : MonoBehaviour {
             title.SetActive(true);
             startButton.SetActive(true);
             playOnce = true;
-            Gemma.inputDisabled = true;
+            Gemma.StopForCutscene();
         }
     }
 }

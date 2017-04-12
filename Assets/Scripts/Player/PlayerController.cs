@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
 	private Vector3 _velocity;
     public GameControls controls;
 
-    public bool inputDisabled;
+    private bool inputDisabled;
     private bool portalSelecting;
     private Vector2 storedVelocity;
     private float storedGravity;
