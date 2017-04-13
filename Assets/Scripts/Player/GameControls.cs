@@ -69,13 +69,21 @@ public class GameControls : MonoBehaviour {
         // We don't want multiple presses from one physical press, this is also why GetKeyDown is used instead of GetKey
         if (Time.time - skipDialogueLast > 0.1f)
         {
-            if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.E))
             {
                 skipDialogueLast = Time.time;
                 return true;
             }
         }
         return false;
+    }
+
+    public bool SkipWholeCutscene()
+    {
+        if (disableSkipping)
+            return false;
+
+        return Input.GetKey(KeyCode.Return);
     }
 
     public bool RestartLevel()
