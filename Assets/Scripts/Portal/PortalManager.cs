@@ -66,7 +66,7 @@ public class PortalManager : MonoBehaviour
     private bool disabled;
     private bool donePortalOnce;
 
-    private Rect lastRect;
+    private Rect? lastRect;
     
     // Use this for initialization
     void Awake()
@@ -218,7 +218,7 @@ public class PortalManager : MonoBehaviour
             afx.cancelEffects(portalDragSound);
             afx.cancelEffects(altWorldAmbience);
 
-            portalRect = lastRect;
+            portalRect = lastRect.Value;
             endSelection(false);
             freeze();
             unfreeze();
