@@ -19,6 +19,9 @@ public class MusicManager : MonoBehaviour
     private bool _muffled = false;
     private float _volume = 1f;
 
+    public bool startPlaying = true;
+    public bool isPlaying { get; private set; }
+
     // Whether the muffle effect is enabled
     public bool muffled
     {
@@ -58,6 +61,9 @@ public class MusicManager : MonoBehaviour
 
     void Awake()
     {
+        // Set initial value
+        isPlaying = false;
+
         // Get low-pass filters
         lpfs = new AudioLowPassFilter[]
         {
@@ -69,7 +75,9 @@ public class MusicManager : MonoBehaviour
     void Start()
     {
         volume = _volume;
-        playMusic();
+        
+        if (startPlaying)
+            playMusic();
     }
 
     // Play looped music
@@ -77,6 +85,7 @@ public class MusicManager : MonoBehaviour
     {
         intro.Play();
         loop.PlayDelayed(intro.clip.length);
+        isPlaying = true;
     }
 
     // Stop the music
@@ -84,6 +93,7 @@ public class MusicManager : MonoBehaviour
     {
         intro.Stop();
         loop.Stop();
+        isPlaying = false;
     }
 
     // Smoothly enable low-pass filters
