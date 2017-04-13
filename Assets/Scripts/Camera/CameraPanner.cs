@@ -23,8 +23,6 @@ public class CameraPanner : MonoBehaviour {
         LeftBoundary = cameraTracker.LeftBoundary;
         RightBoundary = cameraTracker.RightBoundary;
 
-        xMin = LeftBoundary.transform.position.x;
-        xMax = RightBoundary.transform.position.x;
         cutsceneManager = cutsceneManagerObj.GetComponent<CutsceneManager>();
     }
 
@@ -72,6 +70,9 @@ public class CameraPanner : MonoBehaviour {
     // Change the given position such that a camera focused on it is within camera bounds
     private Vector3 checkCameraBounds(Vector3 pos, float camHeight, float camWidth)
     {
+        xMin = LeftBoundary.transform.position.x;
+        xMax = RightBoundary.transform.position.x;
+
         // Get camera edges
         float left = pos.x - (camWidth / 2);
         float right = pos.x + (camWidth / 2);
