@@ -25,6 +25,7 @@ public class CutsceneManager : MonoBehaviour {
     private CameraTracker cameraTracker;
     private CameraPanner cameraPanner;
     public PortalManager portalManager;
+    public MusicManager musicManager;
     public GameControls controls;
     private TypewriterText typewriterText;
     public Canvas dialogueCanvas;
@@ -61,6 +62,7 @@ public class CutsceneManager : MonoBehaviour {
     private bool startedText;
     Queue<CameraPanInfo> pans;
     Queue<MoveInfo> moves;
+    Queue<string> soundToggles;
     private bool startedPan;
     private bool doAPortal;
     private bool endCutscene; // Last cutscene in the level, will do scene transition after
@@ -104,6 +106,7 @@ public class CutsceneManager : MonoBehaviour {
         startedText = false;
         pans = new Queue<CameraPanInfo>();
         moves = new Queue<MoveInfo>();
+        soundToggles = new Queue<string>();
         startedPan = false;
         doAPortal = false;
         endCutscene = false;
@@ -140,6 +143,12 @@ public class CutsceneManager : MonoBehaviour {
 
         if (!Busy())
         {
+            // Toggle sounds when they ask to be
+            while (soundToggles.Count > 0)
+            {
+                ToggleSound(soundToggles.Dequeue());
+            }
+
             if (doAPortal)
             {
                 doAPortal = false;
@@ -548,6 +557,39 @@ public class CutsceneManager : MonoBehaviour {
         }
 
         EndCutscene();
+    }
+
+    public void QueueToggleSound(string name)
+    {
+        soundToggles.Enqueue(name);
+    }
+
+    private void ToggleSound(string name)
+    {
+        // Special case "music" since we need to ask the music manager to start/stop playing
+        if (name.Equals("music")) {
+            if (musicManager.isPlaying)
+                musicManager.stopMusic();
+            else
+                musicManager.playMusic();
+
+            // We did the toggle
+            return;
+        }
+
+        // Try the audio sources then
+        AudioSource[] sources = cameraTracker.mainCam.GetComponentsInChildren<AudioSource>();
+        foreach (AudioSource a in sources)
+            if (a.name.Equals(name))
+            {
+                if (a.isPlaying)
+                    a.Stop();
+                else
+                    a.Play();
+                return;
+            }
+
+        Debug.LogError("Tried to toggle sound that didn't exist: " + name);
     }
 }
 

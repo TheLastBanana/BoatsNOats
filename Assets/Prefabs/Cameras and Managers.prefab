@@ -2825,6 +2825,7 @@ MonoBehaviour:
   lpfChangeTime: 0.01
   baseVolume: 0.6
   muffleVolume: 0.6
+  startPlaying: 1
 --- !u!114 &114232900420386978
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3219,6 +3220,7 @@ MonoBehaviour:
   fader: {fileID: 114424393670326002}
   cameraManager: {fileID: 1065581217306714}
   portalManager: {fileID: 114580626449500856}
+  musicManager: {fileID: 114214324677864962}
   controls: {fileID: 114232900420386978}
   dialogueCanvas: {fileID: 223276061801502846}
   Gemma: {fileID: 0}
