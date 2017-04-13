@@ -21,6 +21,7 @@ public class PlayerEffects : MonoBehaviour
     public void Start()
     {
         anim = GetComponent<Animator>();
+        wasGrounded = anim.GetBool("Ground");
     }
 
     public void Update()
