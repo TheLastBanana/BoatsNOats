@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(AudioEffects))]
 public class MusicManager : MonoBehaviour
 {
     public AudioSource intro;
@@ -15,6 +16,7 @@ public class MusicManager : MonoBehaviour
     AudioLowPassFilter[] lpfs;
     bool lpfEnabled;
     IEnumerator curLPFLerp;
+    AudioEffects afx;
 
     private bool _muffled = false;
     private float _volume = 1f;
@@ -70,6 +72,8 @@ public class MusicManager : MonoBehaviour
             intro.GetComponent<AudioLowPassFilter>(),
             loop.GetComponent<AudioLowPassFilter>()
         };
+
+        afx = GetComponent<AudioEffects>();
     }
 
     void Start()
@@ -91,8 +95,8 @@ public class MusicManager : MonoBehaviour
     // Stop the music
     public void stopMusic()
     {
-        intro.Stop();
-        loop.Stop();
+        afx.smoothStop(intro);
+        afx.smoothStop(loop);
         isPlaying = false;
     }
 

@@ -48,7 +48,8 @@ public class AudioEffects : MonoBehaviour
         yield return new WaitForSeconds(time);
 
         // Delay was cancelled
-        if (effectCancelTimes[audio] > startTime)
+        float cancelTime;
+        if (effectCancelTimes.TryGetValue(audio, out cancelTime) && cancelTime > startTime)
         {
             yield break;
         }
@@ -69,7 +70,8 @@ public class AudioEffects : MonoBehaviour
             yield return null;
 
             // Fade was cancelled
-            if (effectCancelTimes[audio] > startTime)
+            float cancelTime;
+            if (effectCancelTimes.TryGetValue(audio, out cancelTime) && cancelTime > startTime)
             {
                 audio.volume = startVolume;
                 yield break;

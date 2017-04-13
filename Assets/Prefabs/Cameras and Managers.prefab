@@ -370,6 +370,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4833819193951284}
   - component: {fileID: 114214324677864962}
+  - component: {fileID: 114388910324624394}
   m_Layer: 0
   m_Name: Music Manager
   m_TagString: Untagged
@@ -2915,6 +2916,17 @@ MonoBehaviour:
   cChar: {fileID: 20755086786426042}
   cGhost: {fileID: 20167617518070488}
   controls: {fileID: 114232900420386978}
+--- !u!114 &114388910324624394
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1288053648847236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e49cb9b3e5b6abf498048481a2b0a472, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114424393670326002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3216,6 +3228,8 @@ MonoBehaviour:
   rightBound: {fileID: 0}
   portalFlashPrefab: {fileID: 1588745804119268, guid: 5a3878f26abc6a040b024cff129d7ab3,
     type: 2}
+  dryBG: {fileID: 0}
+  wetBG: {fileID: 0}
   offs: {fileID: 114537670656804216}
   fader: {fileID: 114424393670326002}
   cameraManager: {fileID: 1065581217306714}
