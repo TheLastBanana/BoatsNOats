@@ -10,7 +10,7 @@ I’m a little sad we missed out on ice cream.
 <custom pan="gemma" delay="0"/><custom move="mid1" mover="gemma"/>
 </text>
   <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
-Well, it’s been....something Al.
+Well, it’s been... something Al.
 </custom></text>
   <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
 Thanks for getting me here in one piece, though I’m pretty sure you could have carried me the whole way through.

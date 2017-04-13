@@ -2,7 +2,7 @@
 <dialog>
   <text xml:space="preserve"><custom speaker="loudspeakerwet"/><custom voice="Bird Loudspeaker"/><custom speed="0.015">
 This is an automated message: All citizens are instructed to evacuate the city.
-(Press <b><i>E</i></b> to continue)
+(Press <b>E</b> to continue)
 </custom></text>
   <text xml:space="preserve"><custom speaker="loudspeakerwet"/><custom voice="Bird Loudspeaker"/><custom speed="0.015">
 Hurricane Caine is rapidly approaching Jikan harbour. Proceed in an orderly fashion to the docks for emergency shelter and evacuation.
@@ -11,6 +11,6 @@ Hurricane Caine is rapidly approaching Jikan harbour. Proceed in an orderly fash
 That’s right folks. Leave your city wide open for me.
 </custom></text>
   <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
-I can move using <b><i>A</i></b> and <b><i>D</i></b>, and I can jump with <b><i>W</i></b> or <b><i>Spacebar</i></b>.
+I can move using <b>A</b> and <b>D</b>, and I can jump with <b>W</b>  or <b>Spacebar</b>.
 </custom></text>
 </dialog>
