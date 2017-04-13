@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4657924647054258}
   - component: {fileID: 212910668641148736}
-  - component: {fileID: 60062979544876360}
+  - component: {fileID: 60091348623599678}
   m_Layer: 14
   m_Name: Graphics
   m_TagString: Untagged
@@ -66,7 +66,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1858043451063110}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -26.701113, y: 7.39, z: 0}
+  m_LocalPosition: {x: 135.3253, y: 7.4002285, z: 0}
   m_LocalScale: {x: 0.6, y: 0.6, z: 1}
   m_Children:
   - {fileID: 4657924647054258}
@@ -93,7 +93,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!60 &60062979544876360
+--- !u!60 &60091348623599678
 PolygonCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -101,16 +101,16 @@ PolygonCollider2D:
   m_GameObject: {fileID: 1810070202979604}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 696a5fed0f1312e4eb20f7431cb1694a, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
   m_Points:
     m_Paths:
-    - - {x: -1.45, y: -1.45}
-      - {x: -1.45, y: 1.45}
-      - {x: 1.45, y: 1.45}
-      - {x: 1.45, y: -1.45}
+    - - {x: -1.49, y: -1.49}
+      - {x: -1.49, y: 1.49}
+      - {x: 1.49, y: 1.49}
+      - {x: 1.49, y: -1.49}
 --- !u!114 &114571591683516326
 MonoBehaviour:
   m_ObjectHideFlags: 1
