@@ -57,7 +57,7 @@ public class DialoguePointer : MonoBehaviour {
         Vector3 vectorToTarget = pointToTransform.position - objTransform.position;
         float angle = (Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg) + 90;
         Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
-        objTransform.rotation = Quaternion.RotateTowards(objTransform.rotation, q, Time.deltaTime * 1000);
+        objTransform.rotation = Quaternion.RotateTowards(objTransform.rotation, q, Time.deltaTime * 10000);
 	}
 
     private void changeXFromCameraPosition()
