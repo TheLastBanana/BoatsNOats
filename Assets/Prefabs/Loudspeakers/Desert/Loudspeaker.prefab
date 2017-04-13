@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4491393784211084}
   - component: {fileID: 212568480591998886}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: r_speaker_support
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36,7 +36,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4550820359611862}
   - component: {fileID: 95932851791893006}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Loudspeaker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52,7 +52,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4359010397935298}
   - component: {fileID: 212311883005139322}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: r_speaker_mouth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -68,7 +68,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4720394366207360}
   - component: {fileID: 212697949871595096}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: r_speaker_main
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -109,7 +109,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1300174396010314}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.47, y: 2.98, z: 0}
+  m_LocalPosition: {x: 1.33, y: 4.38, z: 0}
   m_LocalScale: {x: -1, y: 1, z: 1}
   m_Children:
   - {fileID: 4491393784211084}
