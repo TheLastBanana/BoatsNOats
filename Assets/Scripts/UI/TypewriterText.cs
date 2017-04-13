@@ -214,6 +214,24 @@ class PortalTag : Tag
     }
 }
 
+class ToggleSoundTag : Tag
+{
+    public int start { get; set; }
+    public int end { get { return start; } set { this.start = value; } }
+    public string name { get; set; }
+
+    public ToggleSoundTag(string name, int start)
+    {
+        this.name = name;
+        this.start = start;
+    }
+
+    public override string ToString()
+    {
+        return "ToggleSoundTag(" + name + ", " + start + ", " + end + ")";
+    }
+}
+
 class Dialog
 {
     public string text { get; set; }
@@ -225,6 +243,7 @@ class Dialog
     public List<MoveTag> moves { get; private set; }
     public List<AnimationTag> animations { get; private set; }
     public List<PortalTag> portals { get; private set; }
+    public List<ToggleSoundTag> toggleSounds { get; private set; }
 
     public Dialog()
     {
@@ -237,6 +256,7 @@ class Dialog
         moves = new List<MoveTag>();
         animations = new List<AnimationTag>();
         portals = new List<PortalTag>();
+        toggleSounds = new List<ToggleSoundTag>();
     }
 
     public void addTag(FormatTag tag)
@@ -272,6 +292,11 @@ class Dialog
     public void addPortal(PortalTag tag)
     {
         portals.Add(tag);
+    }
+
+    public void addToggleSound(ToggleSoundTag tag)
+    {
+        toggleSounds.Add(tag);
     }
 }
 
@@ -412,6 +437,21 @@ public class TypewriterText : MonoBehaviour {
 
                 t = pt;
             }
+            else if (split[1].StartsWith("toggleSound"))
+            {
+                Debug.Assert(split.Length > 2, "Not enough parameters for toggleSound");
+                string[] nameSplit = split[1].Split('=');
+                Debug.Assert(nameSplit.Length == 2, "Name split not 2");
+
+                string name = nameSplit[1].Replace("\"", ""); // Values are quoted..
+                name = name.Replace("_", " ");
+
+                ToggleSoundTag tst = new ToggleSoundTag(name, start);
+                dia.addToggleSound(tst);
+                Debug.Log("GOT TST " + tst);
+
+                t = tst;
+            }
             else
             {
                 Debug.Assert(false, "Unknown custom tag");
@@ -524,6 +564,7 @@ public class TypewriterText : MonoBehaviour {
         List<MoveTag> mTags = dialogs[dialogNum].moves;
         List<AnimationTag> aTags = dialogs[dialogNum].animations;
         List<PortalTag> portalTags = dialogs[dialogNum].portals;
+        List<ToggleSoundTag> toggleTags = dialogs[dialogNum].toggleSounds;
 
         // Keep track of what speed we're putting letters out at
         Stack<SpeedTag> activeSTags = new Stack<SpeedTag>();
@@ -571,6 +612,10 @@ public class TypewriterText : MonoBehaviour {
             foreach (PortalTag tag in portalTags)
                 if (tag.start == i)
                     doPortalEffect(tag);
+
+            foreach (ToggleSoundTag tag in toggleTags)
+                if (tag.start == i)
+                    toggleSound(tag.name);
 
             // Play voice and set its delay if there's a speaker
             if (voice != null && text != null)
@@ -697,6 +742,10 @@ public class TypewriterText : MonoBehaviour {
         return (dialogs[dialogNum].speaker != null);
     }
 
+    public void toggleSound(string name)
+    {
+        cutsceneManager.QueueToggleSound(name);
+    }
     // Check if the text is done animating
     public bool isTextStarted()
     {
