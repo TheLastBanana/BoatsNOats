@@ -3110,7 +3110,7 @@ Prefab:
     - target: {fileID: 114717450731081886, guid: 06d7fe0b7b7ba4844835d6b3b4400e43,
         type: 2}
       propertyPath: frameCountNextLevel
-      value: 512
+      value: 128
       objectReference: {fileID: 0}
     - target: {fileID: 114232900420386978, guid: 06d7fe0b7b7ba4844835d6b3b4400e43,
         type: 2}
