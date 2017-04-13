@@ -456,8 +456,8 @@ public class CutsceneManager : MonoBehaviour {
         currentFlash.GetComponent<PortalTransferEffect>().startScale = new Vector3(camWidth, camHeight, 1f);
 
         // Swap backgrounds
-        dryBG.SetActive(true);
-        wetBG.SetActive(false);
+        if (dryBG) dryBG.SetActive(!dryBG.activeInHierarchy);
+        if (wetBG) wetBG.SetActive(!wetBG.activeInHierarchy);
     }
 
     // Called to signify the cutscene is the last in the level and we need to level change after
