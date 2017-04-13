@@ -10214,7 +10214,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4388783839464488, guid: f59a1736ced72204cb512ebf9810c5aa, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -23.398
+      value: -23.33
       objectReference: {fileID: 0}
     - target: {fileID: 4388783839464488, guid: f59a1736ced72204cb512ebf9810c5aa, type: 2}
       propertyPath: m_LocalPosition.y
@@ -10269,7 +10269,11 @@ Prefab:
     - target: {fileID: 212833840860657782, guid: f59a1736ced72204cb512ebf9810c5aa,
         type: 2}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1218016917995164, guid: f59a1736ced72204cb512ebf9810c5aa, type: 2}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f59a1736ced72204cb512ebf9810c5aa, type: 2}
@@ -11775,6 +11779,19 @@ Prefab:
     - target: {fileID: 1567294092501502, guid: 10f3cc0b0192f744aaa35bac24928418, type: 2}
       propertyPath: m_Name
       value: Circuit Long (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1068390711880672, guid: 10f3cc0b0192f744aaa35bac24928418, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1719336035167810, guid: 10f3cc0b0192f744aaa35bac24928418, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 212953906617796778, guid: 10f3cc0b0192f744aaa35bac24928418,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 10f3cc0b0192f744aaa35bac24928418, type: 2}
