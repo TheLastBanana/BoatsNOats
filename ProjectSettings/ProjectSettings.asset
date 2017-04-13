@@ -10,8 +10,8 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: DefaultCompany
-  productName: Unity Test
+  companyName: "B\xF6ats 'n' \xD6ats"
+  productName: Gemma's Great Gambit
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0, g: 0, b: 0, a: 1}
@@ -211,7 +211,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 0}
+      m_Icon: {fileID: 2800000, guid: 8ae4390cf93dc0e4fa5272b7a281449e, type: 3}
       m_Width: 128
       m_Height: 128
   m_BuildTargetBatching: []
