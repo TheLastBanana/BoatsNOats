@@ -90,7 +90,7 @@ public class PortalManager : MonoBehaviour
             return;
 
         //Undo
-        if (gameControls.LastPortal())
+        if (gameControls.LastPortal() && !disabled)
         {
             Undo();
         }
