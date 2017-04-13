@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dialog>
+  <text xml:space="preserve">
+<custom pan="mid3" delay="0.5"/>
+</text>
   <text xml:space="preserve"><custom speaker="loudspeakerwet"/><custom voice="Bird Loudspeaker"/><custom speed="0.015">
 This is an automated message: All citizens are instructed to evacuate the city.
 (Press <b>E</b> to continue)
