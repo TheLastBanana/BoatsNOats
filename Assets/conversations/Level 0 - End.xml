@@ -10,7 +10,7 @@ This thing is supposed have some cool powers. I’ll use it to teach those gulls
 <custom move="mid1" mover="gemma"/>
 </text>
   <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
-What’s that sound? That can’t be good.<custom portal=""></custom>
+What’s that sound? That can’t be good.<custom portal=""/><custom toggleSound="Alternate_World_Ambience"/><custom toggleSound="music"/> 
 </custom></text>
   <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
 Ok now this ain’t right.
