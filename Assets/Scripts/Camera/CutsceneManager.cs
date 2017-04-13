@@ -15,6 +15,8 @@ public class CutsceneManager : MonoBehaviour {
     public GameObject leftBound;
     public GameObject rightBound;
     public GameObject portalFlashPrefab;
+    public GameObject dryBG;
+    public GameObject wetBG;
     public WorldOffsets offs;
     public FadeOut fader;
 
@@ -452,6 +454,10 @@ public class CutsceneManager : MonoBehaviour {
         float camWidth = camHeight / Screen.height * Screen.width;
 
         currentFlash.GetComponent<PortalTransferEffect>().startScale = new Vector3(camWidth, camHeight, 1f);
+
+        // Swap backgrounds
+        dryBG.SetActive(true);
+        wetBG.SetActive(false);
     }
 
     // Called to signify the cutscene is the last in the level and we need to level change after
