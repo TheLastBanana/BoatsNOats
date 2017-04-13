@@ -161,12 +161,27 @@ public class Splittable : MonoBehaviour
 
             Side meshSide = SplitMesh(leftChild.gameObject, rightChild.gameObject, localMatrix);
             Side collSide = SplitCollider(leftChild.gameObject, rightChild.gameObject, localMatrix);
-            
+
+            // Sizes of new renderers
+            var rightRenderer = rightChild.GetComponent<Renderer>();
+            var leftRenderer = leftChild.GetComponent<Renderer>();
+            bool rightTooSmall = false;
+            bool leftTooSmall = false;
+
+            if (rightRenderer)
+            {
+                var rightRendererSize = rightRenderer.bounds.size;
+                rightTooSmall = Mathf.Min(rightRendererSize.x, rightRendererSize.y) < minSize;
+            }
+
+            if (leftRenderer) {
+                var leftRendererSize = leftRenderer.bounds.size;
+                leftTooSmall = Mathf.Min(leftRendererSize.x, leftRendererSize.y) < minSize;
+            }
+
             // Check if a mesh/collider is entirely on one side, on no side at all, or is too small to bother with
-            var rightSize = rightChild.GetComponent<Renderer>().bounds.size;
-            var leftSize = leftChild.GetComponent<Renderer>().bounds.size;
-            bool meshAllLeft = (meshSide == Side.Left || meshSide == Side.Neither || Mathf.Min(rightSize.x, rightSize.y) < minSize);
-            bool meshAllRight = (meshSide == Side.Right || meshSide == Side.Neither || Mathf.Min(leftSize.x, leftSize.y) < minSize);
+            bool meshAllLeft = (meshSide == Side.Left || meshSide == Side.Neither || rightTooSmall);
+            bool meshAllRight = (meshSide == Side.Right || meshSide == Side.Neither || leftTooSmall);
             bool collAllLeft = (collSide == Side.Left || collSide == Side.Neither);
             bool collAllRight = (collSide == Side.Right || collSide == Side.Neither);
 
