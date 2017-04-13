@@ -477,9 +477,8 @@ public class PortalManager : MonoBehaviour
 
         circuitManager.RecalculateGroups();
 
-        // If we cut any objects, play the cut sound
-        if (mainCuts.Count > 0 || altCuts.Count > 0)
-            objectCutSound.Play();
+        // Play the cut sound
+        objectCutSound.Play();
 
         if (unfreezeAfter) unfreeze();
 
