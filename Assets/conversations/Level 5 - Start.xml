@@ -17,5 +17,8 @@ Seriously? I know you can hear me Al.
 </custom></text>
   <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
 Sorry Gemma! The signal’s breaking up. I’m losing you! BEEEEEEEEEP….
-</custom><custom move="mid2" mover="al"/> </text>
+</custom></text>
+  <text xml:space="preserve">
+<custom move="mid2" mover="al"/>
+</text>
 </dialog>

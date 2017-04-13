@@ -5,5 +5,8 @@ What the heck! Who makes a sewer system like this!
 </custom></text>
   <text xml:space="preserve"><custom speaker="al"/><custom voice="Al Neutral"/><custom speed="0.015">
 You can do it! Think positive!
-</custom><custom move="mid3" mover="al"/> </text>
+</custom></text>
+  <text xml:space="preserve">
+<custom move="mid3" mover="al"/>
+</text>
 </dialog>
