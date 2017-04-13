@@ -219,9 +219,12 @@ public class PortalManager : MonoBehaviour
             afx.cancelEffects(altWorldAmbience);
 
             portalRect = lastRect.Value;
+
             endSelection(false);
             freeze();
             unfreeze();
+
+            lastRect = null;
         }
     }
 
