@@ -211,8 +211,14 @@ public class PortalManager : MonoBehaviour
     {
         if (lastRect != null)
         {
+            //Setup cancel effects dictionnary
+            afx.cancelEffects(portalDragSound);
+            afx.cancelEffects(altWorldAmbience);
+
             portalRect = lastRect;
             endSelection(false);
+            freeze();
+            unfreeze();
         }
     }
 
