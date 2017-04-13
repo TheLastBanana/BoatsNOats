@@ -13,4 +13,7 @@ That’s right folks. Leave your city wide open for me.
   <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
 I can move using <b>A</b> and <b>D</b>, and I can jump with <b>W</b>  or <b>Spacebar</b>.
 </custom></text>
+  <text xml:space="preserve"><custom speaker="gemma"/><custom voice="Gemma Neutral"/><custom speed="0.015">
+Also, if I REALLY don't want to listen to people I can hit <b>Enter</b> to skip through a whole conversation.
+</custom></text>
 </dialog>

@@ -64,6 +64,8 @@ public class CutsceneManager : MonoBehaviour {
     private bool endCutscene; // Last cutscene in the level, will do scene transition after
     private GameObject currentFlash;
 
+    private bool skipEverything;
+
     private GameObject speaker;
 
     // Use this for initialization
@@ -104,6 +106,7 @@ public class CutsceneManager : MonoBehaviour {
         doAPortal = false;
         endCutscene = false;
 
+        skipEverything = false;
 
         // Disable player control for fade
         DisableControls(true);
@@ -115,13 +118,23 @@ public class CutsceneManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        // We're not in a cutscene
+        if (!runningCutscene || skipEverything)
+            return;
+
         // Check if we've gone through everything
         if (numTextCurrent == numTexts && pans.Count <= 0 && moves.Count <= 0 && !doAPortal && !Busy())
+        {
             EndCutscene();
-
-        // We're not in a cutscene
-        if (!runningCutscene)
             return;
+        }
+
+        if (controls.SkipWholeCutscene())
+        {
+            skipEverything = true;
+            StartCoroutine(SkipWholeCutscene());
+            return;
+        }
 
         if (!Busy())
         {
@@ -151,7 +164,7 @@ public class CutsceneManager : MonoBehaviour {
                 startedText = true;
                 typewriterText.startText(numTextCurrent);
                 
-                if (speaker)
+                if (speaker && !skipEverything)
                 {
                     var animator = speaker.GetComponent<Animator>();
                     if (animator)
@@ -166,28 +179,9 @@ public class CutsceneManager : MonoBehaviour {
         if (startedText && !typewriterText.isTextStarted() && !typewriterText.hasSpeaker(numTextCurrent))
             DoAfterText();
 
+        // If player hits the skip button, see if anything can be skipped
         if (controls.SkipDialogue())
-        {
-            // Skip text typewriter effect and display whole text
-            if (typewriterText.isTextStarted())
-                typewriterText.doSkipText();
-
-            // If text has gone through we're waiting for user input to close the text bubble
-            else if (startedText && !typewriterText.isTextStarted())
-                DoAfterText();
-
-            // Skip camera panning
-            else if (startedPan)
-                EndPan();
-
-            // Skip Gemma walking
-            else if (!playerController.DoneWalking())
-                playerController.SkipWalking();
-
-            // Skip Al flying
-            else if (Al != null && !AlScript.DoneFlying())
-                AlScript.SkipFlying();
-         }
+            SkipCheck();
     }
 
     private bool Busy()
@@ -216,6 +210,47 @@ public class CutsceneManager : MonoBehaviour {
         if (currentText != null)
             currentText.gameObject.SetActive(false);
         numTextCurrent += 1;
+    }
+
+    // A skip has happened, so if we can skip something to do that and return true, otherwise nothing to skip so false
+    private bool SkipCheck()
+    {
+        // Skip text typewriter effect and display whole text
+        if (typewriterText.isTextStarted())
+        {
+            typewriterText.doSkipText();
+            return true;
+        }
+
+        // If text has gone through we're waiting for user input to close the text bubble
+        if (startedText && !typewriterText.isTextStarted())
+        {
+            DoAfterText();
+            return true;
+        }
+
+        // Skip camera panning
+        if (startedPan)
+        {
+            EndPan();
+            return true;
+        }
+
+        // Skip Gemma walking
+        if (!playerController.DoneWalking())
+        {
+            playerController.SkipWalking();
+            return true;
+        }
+
+        // Skip Al flying
+        if (Al != null && !AlScript.DoneFlying())
+        {
+            AlScript.SkipFlying();
+            return true;
+        }
+
+        return false;
     }
 
     public void DisableControls(bool disable)
@@ -250,6 +285,7 @@ public class CutsceneManager : MonoBehaviour {
         moves.Clear();
 
         runningCutscene = false;
+        skipEverything = false;
 
         // Resume player control
         if (!endCutscene)
@@ -269,7 +305,12 @@ public class CutsceneManager : MonoBehaviour {
     {
         tag = tag.ToLower();
 
-        if (tag == "gemma")
+        if (skipEverything)
+        {
+            currentText = null;
+            speaker = null;
+        }
+        else if (tag == "gemma")
         {
             currentText = GemmaText;
             speaker = Gemma;
@@ -472,6 +513,35 @@ public class CutsceneManager : MonoBehaviour {
 
         // Done fading
         isFading = false;
+    }
+
+    private IEnumerator SkipWholeCutscene()
+    {
+        SkipCheck();
+        DoAfterText();
+
+        for(int i = numTextCurrent; i < numTexts; i++)
+        {
+            typewriterText.startText(i);
+            typewriterText.doSkipText();
+            yield return new WaitWhile(() => typewriterText.isTextStarted());
+        }
+
+        if (doAPortal)
+        {
+            doAPortal = false;
+            DoPortalEffect();
+        }
+
+        while (moves.Count > 0)
+        {
+            StartMove();
+            playerController.SkipWalking();
+            if (Al != null)
+                AlScript.SkipFlying();
+        }
+
+        EndCutscene();
     }
 }
 
