@@ -64,6 +64,7 @@ public class PortalManager : MonoBehaviour
 
     private bool disabledForLevel;
     private bool disabled;
+    private bool donePortalOnce;
 
     private Rect lastRect;
     
@@ -80,6 +81,7 @@ public class PortalManager : MonoBehaviour
 
         disabledForLevel = false;
         disabled = false;
+        donePortalOnce = false;
     }
 
     // Update is called once per frame
@@ -89,8 +91,8 @@ public class PortalManager : MonoBehaviour
         if (disabledForLevel)
             return;
 
-        //Undo
-        if (gameControls.LastPortal() && !disabled)
+        // Undo if portals are not disabled and we've done a portal before in this level
+        if (gameControls.LastPortal() && !disabled && donePortalOnce)
         {
             Undo();
         }
@@ -99,6 +101,7 @@ public class PortalManager : MonoBehaviour
         // If we press the left mouse button, save mouse location and portal creation
         if (!isTransferring && Input.GetMouseButtonDown(0) && !disabled && !(SceneManager.GetActiveScene().name == "Intro Screen 1.1"))
         {
+            donePortalOnce = true;
             initiatePortal();
         }
 
