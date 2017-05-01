@@ -18,9 +18,9 @@ public class Button : MonoBehaviour {
     void Update() {
         // Break when this is split
         var splittable = transform.parent.GetComponent<Splittable>();
-        if (splittable != null && splittable.isSplit)
+        if (splittable != null && splittable.IsSplit)
         {
-            Source.GetComponent<PowerSource>().isOn = false;
+            Source.GetComponent<PowerSource>().IsOn = false;
             Destroy(this);
             return;
         }
@@ -31,7 +31,7 @@ public class Button : MonoBehaviour {
         if (!isOn)
         {
             transform.position = new Vector3(transform.position.x, transform.position.y - 0.2f, transform.position.z);
-            Source.GetComponent<PowerSource>().isOn = true;
+            Source.GetComponent<PowerSource>().IsOn = true;
             onSound.Play();
         }
         isOn = true;
@@ -42,7 +42,7 @@ public class Button : MonoBehaviour {
         if (isOn)
         {
             transform.position = new Vector3(transform.position.x, transform.position.y + 0.2f, transform.position.z);
-            Source.GetComponent<PowerSource>().isOn = false;
+            Source.GetComponent<PowerSource>().IsOn = false;
             offSound.Play();
         }
         isOn = false;

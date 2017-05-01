@@ -109,7 +109,7 @@ public class Piston : MonoBehaviour
         // Break when this is split
         foreach (var splittable in splittables)
         {
-            if (splittable.isSplit)
+            if (splittable.IsSplit)
             {
                 Destroy(this);
                 return;

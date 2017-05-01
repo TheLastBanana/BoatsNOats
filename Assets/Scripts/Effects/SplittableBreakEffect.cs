@@ -12,9 +12,9 @@ public class SplittableBreakEffect : MonoBehaviour
         if (splittable == null) return;
 
         // The splittable has been split, so add the effect
-        if (splittable.isSplit)
+        if (splittable.IsSplit)
         {
-            var totalBounds = splittable.totalBounds;
+            var totalBounds = splittable.TotalBounds;
 
             var effect = Instantiate(effectPrefab, transform, false);
             effect.transform.position = totalBounds.center;

@@ -19,7 +19,7 @@ public class Splittable : MonoBehaviour
     }
 
     private bool _isSplit = false;
-    public bool isSplit
+    public bool IsSplit
     {
         get
         {
@@ -40,7 +40,7 @@ public class Splittable : MonoBehaviour
     }
 
     // Encapsulated bounds of all children
-    public Bounds totalBounds
+    public Bounds TotalBounds
     {
         get
         {
@@ -242,11 +242,16 @@ public class Splittable : MonoBehaviour
         }
 
         _isSplit = true;
-        if (rightParent != null) rightParent.GetComponent<Splittable>()._isSplit = true;
+        if (rightParent != null)
+        {
+            rightParent.GetComponent<Splittable>()._isSplit = true;
+        }
 
-        List<GameObject> gameObjectList = new List<GameObject>();
-        gameObjectList.Add(leftParent);
-        gameObjectList.Add(rightParent);
+        List<GameObject> gameObjectList = new List<GameObject>
+        {
+            leftParent,
+            rightParent
+        };
         return gameObjectList;
     }
 
@@ -292,10 +297,12 @@ public class Splittable : MonoBehaviour
         sr.enabled = false;
 
         // Create mesh, copying the mesh data of the sprite
-        Mesh mesh = new Mesh();
-        mesh.vertices = Array.ConvertAll(sr.sprite.vertices, item => (Vector3)item);
-        mesh.uv = sr.sprite.uv;
-        mesh.triangles = Array.ConvertAll(sr.sprite.triangles, item => (int)item);
+        Mesh mesh = new Mesh()
+        {
+            vertices = Array.ConvertAll(sr.sprite.vertices, item => (Vector3)item),
+            uv = sr.sprite.uv,
+            triangles = Array.ConvertAll(sr.sprite.triangles, item => (int)item)
+        };
 
         // Remove sprite renderer
         var sortingLayerID = sr.sortingLayerID;

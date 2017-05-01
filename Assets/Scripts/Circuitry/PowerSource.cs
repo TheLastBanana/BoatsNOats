@@ -6,7 +6,7 @@ public class PowerSource : MonoBehaviour
     public int groupId = 0;
 
     bool _isOn = false;
-    public bool isOn
+    public bool IsOn
     {
         get
         {
@@ -28,9 +28,9 @@ public class PowerSource : MonoBehaviour
     void Update()
     {
         // The power source breaks if it's split
-        if (GetComponent<Splittable>().isSplit)
+        if (GetComponent<Splittable>().IsSplit)
         {
-            isOn = false;
+            IsOn = false;
             Destroy(this);
         }
     }

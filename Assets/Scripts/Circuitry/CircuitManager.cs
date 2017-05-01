@@ -32,7 +32,7 @@ public class CircuitManager : MonoBehaviour
         foreach (var circuit in group)
         {
             var powerSource = circuit.GetComponent<PowerSource>();
-            if (powerSource == null || !powerSource.isOn) continue;
+            if (powerSource == null || !powerSource.IsOn) continue;
 
             // If this is providing power, we're done
             powered = true;
@@ -108,7 +108,7 @@ public class CircuitManager : MonoBehaviour
                 // If it's -1, it's an unfilled circuit area
                 if (groupIDs[y * w + x] == -1)
                 {
-                    floodFillIntMap(groupIDs, w, h, x, y, curId);
+                    FloodFillIntMap(groupIDs, w, h, x, y, curId);
                     ++curId;
                     ++numGroups;
                 }
@@ -164,7 +164,7 @@ public class CircuitManager : MonoBehaviour
         var splittable = circuit.GetComponent<Splittable>();
         if (splittable == null)
         {
-            bounds = splittable.totalBounds;
+            bounds = splittable.TotalBounds;
         }
         else
         {
@@ -247,7 +247,7 @@ public class CircuitManager : MonoBehaviour
         public Point(int aX, int aY) : this((short)aX, (short)aY) { }
     }
 
-    static void floodFillIntMap(int[] array, int w, int h, int aX, int aY, int aFillNum)
+    static void FloodFillIntMap(int[] array, int w, int h, int aX, int aY, int aFillNum)
     {
         int refNum = array[aX + aY * w];
         Queue<Point> nodes = new Queue<Point>();

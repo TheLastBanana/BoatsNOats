@@ -56,7 +56,7 @@ public class RobotAI : MonoBehaviour {
     {
         // Break when this is split
         var splittable = GetComponent<Splittable>();
-        if (splittable != null && splittable.isSplit)
+        if (splittable != null && splittable.IsSplit)
         {
             Destroy(this);
             return;
@@ -70,7 +70,7 @@ public class RobotAI : MonoBehaviour {
     {
         // Break when this is split
         var splittable = GetComponent<Splittable>();
-        if (splittable != null && splittable.isSplit)
+        if (splittable != null && splittable.IsSplit)
         {
             return;
         }
