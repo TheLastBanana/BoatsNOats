@@ -279,27 +279,7 @@ public class PortalManager : MonoBehaviour
             portPos2 = mainCam.ScreenToWorldPoint(clampedMousePos);
         }
 
-
-
-        // The further the current portal rectangle is from the target, the
-        // faster it accelerates towards it
-        var oldCenter = movingPortalRect.center;
-        var targetCenter = (Vector2)(portPos1 + portPos2) / 2f;
-        var centerDir = targetCenter - oldCenter;
-        portalSpeed += centerDir.magnitude * portalAcceleration * centerDir.normalized;
-
-        var oldSize = movingPortalRect.size;
-        var targetSize = (Vector2)(portPos1 - portPos2);
-        var sizeDir = targetSize - oldSize;
-        portalSizeSpeed += sizeDir.magnitude * portalAcceleration * sizeDir.normalized;
-
-        // Apply damping
-        portalSpeed *= portalDamping;
-        portalSizeSpeed *= portalDamping;
-
-        // Move the portal rectangle
-        movingPortalRect.center = movingPortalRect.center + portalSpeed;
-        movingPortalRect.size = movingPortalRect.size + portalSizeSpeed;
+        MovePortalJuicily();
 
         musicManager.volume = portalMusicVolume;
     }
@@ -348,6 +328,30 @@ public class PortalManager : MonoBehaviour
             Unfreeze();
         }
 
+    }
+
+    // Move the portal in a juicy way
+    void MovePortalJuicily()
+    {
+        // The further the current portal rectangle is from the target, the
+        // faster it accelerates towards it
+        var oldCenter = movingPortalRect.center;
+        var targetCenter = (Vector2)(portPos1 + portPos2) / 2f;
+        var centerDir = targetCenter - oldCenter;
+        portalSpeed += centerDir.magnitude * portalAcceleration * centerDir.normalized;
+
+        var oldSize = movingPortalRect.size;
+        var targetSize = (Vector2)(portPos1 - portPos2);
+        var sizeDir = targetSize - oldSize;
+        portalSizeSpeed += sizeDir.magnitude * portalAcceleration * sizeDir.normalized;
+
+        // Apply damping
+        portalSpeed *= portalDamping;
+        portalSizeSpeed *= portalDamping;
+
+        // Move the portal rectangle
+        movingPortalRect.center = movingPortalRect.center + portalSpeed;
+        movingPortalRect.size = movingPortalRect.size + portalSizeSpeed;
     }
     
     // Check if anything is blocking the portal
