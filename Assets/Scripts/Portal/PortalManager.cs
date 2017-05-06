@@ -586,7 +586,6 @@ public class PortalManager : MonoBehaviour
         if (selectMin.y >= objMin.y && selectMin.y <= objMax.y)
             cutLines.Add(new Vector2[] { selectMin, Vector2.right });
         
-        // If we have no cuts, obviously this object isn't in the portal
         bool alwaysInside = true;
 
         // Iterate the list of lines, cutting along each of them.
@@ -627,6 +626,7 @@ public class PortalManager : MonoBehaviour
             }
         }
         
+        // Notify both newly-cut objects that they've been cut (if they exist)
         if (outer.Count > 0 && outer[0] != null)
             outer[0].SendMessage("OnSplitMergeFinished", null, SendMessageOptions.DontRequireReceiver);
 

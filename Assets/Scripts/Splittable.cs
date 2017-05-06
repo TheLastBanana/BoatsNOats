@@ -141,14 +141,14 @@ public class Splittable : MonoBehaviour
             Transform leftChild = leftChildren[i];
             Transform rightChild = rightChildren[i];
 
-            // This is specifically tagged to not copy
+            // This is specifically tagged to not copy, so don't copy it over
             if (leftChild.tag == "No Copy on Split")
             {
                 DestroyImmediate(rightChild.gameObject);
                 continue;
             }
 
-            // Whatever this child is, we don't care about it
+            // Ignore children that are neither visible nor collidable
             if (leftChild.GetComponent<MeshRenderer>() == null && leftChild.GetComponent<PolygonCollider2D>() == null)
                 continue;
 
@@ -159,10 +159,11 @@ public class Splittable : MonoBehaviour
                 leftChild.transform.localScale
             );
 
+            // This is where we actually split the object
             Side meshSide = SplitMesh(leftChild.gameObject, rightChild.gameObject, localMatrix);
             Side collSide = SplitCollider(leftChild.gameObject, rightChild.gameObject, localMatrix);
 
-            // Sizes of new renderers
+            // Calculate sizes of new renderers to check if they're practically invisible
             var rightRenderer = rightChild.GetComponent<Renderer>();
             var leftRenderer = leftChild.GetComponent<Renderer>();
             bool rightTooSmall = false;
@@ -227,7 +228,7 @@ public class Splittable : MonoBehaviour
             Destroy(rightParent.GetComponent<Animator>());
         }
 
-        // Clean up parents
+        // Clean up parents with no children
         if (rightParent.transform.childCount == 0)
         {
             Destroy(rightParent);
@@ -241,6 +242,7 @@ public class Splittable : MonoBehaviour
             leftParent = null;
         }
 
+        // Mark that both sides have been split
         _isSplit = true;
         if (rightParent != null)
         {
@@ -325,7 +327,7 @@ public class Splittable : MonoBehaviour
         mesh.RecalculateBounds();
     }
 
-    // Split leftObj's mesh into two (leftObj and rightObj) along a plane defined by anchor and dir
+    // Split leftObj's mesh into two (leftObj and rightObj) along the Y axis after transformation by matrix
     static private Side SplitMesh(GameObject leftObj, GameObject rightObj, Matrix4x4 matrix)
     {
         Matrix4x4 matInverse = matrix.inverse;
@@ -333,6 +335,7 @@ public class Splittable : MonoBehaviour
         var rightFilter = rightObj.GetComponent<MeshFilter>();
         var leftFilter = leftObj.GetComponent<MeshFilter>();
 
+        // If either side is missing a mesh filter, then there's no point in splitting the mesh
         if (rightFilter == null || leftFilter == null) return Side.Neither;
 
         var rightMesh = rightFilter.mesh;
@@ -358,14 +361,14 @@ public class Splittable : MonoBehaviour
         foreach (var vert in leftVerts)
             if (vert.x < 0) leftCount += 1;
 
-        // All on the right
+        // All on the right; destroy the left side
         if (leftCount == 0)
         {
             Destroy(leftFilter);
             Destroy(leftObj.GetComponent<MeshRenderer>());
             return Side.Right;
         }
-        // All on the left
+        // All on the left; destroy the right side
         else if (leftCount == leftVerts.Count)
         {
             Destroy(rightFilter);
@@ -373,10 +376,11 @@ public class Splittable : MonoBehaviour
             return Side.Left;
         }
 
+        // UV coordinates on each side
         List<Vector2> leftUV = new List<Vector2>(leftMesh.uv);
         List<Vector2> rightUV = new List<Vector2>(rightMesh.uv);
 
-        // Polygons on each side
+        // Triangles on each side
         List<int> leftTris = new List<int>();
         List<int> rightTris = new List<int>();
 
@@ -391,6 +395,7 @@ public class Splittable : MonoBehaviour
             List<int> left = new List<int>();
             List<int> right = new List<int>();
 
+            // For each vertex in the triangle, determine whether it's left or right of the Y axis
             for (int j = i; j < i + 3; ++j)
             {
                 int vi = meshTriangles[j];
@@ -435,7 +440,7 @@ public class Splittable : MonoBehaviour
                 int leftInterIdA, rightInterIdA, leftInterIdB, rightInterIdB;
 
                 // Determine edges we're looking at. Always put the smallest vert id first
-                // so the edge tuple is consistent.
+                // so the edge tuple is consistent for lookup in the *Inters dicts
                 Edge edgeA = new Edge(Math.Min(vertA, vertC), Math.Max(vertA, vertC));
                 Edge edgeB = new Edge(Math.Min(vertB, vertC), Math.Max(vertB, vertC));
 
@@ -453,6 +458,9 @@ public class Splittable : MonoBehaviour
                 leftInterIdB = leftInters[edgeB];
                 rightInterIdB = rightInters[edgeB];
 
+                // No matter what, we have two vertices on one side and one vertex on the other. The side with one vertex will
+                // produce three edges, i.e. a single triangle, while the side with two vertices will result in four edges, i.e.
+                // two triangles.
                 if (left.Count == 2)
                 {
                     // Add right triangle
@@ -488,7 +496,7 @@ public class Splittable : MonoBehaviour
             }
         }
 
-        // Transform back
+        // Transform back to local coordinates
         for (int i = 0; i < leftVerts.Count; ++i)
         {
             Vector4 point = new Vector4(leftVerts[i].x, leftVerts[i].y, leftVerts[i].z, 1);
@@ -500,6 +508,7 @@ public class Splittable : MonoBehaviour
             rightVerts[i] = matInverse * point;
         }
         
+        // Update the actual meshes
         leftMesh.vertices = leftVerts.ToArray();
         leftMesh.triangles = leftTris.ToArray();
         leftMesh.uv = leftUV.ToArray();
@@ -516,7 +525,7 @@ public class Splittable : MonoBehaviour
         leftMesh.RecalculateBounds();
         rightMesh.RecalculateBounds();
 
-        return Side.Both; // Note this is also triggered if the mesh is empty
+        return Side.Both; // Note this is currently also triggered if the mesh is empty
     }
 
     // Used within SplitMesh to find the intersection point between the plane and a mesh edge
@@ -560,6 +569,7 @@ public class Splittable : MonoBehaviour
         var numMeshTris = meshTriangles.Length;
         var numMeshVerts = meshVertices.Length;
 
+        // Any vertices whose IDs are in the triangle array are in use
         for (int i = 0; i < numMeshTris; ++i)
             usedVertices.Add(meshTriangles[i]);
 
@@ -577,7 +587,10 @@ public class Splittable : MonoBehaviour
             tempUV.Add(meshUVs[i]);
         }
 
-        // Reverse the list so we don't also have to decrement higher removed indices
+        // As we remove vertices, we'll be decrementing the IDs of any higher vertices. We reverse the list of
+        // vertices to be removed here so that we don't affect the IDs of other vertices that will be removed
+        // later (i.e. if we remove vertex 1, then vertex 2 is now vertex 1, so our "removed" list would now be
+        // wrong; instead, we remove vertex 2 first, then remove vertex 1).
         removed.Reverse();
 
         int[] tempTriangles = meshTriangles.Clone() as int[];
@@ -595,7 +608,7 @@ public class Splittable : MonoBehaviour
         mesh.uv = tempUV.ToArray();
     }
 
-    // Split leftObj's PolygonCollider2d into two (leftObj and rightObj) along a plane defined by anchor and dir
+    // Split leftObj's PolygonCollider2d into two (leftObj and rightObj) along the Y axis after transformation by matrix
     static private Side SplitCollider(GameObject leftObj, GameObject rightObj, Matrix4x4 matrix)
     {
         Matrix4x4 matInverse = matrix.inverse;
@@ -612,29 +625,33 @@ public class Splittable : MonoBehaviour
         {
             Vector2[] path = leftColl.GetPath(pathIndex);
 
-            List<Vector2> oldPoints = new List<Vector2>();
+            // New collider points
             List<Vector2> leftPoints = new List<Vector2>();
             List<Vector2> rightPoints = new List<Vector2>();
 
-            // Transform points to be relative to cutting plane
+            // List of the left object's pre-split points
+            List<Vector2> oldPoints = new List<Vector2>();
+
+            // Transform points to be relative to cutting plane (Y axis)
             foreach (Vector3 point in path)
             {
                 Vector3 transformed = matrix.MultiplyPoint3x4(point);
                 oldPoints.Add(transformed);
             }
 
-            // Whether the last point was on the left
+            // Whether the previous point was on the left
             bool wasLeft = oldPoints[0].x < 0;
 
             for (int i = 0; i < oldPoints.Count + 1; ++i)
             {
+                // Each path in the collider is closed, so our "next" point is the first point if we're at the end of the list
                 Vector2 point = oldPoints[i % oldPoints.Count];
                 bool isLeft = point.x < 0;
 
-                // Check if this edge is split (i.e. we've gone from left to right)
+                // Check if this edge is split (i.e. we've gone from a point on the left to a point on the right)
                 if (wasLeft != isLeft)
                 {
-                    // Add a new point between the two using the slope calculation (see comments in SplitMesh)
+                    // Add a new point between the two using the slope calculation (see comments in IntersectEdge)
                     Vector2 lastPoint = oldPoints[i - 1];
                     float ratio = (-lastPoint.x) / (point.x - lastPoint.x);
                     Vector2 inter = Vector2.Lerp(lastPoint, point, ratio);
@@ -643,7 +660,7 @@ public class Splittable : MonoBehaviour
                     rightPoints.Add(inter);
                 }
 
-                // Don't duplicate the last point if we're not interpolating it
+                // If we're at the last point, then point is already in the list, so don't add it
                 if (i < oldPoints.Count)
                 {
                     if (isLeft) leftPoints.Add(point);
@@ -653,7 +670,7 @@ public class Splittable : MonoBehaviour
                 wasLeft = isLeft;
             }
 
-            // Transform back
+            // Transform back to local coordinates
             for (int i = 0; i < leftPoints.Count; ++i)
             {
                 Vector4 point = new Vector4(leftPoints[i].x, leftPoints[i].y, 0, 1);
@@ -665,6 +682,7 @@ public class Splittable : MonoBehaviour
                 rightPoints[i] = matInverse * point;
             }
 
+            // Update paths if valid
             if (leftPoints.Count > 0)
             {
                 anyLeft = true;
