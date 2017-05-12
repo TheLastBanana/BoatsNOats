@@ -13,9 +13,9 @@ public class titlescript : MonoBehaviour {
     void Start () {
         imageAlpha = GetComponent<Image>().color;
     }
-	
-	// Update is called once per frame
-	void Update () {
+    
+    // Update is called once per frame
+    void Update () {
         if (currentTime <= timeToMove)
         {
             currentTime += Time.deltaTime;

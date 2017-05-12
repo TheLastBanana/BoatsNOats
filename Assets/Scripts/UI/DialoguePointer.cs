@@ -20,8 +20,8 @@ public class DialoguePointer : MonoBehaviour {
     private float z;
     private Transform dummy;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         objTransform = GetComponent<Transform>();
         if (pointTo != null)
             pointToTransform = pointTo.GetComponent<Transform>();
@@ -32,10 +32,10 @@ public class DialoguePointer : MonoBehaviour {
         z = objTransform.localPosition.z;
         dummy = new GameObject().GetComponent<Transform>();
         dummy.parent = objTransform.parent;
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    }
+    
+    // Update is called once per frame
+    void Update () {
         if (pointTo == null)
             return;
 
@@ -58,7 +58,7 @@ public class DialoguePointer : MonoBehaviour {
         float angle = (Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg) + 90;
         Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
         objTransform.rotation = Quaternion.RotateTowards(objTransform.rotation, q, Time.deltaTime * 10000);
-	}
+    }
 
     private void changeXFromCameraPosition()
     {

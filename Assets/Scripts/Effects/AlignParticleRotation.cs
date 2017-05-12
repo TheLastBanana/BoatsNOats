@@ -14,5 +14,5 @@ public class AlignParticleRotation : MonoBehaviour {
     void Update()
     {
         sysMain.startRotationZMultiplier = (-align.localRotation.eulerAngles.z) * Mathf.Deg2Rad;
-	}
+    }
 }

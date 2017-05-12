@@ -9,15 +9,15 @@ public class Portal : MonoBehaviour {
     // i.e. origin.x + offs.x == alternateOrigin.x
     public WorldOffsets offs;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    // Use this for initialization
+    void Start () {
+        
+    }
+    
+    // Update is called once per frame
+    void Update () {
+        
+    }
 
     // This should resize the portal to have the top left corner at corner
     // with width and height from size

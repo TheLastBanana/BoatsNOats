@@ -16,15 +16,15 @@ public class IntroCutscene : MonoBehaviour {
     private bool playOnce = false;
     
     // Use this for initialization
-	void Awake()
+    void Awake()
     {
         Gemma = Gemma.GetComponent<PlayerController>();
         StartCoroutine(Waitforscreen());
         camSwitcher.SetCutscene(true);
     }
-	
-	// Update is called once per frame
-	void Update () {
+    
+    // Update is called once per frame
+    void Update () {
     }
 
     IEnumerator Waitforscreen()

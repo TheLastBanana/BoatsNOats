@@ -29,9 +29,9 @@ public class credits : MonoBehaviour {
         tc.text = creds;
         rect = transform.GetComponent<RectTransform>();
     }
-	
-	// Update is called once per frame
-	void Update () {
+    
+    // Update is called once per frame
+    void Update () {
         
         rect.sizeDelta = new Vector2(rect.rect.width, rect.rect.height+3.75f);
         if(rect.rect.height > 12384f)

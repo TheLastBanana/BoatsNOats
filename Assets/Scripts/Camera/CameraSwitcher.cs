@@ -33,7 +33,7 @@ public class CameraSwitcher : MonoBehaviour
 
     // Update is called once per frame
     void Update () {
-		if (!_switched && controls.CheckOtherWorld(true) && !inCutscene)
+        if (!_switched && controls.CheckOtherWorld(true) && !inCutscene)
         {
             cMain.enabled = false;
             cChar.enabled = false;

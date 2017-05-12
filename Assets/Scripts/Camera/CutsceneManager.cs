@@ -120,9 +120,9 @@ public class CutsceneManager : MonoBehaviour {
         isFading = true;
         StartCoroutine(FadeIn(32));
     }
-	
-	// Update is called once per frame
-	void Update () {
+    
+    // Update is called once per frame
+    void Update () {
         // We're not in a cutscene
         if (!runningCutscene || skipEverything)
             return;

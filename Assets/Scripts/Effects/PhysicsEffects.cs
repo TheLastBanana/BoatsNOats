@@ -6,8 +6,8 @@ public class PhysicsEffects : MonoBehaviour
     public float velocityThreshold = 0.3f;
     public GameObject effectPrefab;
     Dictionary<Vector2, Vector2> collisionOffsets = new Dictionary<Vector2, Vector2>();
-	
-	void OnCollisionEnter2D(Collision2D collision)
+    
+    void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.relativeVelocity.magnitude > velocityThreshold)
         {
@@ -36,7 +36,7 @@ public class PhysicsEffects : MonoBehaviour
             // Store the collision point depending on its direction
             collisionOffsets[snappedDir] = avgOffset;
         }
-	}
+    }
 
     void FixedUpdate()
     {

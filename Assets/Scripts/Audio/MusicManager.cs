@@ -85,7 +85,7 @@ public class MusicManager : MonoBehaviour
     }
 
     // Play looped music
-	public void playMusic()
+    public void playMusic()
     {
         intro.Play();
         loop.PlayDelayed(intro.clip.length);

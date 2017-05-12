@@ -551,7 +551,7 @@ public class TypewriterText : MonoBehaviour {
             dialogs.Add(dia);
         }
     }
-	
+    
     IEnumerator AnimateText(int dialogNum)
     {
         Text text;

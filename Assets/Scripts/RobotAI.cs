@@ -50,9 +50,9 @@ public class RobotAI : MonoBehaviour {
         if (bumpEffect)
             bumpEffectPos = bumpEffect.transform.localPosition;
     }
-	
-	// Update is called once per frame
-	void Update()
+    
+    // Update is called once per frame
+    void Update()
     {
         // Break when this is split
         var splittable = GetComponent<Splittable>();

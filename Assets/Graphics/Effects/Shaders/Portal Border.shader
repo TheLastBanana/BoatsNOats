@@ -1,30 +1,30 @@
 ﻿Shader "Custom/Portal Border"
 {
-	Properties
-	{
-		_MainTex ("Texture", 2D) = "white" {}
+    Properties
+    {
+        _MainTex ("Texture", 2D) = "white" {}
         _Color("Main Color", Color) = (1, 1, 1, 1)
         _Resolution ("Resolution", Float) = 1000
         _Speed ("Speed", Float) = 100
-	}
-	SubShader
-	{
-		// No culling or depth
-		Cull Off ZWrite Off ZTest Always
+    }
+    SubShader
+    {
+        // No culling or depth
+        Cull Off ZWrite Off ZTest Always
         Blend SrcAlpha OneMinusSrcAlpha
 
-		Pass
-		{
-			CGPROGRAM
-			#pragma vertex vert
-			#pragma fragment frag
+        Pass
+        {
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
             #pragma target 3.0
-			#include "UnityCG.cginc"
+            #include "UnityCG.cginc"
 
-			struct v2f
-			{
+            struct v2f
+            {
                 float2 uv : TEXCOORD0;
-			};
+            };
 
             v2f vert(
                 float4 vertex : POSITION, // vertex position input
@@ -37,21 +37,21 @@
                 outpos = UnityObjectToClipPos(vertex);
                 return o;
             }
-			
-			sampler2D _MainTex;
+            
+            sampler2D _MainTex;
             float _Resolution;
             float _Speed;
             float4 _Color;
 
-			fixed4 frag (v2f i, UNITY_VPOS_TYPE screenPos : VPOS) : SV_Target
-			{
+            fixed4 frag (v2f i, UNITY_VPOS_TYPE screenPos : VPOS) : SV_Target
+            {
                 float2 timeOffset = _Time.xx * _Speed;
-				fixed4 col = tex2D(_MainTex, screenPos.xy / _Resolution + timeOffset);
+                fixed4 col = tex2D(_MainTex, screenPos.xy / _Resolution + timeOffset);
                 col *= _Color;
 
-				return col;
-			}
-			ENDCG
-		}
-	}
+                return col;
+            }
+            ENDCG
+        }
+    }
 }

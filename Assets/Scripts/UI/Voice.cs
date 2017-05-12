@@ -66,7 +66,7 @@ public class Voice : MonoBehaviour
     }
 
     // Randomly pick one of the clips, taking into account their weights.
-	WeightedClip GetRandomClip()
+    WeightedClip GetRandomClip()
     {
         // Determine total weight of clips
         float total = 0f;
@@ -91,5 +91,5 @@ public class Voice : MonoBehaviour
         Debug.LogError("Failed to pick a random clip");
 
         return null;
-	}
+    }
 }

@@ -12,13 +12,13 @@ public class CameraTracker : MonoBehaviour {
     public GameObject RightBoundary;
     private GameObject currentTarget;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         currentTarget = Gemma;
     }
-	
-	// Update is called once per frame
-	void Update ()
+    
+    // Update is called once per frame
+    void Update ()
     {
         var xMin = LeftBoundary.transform.position.x;
         var xMax = RightBoundary.transform.position.x;
